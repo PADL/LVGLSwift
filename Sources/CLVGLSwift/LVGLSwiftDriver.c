@@ -1,9 +1,7 @@
-#include <SDL2/SDL.h>
-
-#include "../lvgl/lvgl.h"
-#include "../lv_drivers/sdl/sdl.h"
-
+#include "CLVGLSwift.h"
 #include "LVGLSwiftDriver.h"
+
+#include "sdl/sdl.h"
 
 static lv_disp_t *display;
 static lv_disp_draw_buf_t drawBuffer;

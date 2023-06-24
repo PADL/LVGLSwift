@@ -4,7 +4,9 @@ import PackageDescription
 import Foundation
 
 #if os(macOS)
-let SDLCFlags=["-I/opt/homebrew/include"]
+let SDLCFlags = ["-I/opt/homebrew/include"]
+#else
+let SDLCFlags = [String]()
 #endif
 
 let package = Package(
@@ -36,4 +38,4 @@ let package = Package(
 	    dependencies: ["CLVGLSwift"]
 	),
     ]
-)
+)    
