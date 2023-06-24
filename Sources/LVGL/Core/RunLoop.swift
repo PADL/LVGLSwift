@@ -17,16 +17,18 @@
 import Foundation
 import CLVGL
 
-public actor LVGL {
-    public static let shared = LVGL()
+public actor LVRunLoop {
+    public static let shared = LVRunLoop()
 
+    private var task: Task<Void, Never>
+    
     init() {
         lv_init()
         LVGLSwiftDriverInit()
 
-        Task.detached {
+        task = Task.detached {
             repeat {
-                try await Task.sleep(nanoseconds: 5 * 1_000_000)
+                try? await Task.sleep(nanoseconds: 5 * 1_000_000)
                 lv_tick_inc(5)
             } while !Task.isCancelled
         }
@@ -38,6 +40,8 @@ public actor LVGL {
             usleep(5000)
         } while !Task.isCancelled
     }
+    
+    
     
     deinit {
         lv_deinit()
