@@ -19,6 +19,9 @@ let package = Package(
         .library(name: "LVGL", targets: ["LVGL"]),
     ],
     dependencies: [
+        .package(url: "https://github.com/apple/swift-async-algorithms", from: "0.1.0"),
+        .package(url: "https://github.com/apple/swift-foundation", .branch("main")),
+        .package(url: "https://github.com/lhoward/AsyncExtensions", .branch("linux")),
     ],
     targets: [
         // Targets are the basic building blocks of a package. A target can define a module or a test suite.
@@ -35,7 +38,12 @@ let package = Package(
         ),
 	.target(
 	    name: "LVGL",
-	    dependencies: ["CLVGL"]
+	    dependencies: [
+		"CLVGL",
+		"AsyncExtensions",
+		.product(name: "AsyncAlgorithms", package: "swift-async-algorithms"),
+                .product(name: "FoundationPreview", package: "swift-foundation", condition: .when(platforms: [.linux])),
+	    ]
 	),
     ]
 )    
