@@ -17,32 +17,8 @@
 import Foundation
 import CLVGL
 
-public struct LVEvent {
-    let event: UnsafeMutablePointer<lv_event_t>
-    
-    static func registerID() -> UInt32 {
-        lv_event_register_id()
+public class LVButton: LVObject {
+    public init(with parent: LVObject) {
+        super.init(lv_btn_create(parent.object))
     }
-    
-    init(_ event: UnsafeMutablePointer<lv_event_t>) {
-        self.event = event
-    }
-    
-    public var target: LVObject {
-        bridgeToSwift(lv_event_get_user_data(event))
-    }
-    
-    public var code: lv_event_code_t {
-        lv_event_get_code(event)
-    }
-    
-    public func stopBubbling() {
-        lv_event_stop_bubbling(event)
-    }
-    
-    public func stopProcessing() {
-        lv_event_stop_processing(event)
-    }
-    
 }
-

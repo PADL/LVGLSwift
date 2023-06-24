@@ -1,4 +1,4 @@
-    //
+//
 // Copyright (c) 2023 PADL Software Pty Ltd
 //
 // Licensed under the Apache License, Version 2.0 (the License);
@@ -29,7 +29,7 @@ func bridgeToCLVGL<T: AnyObject>(_ object: T) -> UnsafeMutableRawPointer {
 
 public class LVObject {
     let object: UnsafeMutablePointer<lv_obj_t>
-    public let channel = AsyncChannel<LVEvent>()
+    public let events = AsyncChannel<LVEvent>()
     
     init(_ object: UnsafeMutablePointer<lv_obj_t>) {
         self.object = object
@@ -40,13 +40,21 @@ public class LVObject {
             let event = LVEvent($0!)
             
             Task { @MainActor in
-                await event.target.channel.send(event)
+                await event.target.events.send(event)
             }
         }, LV_EVENT_ALL, bridgeToCLVGL(self))
     }
     
+    func withObjectCast<T, U>(to type: T.Type, _ body: (T) -> U) -> U {
+        withUnsafePointer(to: object) {
+            $0.withMemoryRebound(to: type, capacity: 1) {
+                body($0.pointee)
+            }
+        }
+    }
+
     deinit {
+        events.finish()
         lv_obj_del(object)
-        channel.finish()
     }
 }
