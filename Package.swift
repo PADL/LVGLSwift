@@ -20,7 +20,7 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/apple/swift-async-algorithms", from: "0.1.0"),
-        .package(url: "https://github.com/apple/swift-foundation", .branch("main")),
+        //.package(url: "https://github.com/apple/swift-foundation", .branch("main")),
         .package(url: "https://github.com/lhoward/AsyncExtensions", .branch("linux")),
     ],
     targets: [
@@ -42,7 +42,7 @@ let package = Package(
 		"CLVGL",
 		"AsyncExtensions",
 		.product(name: "AsyncAlgorithms", package: "swift-async-algorithms"),
-                .product(name: "FoundationPreview", package: "swift-foundation", condition: .when(platforms: [.linux])),
+                //.product(name: "FoundationPreview", package: "swift-foundation", condition: .when(platforms: [.linux])),
 	    ]
 	),
     ]
