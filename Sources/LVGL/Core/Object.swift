@@ -1,4 +1,4 @@
-//
+    //
 // Copyright (c) 2023 PADL Software Pty Ltd
 //
 // Licensed under the Apache License, Version 2.0 (the License);
@@ -15,36 +15,38 @@
 //
 
 import Foundation
+import AsyncAlgorithms
+import AsyncExtensions
 import CLVGL
 
-func bridgeToSwift<T: LVObject>(_ pointer: UnsafeRawPointer) -> T {
+func bridgeToSwift<T: AnyObject>(_ pointer: UnsafeRawPointer) -> T {
     Unmanaged<T>.fromOpaque(pointer).takeUnretainedValue()
 }
 
-func bridgeToCLVGL<T: LVObject>(_ object: T) -> UnsafeMutableRawPointer {
+func bridgeToCLVGL<T: AnyObject>(_ object: T) -> UnsafeMutableRawPointer {
     UnsafeMutableRawPointer(Unmanaged.passUnretained(object).toOpaque())
 }
 
 public class LVObject {
     let object: UnsafeMutablePointer<lv_obj_t>
+    public let channel = AsyncChannel<LVEvent>()
     
     init(_ object: UnsafeMutablePointer<lv_obj_t>) {
         self.object = object
         object.pointee.user_data = bridgeToCLVGL(self)
-        lv_obj_add_event_cb(object, { event in
-            guard let event = event?.pointee else {
-                return
-            }
-            let object = bridgeToSwift(event.target.pointee.user_data)
         
-            // fire off event handler
-        }, LV_EVENT_ALL, nil)
+        lv_obj_add_event_cb(object, {
+            if $0 == nil { return }
+            let event = LVEvent($0!)
+            
+            Task { @MainActor in
+                await event.target.channel.send(event)
+            }
+        }, LV_EVENT_ALL, bridgeToCLVGL(self))
     }
     
     deinit {
         lv_obj_del(object)
+        channel.finish()
     }
-    
-    
-    
 }
