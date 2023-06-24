@@ -15,7 +15,7 @@
 //
 
 import Foundation
-import CLVGLSwift
+import CLVGL
 
 func bridgeToSwift<T: LVObject>(_ pointer: UnsafeRawPointer) -> T {
     Unmanaged<T>.fromOpaque(pointer).takeUnretainedValue()

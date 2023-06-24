@@ -10,13 +10,13 @@ let SDLCFlags = [String]()
 #endif
 
 let package = Package(
-    name: "LVGLSwift",
+    name: "LVGL",
     platforms: [
        .macOS(.v10_15),
     ],
     products: [
-        .library(name: "CLVGLSwift", targets: ["CLVGLSwift"]),
-        .library(name: "LVGLSwift", targets: ["LVGLSwift"]),
+        .library(name: "CLVGL", targets: ["CLVGL"]),
+        .library(name: "LVGL", targets: ["LVGL"]),
     ],
     dependencies: [
     ],
@@ -24,7 +24,7 @@ let package = Package(
         // Targets are the basic building blocks of a package. A target can define a module or a test suite.
         // Targets can depend on other targets in this package, and on products in packages this package depends on.
         .target(
-            name: "CLVGLSwift",
+            name: "CLVGL",
             dependencies: [],
             cSettings: [
                         .headerSearchPath("lv_drivers"),
@@ -34,8 +34,8 @@ let package = Package(
 	    linkerSettings: [.unsafeFlags(["-L/opt/homebrew/lib","-lSDL2"])]
         ),
 	.target(
-	    name: "LVGLSwift",
-	    dependencies: ["CLVGLSwift"]
+	    name: "LVGL",
+	    dependencies: ["CLVGL"]
 	),
     ]
 )    

@@ -15,7 +15,7 @@
 //
 
 import Foundation
-import CLVGLSwift
+import CLVGL
 
 public actor LVGL {
     public static let shared = LVGL()
