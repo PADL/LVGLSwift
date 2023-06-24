@@ -17,12 +17,12 @@
 import Foundation
 import CLVGLSwift
 
-public actor LVGLSwift {
-    public static let shared = LVGLSwift()
+public actor LVGL {
+    public static let shared = LVGL()
 
     init() {
-	lv_init()
-	LVGLSwiftDriverInit()
+        lv_init()
+        LVGLSwiftDriverInit()
 
         Task.detached {
             repeat {
@@ -37,5 +37,13 @@ public actor LVGLSwift {
             lv_task_handler()
             usleep(5000)
         } while !Task.isCancelled
+    }
+    
+    deinit {
+        lv_deinit()
+    }
+    
+    var isInitialized: Bool {
+        lv_is_initialized()
     }
 }
