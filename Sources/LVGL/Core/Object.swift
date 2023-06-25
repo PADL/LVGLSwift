@@ -19,32 +19,56 @@ import AsyncAlgorithms
 import AsyncExtensions
 import CLVGL
 
-func bridgeToSwift<T: AnyObject>(_ pointer: UnsafeRawPointer) -> T {
-    Unmanaged<T>.fromOpaque(pointer).takeUnretainedValue()
+public struct LVSize {
+    var width: lv_coord_t
+    var height: lv_coord_t
+    
+    public init(width: lv_coord_t, height: lv_coord_t) {
+        self.width = width
+        self.height = height
+    }
 }
 
-func bridgeToCLVGL<T: AnyObject>(_ object: T) -> UnsafeMutableRawPointer {
-    UnsafeMutableRawPointer(Unmanaged.passUnretained(object).toOpaque())
-}
-
-public class LVObject {
+public class LVObject: CustomStringConvertible, Equatable {
     let object: UnsafeMutablePointer<lv_obj_t>
     public let events = AsyncChannel<LVEvent>()
     
-    init(_ object: UnsafeMutablePointer<lv_obj_t>) {
+    init(_ object: UnsafeMutablePointer<lv_obj_t>, filter: lv_event_code_t = LV_EVENT_ALL) {
         self.object = object
-        object.pointee.user_data = bridgeToCLVGL(self)
         
-        lv_theme_apply(object)
         lv_obj_set_user_data(object, bridgeToCLVGL(self))
         lv_obj_add_event_cb(object, {
-            if $0 == nil { return }
-            let event = LVEvent($0!)
+            guard let eventData = $0?.pointee else {
+                return
+            }
             
+            if eventData.code == LV_EVENT_DELETE {
+                lv_obj_set_user_data(eventData.target, nil)
+            }
+            
+            let event = LVEvent(eventData)
+
             Task { @MainActor in
                 await event.target.events.send(event)
             }
-        }, LV_EVENT_ALL, bridgeToCLVGL(self))
+        }, filter, bridgeToCLVGL(self))
+        lv_theme_apply(object)
+    }
+    
+    public static func == (lhs: LVObject, rhs: LVObject) -> Bool {
+        lhs.object == rhs.object
+    }
+
+    public var parent: LVObject? {
+        guard let parent = object.pointee.parent else {
+            return nil
+        }
+        
+        return bridgeToSwift(lv_obj_get_user_data(parent))
+    }
+    
+    public var description: String {
+        "\(type(of: self))(parent: \(String(describing: parent)))"
     }
     
     func withObjectCast<T, U>(to type: T.Type, _ body: (T) -> U) -> U {
@@ -54,13 +78,13 @@ public class LVObject {
             }
         }
     }
-
-    public var size: (lv_coord_t, lv_coord_t) {
+    
+    public var size: LVSize {
         get {
-            (lv_obj_get_width(object), lv_obj_get_height(object))
+            LVSize(width: lv_obj_get_width(object), height: lv_obj_get_height(object))
         }
         set {
-            lv_obj_set_size(object, newValue.0, newValue.1)
+            lv_obj_set_size(object, newValue.width, newValue.height)
         }
     }
 
@@ -109,8 +133,8 @@ public class LVObject {
         lv_obj_set_align(object, align)
     }
     
-    public func align(to align: lv_align_t, offset: (lv_coord_t, lv_coord_t)) {
-        lv_obj_align(object, align, offset.0, offset.1)
+    public func align(to align: lv_align_t, offset: lv_point_t) {
+        lv_obj_align(object, align, offset.x, offset.y)
     }
     
     public func invalidate(area: lv_area_t? = nil) {
@@ -152,7 +176,62 @@ public class LVObject {
     public func center() {
         lv_obj_center(object)
     }
+    
+    public func append(style: LVStyle?, selector: lv_style_selector_t) {
+        if let style {
+            var style = style.style
+            lv_obj_add_style(object, &style, selector)
+        } else {
+            lv_obj_add_style(object, nil, selector)
+        }
+    }
+    
+    public func remove(style: LVStyle?, selector: lv_style_selector_t) {
+        if let style {
+            var style = style.style
+            lv_obj_remove_style(object, &style, selector)
+        } else {
+            lv_obj_remove_style(object, nil, selector)
+        }
+    }
+    
+    public func removeAllStyles() {
+        lv_obj_remove_style(object, nil, lv_style_selector_t(LV_PART_ANY | LV_STATE_ANY))
+    }
+    
+    public func refreshStyle(part: lv_part_t, property: lv_style_prop_t) {
+        lv_obj_refresh_style(object, part, property)
+    }
+    
+    public static func enableStyleRefresh(_ enabled: Bool) {
+        lv_obj_enable_style_refresh(enabled)
+    }
+    
+    public func set(flag: lv_obj_flag_t) {
+        lv_obj_add_flag(object, flag)
+    }
 
+    public func clear(flag: lv_obj_flag_t) {
+        lv_obj_clear_flag(object, flag)
+    }
+    
+    public func set(state: lv_state_t) {
+        lv_obj_add_state(object, state)
+    }
+
+    public func clear(state: lv_state_t) {
+        lv_obj_clear_state(object, state)
+    }
+    
+    public var state: lv_state_t {
+        lv_obj_get_state(object)
+    }
+    
+    public var isValid: Bool {
+        lv_obj_is_valid(object)
+    }
+    // TODO: get/set local style property?
+    
     deinit {
         events.finish()
         lv_obj_del(object)

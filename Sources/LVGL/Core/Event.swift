@@ -17,7 +17,7 @@
 import Foundation
 import CLVGL
 
-public struct LVEvent {
+struct LVEventReference: CustomStringConvertible {
     let event: UnsafeMutablePointer<lv_event_t>
     
     static func registerID() -> UInt32 {
@@ -49,5 +49,50 @@ public struct LVEvent {
     public func stopProcessing() {
         lv_event_stop_processing(event)
     }
+    
+    public var description: String {
+        return "LVEventReference(target: \(target), currentTarget: \(currentTarget), code: \(code))"
+    }
 }
 
+public class LVEvent: CustomStringConvertible {
+    let event: lv_event_t
+    
+    static func registerID() -> UInt32 {
+        lv_event_register_id()
+    }
+    
+    /// unbalanced retain required in case event outlives target
+    
+    init(_ event: lv_event_t) {
+        self.event = event
+        var event = event
+        LVRetainEventUserData(&event)
+    }
+    
+    deinit {
+        var event = event
+        LVReleaseEventUserData(&event)
+    }
+    
+    public var target: LVObject {
+        var event = event
+        let target = lv_event_get_target(&event)!
+        return bridgeToSwift(lv_obj_get_user_data(target))
+    }
+    
+    public var currentTarget: LVObject {
+        var event = event
+        let currentTarget = lv_event_get_current_target(&event)!
+        return bridgeToSwift(lv_obj_get_user_data(currentTarget))
+    }
+    
+    public var code: lv_event_code_t {
+        var event = event
+        return lv_event_get_code(&event)
+    }
+    
+    public var description: String {
+        return "LVEvent(target: \(target), currentTarget: \(currentTarget), code: \(code))"
+    }
+}

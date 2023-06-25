@@ -45,5 +45,9 @@ let package = Package(
                 //.product(name: "FoundationPreview", package: "swift-foundation", condition: .when(platforms: [.linux])),
 	    ]
 	),
+        .executableTarget(
+            name: "LVGLDemo",
+            dependencies: ["LVGL"]
+        )
     ]
 )    

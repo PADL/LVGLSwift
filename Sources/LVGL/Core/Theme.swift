@@ -17,28 +17,20 @@
 import Foundation
 import CLVGL
 
-public struct LVTheme {
-    typealias Callback = ((LVTheme, LVObject) -> Void)
+public class LVTheme {
+    public typealias Callback = ((LVTheme, LVObject) -> Void)
     
-    private var theme: lv_theme_t = lv_theme_t()
-    private let callback: CallbackBox?
+    var theme: lv_theme_t = lv_theme_t()
+    private let callback: Callback?
     
-    class CallbackBox {
-        let callback: Callback
-        
-        init(_ callback: @escaping Callback) {
-            self.callback = callback
-        }
-    }
-    
-    init(_ callback: Callback? = nil) {
+    public init(_ callback: Callback? = nil) {
         if let callback {
-            self.callback = CallbackBox(callback)
-            self.theme.user_data = bridgeToCLVGL(self.callback!)
+            self.callback = callback
         } else {
             self.callback = nil
-            self.theme.user_data = nil
         }
+        self.theme.parent = nil
+        self.theme.user_data = bridgeToCLVGL(self)
         self.theme.disp = lv_disp_get_default()
         self.primaryColor = .white
         self.secondaryColor = .black
@@ -52,14 +44,14 @@ public struct LVTheme {
                 return
             }
             
-            let callback: CallbackBox = bridgeToSwift(themePointer.pointee.user_data)
-            let theme = LVTheme(themePointer.pointee)
+            let theme: LVTheme = bridgeToSwift(themePointer.pointee.user_data)
+            guard let callback = theme.callback else {
+                return
+            }
             
             if let objectUserData = lv_obj_get_user_data(objectPointer) {
                let object: LVObject = bridgeToSwift(objectUserData)
-                callback.callback(theme, object)
-            } else {
-                callback.callback(theme, LVObject(objectPointer))
+                callback(theme, object)
             }
         }
     }

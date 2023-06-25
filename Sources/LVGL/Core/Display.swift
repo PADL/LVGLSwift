@@ -17,23 +17,19 @@
 import Foundation
 import CLVGL
 
-public class LVScreen: LVObject {
+public struct LVDisplay {
+    var display: UnsafeMutablePointer<lv_disp_t>
+    
     public init() {
-        super.init(lv_obj_create(nil))
+        self.display = lv_disp_get_default()
     }
     
-    static var current: LVScreen? {
-        let screen = lv_scr_act()
-        
-        guard let userData = screen?.pointee.user_data else {
-            return nil
+    public var theme: LVTheme {
+        get {
+            bridgeToSwift(lv_disp_get_theme(display)!.pointee.user_data)
         }
-        
-        return bridgeToSwift(userData)
+        set {
+            lv_disp_set_theme(display, &newValue.theme)
+        }
     }
-    
-    func load() {
-        lv_scr_load(object)
-    }
-
 }

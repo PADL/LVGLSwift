@@ -17,35 +17,14 @@
 import Foundation
 import CLVGL
 
-public actor LVRunLoop {
-    public static let shared = LVRunLoop()
-
-    private var task: Task<Void, Never>
-    
+public class LVScreen: LVObject {
     public init() {
-        lv_init()
-        LVGLSwiftDriverInit()
-
-        task = Task.detached {
-            repeat {
-                try? await Task.sleep(nanoseconds: 5 * 1_000_000)
-                lv_tick_inc(5)
-            } while !Task.isCancelled
-        }
-    }
-
-    public func run() {
-        repeat {
-            lv_task_handler()
-            usleep(5000)
-        } while !Task.isCancelled
+        super.init(lv_scr_act())
     }
     
-    deinit {
-        lv_deinit()
-    }
+    public static let current = LVScreen()
     
-    public var isInitialized: Bool {
-        lv_is_initialized()
+    public func load() {
+        lv_scr_load(object)
     }
 }

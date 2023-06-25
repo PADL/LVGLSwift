@@ -18,10 +18,15 @@ import Foundation
 import CLVGL
 
 public class LVStyle {
-    private var style: lv_style_t = lv_style_t()
+    var style: lv_style_t = lv_style_t()
     
-    init() {
+    public init() {
         lv_style_init(&style)
+    }
+    
+    public func reportChange() {
+        var style = style
+        lv_obj_report_style_change(&style)
     }
     
     func _getProperty(_ property: lv_style_prop_t) -> lv_style_value_t? {
@@ -111,87 +116,87 @@ public class LVStyle {
         }
     }
     
-    @LVStyleIntegerProperty(LV_STYLE_WIDTH) var width: lv_coord_t?
-    @LVStyleIntegerProperty(LV_STYLE_MIN_WIDTH) var minWidth: lv_coord_t?
-    @LVStyleIntegerProperty(LV_STYLE_MAX_WIDTH) var maxWidth: lv_coord_t?
-    @LVStyleIntegerProperty(LV_STYLE_HEIGHT) var height: lv_coord_t?
-    @LVStyleIntegerProperty(LV_STYLE_MIN_HEIGHT) var minHeight: lv_coord_t?
-    @LVStyleIntegerProperty(LV_STYLE_MAX_HEIGHT) var maxHeight: lv_coord_t?
-    @LVStyleIntegerProperty(LV_STYLE_X) var x: lv_coord_t?
-    @LVStyleIntegerProperty(LV_STYLE_Y) var y: lv_coord_t?
-    @LVStyleIntegerProperty(LV_STYLE_ALIGN) var alignment: lv_align_t?
-    @LVStyleIntegerProperty(LV_STYLE_TRANSFORM_WIDTH) var widthTransformation: lv_coord_t?
-    @LVStyleIntegerProperty(LV_STYLE_TRANSFORM_HEIGHT) var heightTransformation: lv_coord_t?
-    @LVStyleIntegerProperty(LV_STYLE_TRANSLATE_X) var xTranslation: lv_coord_t?
-    @LVStyleIntegerProperty(LV_STYLE_TRANSLATE_Y) var yTranslation: lv_coord_t?
-    @LVStyleIntegerProperty(LV_STYLE_TRANSFORM_ZOOM) var zoomTransform: lv_coord_t?
-    @LVStyleIntegerProperty(LV_STYLE_TRANSFORM_ANGLE) var angleTransform: lv_coord_t?
-    @LVStyleIntegerProperty(LV_STYLE_TRANSFORM_PIVOT_X) var xPivotTransform: lv_coord_t?
-    @LVStyleIntegerProperty(LV_STYLE_TRANSFORM_PIVOT_Y) var yPivotTransform: lv_coord_t?
-    @LVStyleIntegerProperty(LV_STYLE_PAD_TOP) var topPadding: lv_coord_t?
-    @LVStyleIntegerProperty(LV_STYLE_PAD_BOTTOM) var bottomPadding: lv_coord_t?
-    @LVStyleIntegerProperty(LV_STYLE_PAD_LEFT) var leftPadding: lv_coord_t?
-    @LVStyleIntegerProperty(LV_STYLE_PAD_RIGHT) var rightPadding: lv_coord_t?
-    @LVStyleIntegerProperty(LV_STYLE_PAD_ROW) var rowPadding: lv_coord_t?
-    @LVStyleIntegerProperty(LV_STYLE_PAD_COLUMN) var colunnPadding: lv_coord_t?
-    @LVStyleColorProperty(LV_STYLE_BG_COLOR) var backgroundColor: LVColor?
-    @LVStyleIntegerProperty(LV_STYLE_BG_OPA) var backgroundOpacity: lv_opa_t?
-    @LVStyleColorProperty(LV_STYLE_BG_GRAD_COLOR) var backgroundGradientColor: LVColor?
-    @LVStyleIntegerProperty(LV_STYLE_BG_GRAD_DIR) var backgroundGradientDirection: lv_grad_dir_t?
-    @LVStyleIntegerProperty(LV_STYLE_BG_MAIN_STOP) var backgroundMainStop: lv_coord_t?
-    @LVStyleIntegerProperty(LV_STYLE_BG_GRAD_STOP) var backgroundGradientStop: lv_coord_t?
+    @LVStyleIntegerProperty(LV_STYLE_WIDTH) public var width: lv_coord_t?
+    @LVStyleIntegerProperty(LV_STYLE_MIN_WIDTH) public var minWidth: lv_coord_t?
+    @LVStyleIntegerProperty(LV_STYLE_MAX_WIDTH) public var maxWidth: lv_coord_t?
+    @LVStyleIntegerProperty(LV_STYLE_HEIGHT) public var height: lv_coord_t?
+    @LVStyleIntegerProperty(LV_STYLE_MIN_HEIGHT) public var minHeight: lv_coord_t?
+    @LVStyleIntegerProperty(LV_STYLE_MAX_HEIGHT) public var maxHeight: lv_coord_t?
+    @LVStyleIntegerProperty(LV_STYLE_X) public var x: lv_coord_t?
+    @LVStyleIntegerProperty(LV_STYLE_Y) public var y: lv_coord_t?
+    @LVStyleIntegerProperty(LV_STYLE_ALIGN) public var alignment: lv_align_t?
+    @LVStyleIntegerProperty(LV_STYLE_TRANSFORM_WIDTH) public var widthTransformation: lv_coord_t?
+    @LVStyleIntegerProperty(LV_STYLE_TRANSFORM_HEIGHT) public var heightTransformation: lv_coord_t?
+    @LVStyleIntegerProperty(LV_STYLE_TRANSLATE_X) public var xTranslation: lv_coord_t?
+    @LVStyleIntegerProperty(LV_STYLE_TRANSLATE_Y) public var yTranslation: lv_coord_t?
+    @LVStyleIntegerProperty(LV_STYLE_TRANSFORM_ZOOM) public var zoomTransform: lv_coord_t?
+    @LVStyleIntegerProperty(LV_STYLE_TRANSFORM_ANGLE) public var angleTransform: lv_coord_t?
+    @LVStyleIntegerProperty(LV_STYLE_TRANSFORM_PIVOT_X) public var xPivotTransform: lv_coord_t?
+    @LVStyleIntegerProperty(LV_STYLE_TRANSFORM_PIVOT_Y) public var yPivotTransform: lv_coord_t?
+    @LVStyleIntegerProperty(LV_STYLE_PAD_TOP) public var topPadding: lv_coord_t?
+    @LVStyleIntegerProperty(LV_STYLE_PAD_BOTTOM) public var bottomPadding: lv_coord_t?
+    @LVStyleIntegerProperty(LV_STYLE_PAD_LEFT) public var leftPadding: lv_coord_t?
+    @LVStyleIntegerProperty(LV_STYLE_PAD_RIGHT) public var rightPadding: lv_coord_t?
+    @LVStyleIntegerProperty(LV_STYLE_PAD_ROW) public var rowPadding: lv_coord_t?
+    @LVStyleIntegerProperty(LV_STYLE_PAD_COLUMN) public var colunnPadding: lv_coord_t?
+    @LVStyleColorProperty(LV_STYLE_BG_COLOR) public var backgroundColor: LVColor?
+    @LVStyleIntegerProperty(LV_STYLE_BG_OPA) public var backgroundOpacity: lv_opa_t?
+    @LVStyleColorProperty(LV_STYLE_BG_GRAD_COLOR) public var backgroundGradientColor: LVColor?
+    @LVStyleIntegerProperty(LV_STYLE_BG_GRAD_DIR) public var backgroundGradientDirection: lv_grad_dir_t?
+    @LVStyleIntegerProperty(LV_STYLE_BG_MAIN_STOP) public var backgroundMainStop: lv_coord_t?
+    @LVStyleIntegerProperty(LV_STYLE_BG_GRAD_STOP) public var backgroundGradientStop: lv_coord_t?
     // TODO: LV_STYLE_BG_GRAD
     // TODO: LV_STYLE_BG_DITHER_MODE
     // TODO: LV_STYLE_BG_IMG_SRC
-    @LVStyleIntegerProperty(LV_STYLE_BG_IMG_OPA) var imageOpacity: lv_opa_t?
-    @LVStyleColorProperty(LV_STYLE_BG_IMG_RECOLOR) var imageRecolor: LVColor?
-    @LVStyleIntegerProperty(LV_STYLE_BG_IMG_RECOLOR_OPA) var imageRecolorOpacity: lv_opa_t?
-    @LVStyleBooleanProperty(LV_STYLE_BG_IMG_TILED) var imageIsTiled: Bool?
-    @LVStyleColorProperty(LV_STYLE_BORDER_COLOR) var borderColor: LVColor?
-    @LVStyleIntegerProperty(LV_STYLE_BORDER_OPA) var borderOpacity: lv_opa_t?
-    @LVStyleIntegerProperty(LV_STYLE_BORDER_WIDTH) var borderWidth: lv_coord_t?
-    @LVStyleIntegerProperty(LV_STYLE_BORDER_SIDE) var borderSide: lv_border_side_t?
-    @LVStyleBooleanProperty(LV_STYLE_BORDER_POST) var borderPost: Bool?
-    @LVStyleIntegerProperty(LV_STYLE_OUTLINE_WIDTH) var outlineWidth: lv_coord_t?
-    @LVStyleColorProperty(LV_STYLE_OUTLINE_COLOR) var outlineColor: LVColor?
-    @LVStyleIntegerProperty(LV_STYLE_OUTLINE_OPA) var outlineOpacity: lv_opa_t?
-    @LVStyleIntegerProperty(LV_STYLE_OUTLINE_PAD) var outlinePad: lv_coord_t?
-    @LVStyleIntegerProperty(LV_STYLE_SHADOW_WIDTH) var shadowWidth: lv_coord_t?
-    @LVStyleIntegerProperty(LV_STYLE_SHADOW_OFS_X) var shadowXOffset: lv_coord_t?
-    @LVStyleIntegerProperty(LV_STYLE_SHADOW_OFS_Y) var shadowYOffset: lv_coord_t?
-    @LVStyleIntegerProperty(LV_STYLE_SHADOW_SPREAD) var shadowSpread: lv_coord_t?
-    @LVStyleColorProperty(LV_STYLE_SHADOW_COLOR) var shadowColor: LVColor?
-    @LVStyleIntegerProperty(LV_STYLE_SHADOW_OPA) var shadowOpacity: lv_opa_t?
-    @LVStyleIntegerProperty(LV_STYLE_LINE_WIDTH) var lineWidth: lv_coord_t?
-    @LVStyleIntegerProperty(LV_STYLE_LINE_DASH_WIDTH) var lineDashWidth: lv_coord_t?
-    @LVStyleIntegerProperty(LV_STYLE_LINE_DASH_GAP) var lineDashGap: lv_coord_t?
-    @LVStyleBooleanProperty(LV_STYLE_LINE_ROUNDED) var lineIsRounded: Bool?
-    @LVStyleColorProperty(LV_STYLE_LINE_COLOR) var lineColor: LVColor?
-    @LVStyleIntegerProperty(LV_STYLE_LINE_OPA) var lineOpacity: lv_opa_t?
-    @LVStyleIntegerProperty(LV_STYLE_ARC_WIDTH) var arcWidth: lv_coord_t?
-    @LVStyleBooleanProperty(LV_STYLE_ARC_ROUNDED) var arcIsRounded: Bool?
-    @LVStyleColorProperty(LV_STYLE_ARC_COLOR) var arcColor: LVColor?
-    @LVStyleIntegerProperty(LV_STYLE_ARC_OPA) var arcOpacity: lv_opa_t?
+    @LVStyleIntegerProperty(LV_STYLE_BG_IMG_OPA) public var imageOpacity: lv_opa_t?
+    @LVStyleColorProperty(LV_STYLE_BG_IMG_RECOLOR) public var imageRecolor: LVColor?
+    @LVStyleIntegerProperty(LV_STYLE_BG_IMG_RECOLOR_OPA) public var imageRecolorOpacity: lv_opa_t?
+    @LVStyleBooleanProperty(LV_STYLE_BG_IMG_TILED) public var imageIsTiled: Bool?
+    @LVStyleColorProperty(LV_STYLE_BORDER_COLOR) public var borderColor: LVColor?
+    @LVStyleIntegerProperty(LV_STYLE_BORDER_OPA) public var borderOpacity: lv_opa_t?
+    @LVStyleIntegerProperty(LV_STYLE_BORDER_WIDTH) public var borderWidth: lv_coord_t?
+    @LVStyleIntegerProperty(LV_STYLE_BORDER_SIDE) public var borderSide: lv_border_side_t?
+    @LVStyleBooleanProperty(LV_STYLE_BORDER_POST) public var borderPost: Bool?
+    @LVStyleIntegerProperty(LV_STYLE_OUTLINE_WIDTH) public var outlineWidth: lv_coord_t?
+    @LVStyleColorProperty(LV_STYLE_OUTLINE_COLOR) public var outlineColor: LVColor?
+    @LVStyleIntegerProperty(LV_STYLE_OUTLINE_OPA) public var outlineOpacity: lv_opa_t?
+    @LVStyleIntegerProperty(LV_STYLE_OUTLINE_PAD) public var outlinePad: lv_coord_t?
+    @LVStyleIntegerProperty(LV_STYLE_SHADOW_WIDTH) public var shadowWidth: lv_coord_t?
+    @LVStyleIntegerProperty(LV_STYLE_SHADOW_OFS_X) public var shadowXOffset: lv_coord_t?
+    @LVStyleIntegerProperty(LV_STYLE_SHADOW_OFS_Y) public var shadowYOffset: lv_coord_t?
+    @LVStyleIntegerProperty(LV_STYLE_SHADOW_SPREAD) public var shadowSpread: lv_coord_t?
+    @LVStyleColorProperty(LV_STYLE_SHADOW_COLOR) public var shadowColor: LVColor?
+    @LVStyleIntegerProperty(LV_STYLE_SHADOW_OPA) public var shadowOpacity: lv_opa_t?
+    @LVStyleIntegerProperty(LV_STYLE_LINE_WIDTH) public var lineWidth: lv_coord_t?
+    @LVStyleIntegerProperty(LV_STYLE_LINE_DASH_WIDTH) public var lineDashWidth: lv_coord_t?
+    @LVStyleIntegerProperty(LV_STYLE_LINE_DASH_GAP) public var lineDashGap: lv_coord_t?
+    @LVStyleBooleanProperty(LV_STYLE_LINE_ROUNDED) public var lineIsRounded: Bool?
+    @LVStyleColorProperty(LV_STYLE_LINE_COLOR) public var lineColor: LVColor?
+    @LVStyleIntegerProperty(LV_STYLE_LINE_OPA) public var lineOpacity: lv_opa_t?
+    @LVStyleIntegerProperty(LV_STYLE_ARC_WIDTH) public var arcWidth: lv_coord_t?
+    @LVStyleBooleanProperty(LV_STYLE_ARC_ROUNDED) public var arcIsRounded: Bool?
+    @LVStyleColorProperty(LV_STYLE_ARC_COLOR) public var arcColor: LVColor?
+    @LVStyleIntegerProperty(LV_STYLE_ARC_OPA) public var arcOpacity: lv_opa_t?
     // TODO: LV_STYLE_ARC_IMG_SRC
-    @LVStyleColorProperty(LV_STYLE_TEXT_COLOR) var textColor: LVColor?
-    @LVStyleIntegerProperty(LV_STYLE_TEXT_OPA) var textOpacity: lv_opa_t?
-    @LVStyleFontProperty(LV_STYLE_TEXT_FONT) var textFont: LVFont?
-    @LVStyleIntegerProperty(LV_STYLE_TEXT_LETTER_SPACE) var textLetterSpacing: lv_coord_t?
-    @LVStyleIntegerProperty(LV_STYLE_TEXT_LINE_SPACE) var textLineSpacing: lv_coord_t?
-    @LVStyleIntegerProperty(LV_STYLE_TEXT_DECOR) var textDecor: lv_text_decor_t?
-    @LVStyleIntegerProperty(LV_STYLE_TEXT_ALIGN) var textAlignment: lv_text_align_t?
-    @LVStyleIntegerProperty(LV_STYLE_RADIUS) var radius: lv_coord_t?
-    @LVStyleBooleanProperty(LV_STYLE_CLIP_CORNER) var clipCorner: Bool?
-    @LVStyleIntegerProperty(LV_STYLE_OPA) var opacity: lv_opa_t?
+    @LVStyleColorProperty(LV_STYLE_TEXT_COLOR) public var textColor: LVColor?
+    @LVStyleIntegerProperty(LV_STYLE_TEXT_OPA) public var textOpacity: lv_opa_t?
+    @LVStyleFontProperty(LV_STYLE_TEXT_FONT) public var textFont: LVFont?
+    @LVStyleIntegerProperty(LV_STYLE_TEXT_LETTER_SPACE) public var textLetterSpacing: lv_coord_t?
+    @LVStyleIntegerProperty(LV_STYLE_TEXT_LINE_SPACE) public var textLineSpacing: lv_coord_t?
+    @LVStyleIntegerProperty(LV_STYLE_TEXT_DECOR) public var textDecor: lv_text_decor_t?
+    @LVStyleIntegerProperty(LV_STYLE_TEXT_ALIGN) public var textAlignment: lv_text_align_t?
+    @LVStyleIntegerProperty(LV_STYLE_RADIUS) public var radius: lv_coord_t?
+    @LVStyleBooleanProperty(LV_STYLE_CLIP_CORNER) public var clipCorner: Bool?
+    @LVStyleIntegerProperty(LV_STYLE_OPA) public var opacity: lv_opa_t?
     // TODO: LV_STYLE_COLOR_FILTER_DSC
-    @LVStyleIntegerProperty(LV_STYLE_COLOR_FILTER_OPA) var colorFilterOpacity: lv_opa_t?
+    @LVStyleIntegerProperty(LV_STYLE_COLOR_FILTER_OPA) public var colorFilterOpacity: lv_opa_t?
     // TODO: LV_STYLE_ANIM
     // TODO: LV_STYLE_ANIM_TIME
     // TODO: LV_STYLE_ANIM_SPEED
     // TODO: LV_STYLE_TRANSITION
-    @LVStyleIntegerProperty(LV_STYLE_BLEND_MODE) var blendMode: lv_blend_mode_t?
-    @LVStyleIntegerProperty(LV_STYLE_LAYOUT) var layout: UInt16?
-    @LVStyleIntegerProperty(LV_STYLE_BASE_DIR) var baseDir: UInt16?
+    @LVStyleIntegerProperty(LV_STYLE_BLEND_MODE) public var blendMode: lv_blend_mode_t?
+    @LVStyleIntegerProperty(LV_STYLE_LAYOUT) public var layout: UInt16?
+    @LVStyleIntegerProperty(LV_STYLE_BASE_DIR) public var baseDir: UInt16?
 }
 
 @propertyWrapper
