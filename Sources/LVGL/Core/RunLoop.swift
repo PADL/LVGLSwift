@@ -22,7 +22,7 @@ public class LVRunLoop {
 
     private var task: Task<Void, Never>
     
-    public init(width: UInt32 = 1024, height: UInt32 = 768) {
+    public init(width: UInt32 = 1024, height: UInt32 = 600) {
         lv_init()
         LVGLSwiftDriverInit(width, height)
 

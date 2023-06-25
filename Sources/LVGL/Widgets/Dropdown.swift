@@ -31,9 +31,7 @@ public class LVDropdown: LVObject {
             String(cString: lv_dropdown_get_text(object), encoding: .utf8)!
         }
         set {
-            withUnsafePointer(to: newValue.cString(using: .utf8)!) {
-                lv_dropdown_set_text(object, $0)
-            }
+            lv_dropdown_set_text(object, newValue)
         }
     }
     
@@ -42,16 +40,12 @@ public class LVDropdown: LVObject {
             String(cString: lv_dropdown_get_options(object), encoding: .utf8)!
         }
         set {
-            withUnsafePointer(to: newValue.cString(using: .utf8)!) {
-                lv_dropdown_set_options(object, $0)
-            }
+            lv_dropdown_set_options(object, newValue)
         }
     }
     
     public func add(option: String, at position: UInt32) {
-        withUnsafePointer(to: option.cString(using: .utf8)!) {
-            lv_dropdown_add_option(object, $0, position)
-        }
+        lv_dropdown_add_option(object, option, position)
     }
     
     public func clearOptions() {
@@ -81,9 +75,7 @@ public class LVDropdown: LVObject {
             String(cString: lv_dropdown_get_symbol(object), encoding: .utf8)!
         }
         set {
-            withUnsafePointer(to: newValue.cString(using: .utf8)!) {
-                lv_dropdown_set_symbol(object, $0)
-            }
+            lv_dropdown_set_symbol(object, newValue)
         }
     }
     
@@ -97,9 +89,7 @@ public class LVDropdown: LVObject {
     }
     
     public func index(of option: String) -> Int32 {
-        withUnsafePointer(to: options.cString(using: .utf8)!) {
-            lv_dropdown_get_option_index(object, $0)
-        }
+        lv_dropdown_get_option_index(object, option)
     }
     
     public func open() {

@@ -27,9 +27,7 @@ public class LVTextArea: LVObject {
             String(cString: lv_textarea_get_text(object), encoding: .utf8)!
         }
         set {
-            withUnsafePointer(to: newValue.cString(using: .utf8)!) {
-                lv_textarea_set_text(object, $0)
-            }
+            lv_textarea_set_text(object, newValue)
         }
     }
     
@@ -38,9 +36,7 @@ public class LVTextArea: LVObject {
             String(cString: lv_textarea_get_placeholder_text(object), encoding: .utf8)!
         }
         set {
-            withUnsafePointer(to: newValue.cString(using: .utf8)!) {
-                lv_textarea_set_placeholder_text(object, $0)
-            }
+            lv_textarea_set_placeholder_text(object, newValue)
         }
     }
     
@@ -76,9 +72,7 @@ public class LVTextArea: LVObject {
             String(cString: lv_textarea_get_password_bullet(object), encoding: .utf8)!
         }
         set {
-            withUnsafePointer(to: newValue.cString(using: .utf8)!) {
-                lv_textarea_set_password_bullet(object, $0)
-            }
+            lv_textarea_set_password_bullet(object, newValue)
         }
     }
 
@@ -105,9 +99,7 @@ public class LVTextArea: LVObject {
             String(cString: lv_textarea_get_accepted_chars(object), encoding: .utf8)!
         }
         set {
-            withUnsafePointer(to: newValue.cString(using: .utf8)!) {
-                lv_textarea_set_accepted_chars(object, $0)
-            }
+            lv_textarea_set_accepted_chars(object, newValue)
         }
     }
     
@@ -121,9 +113,7 @@ public class LVTextArea: LVObject {
     }
     
     public func setInsertReplacement(to newValue: String) {
-        withUnsafePointer(to: newValue.cString(using: .utf8)!) {
-            lv_textarea_set_insert_replace(object, $0)
-        }
+        lv_textarea_set_insert_replace(object, newValue)
     }
     
     public var selectionMode: Bool {
@@ -153,9 +143,7 @@ public class LVTextArea: LVObject {
     }
     
     public func append(_ text: String) {
-        withUnsafePointer(to: text.cString(using: .utf8)!) {
-            lv_textarea_add_text(object, $0)
-        }
+        lv_textarea_add_text(object, text)
     }
     
     public func removeLeadingCharacter() {

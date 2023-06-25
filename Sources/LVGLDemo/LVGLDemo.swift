@@ -27,7 +27,6 @@ struct App {
 
         /// example based on https://github.com/scottandrew/LVGLSwift
         /// used with permission from author
-        ///
     
         let screen = LVScreen.current
         let button = LVButton(with: screen)

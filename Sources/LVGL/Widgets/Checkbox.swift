@@ -27,9 +27,7 @@ public class LVCheckbox: LVObject {
             String(cString: lv_checkbox_get_text(object), encoding: .utf8)!
         }
         set {
-            withUnsafePointer(to: newValue.cString(using: .utf8)!) {
-                lv_checkbox_set_text(object, $0)
-            }
+            lv_checkbox_set_text(object, newValue)
         }
     }
 }

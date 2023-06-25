@@ -27,9 +27,7 @@ public class LVLabel: LVObject {
             String(cString: lv_checkbox_get_text(object), encoding: .utf8)!
         }
         set {
-            withUnsafePointer(to: newValue.cString(using: .utf8)!) {
-                lv_checkbox_set_text(object, $0)
-            }
+            lv_checkbox_set_text(object, newValue)
         }
     }
     
@@ -80,9 +78,7 @@ public class LVLabel: LVObject {
     }
     
     func insert(text: String, at position: UInt32) {
-        withUnsafePointer(to: text.cString(using: .utf8)!) {
-            lv_label_ins_text(object, position, $0)
-        }
+        lv_label_ins_text(object, position, text)
     }
     
     func cut(characters: UInt32, at position: UInt32) {

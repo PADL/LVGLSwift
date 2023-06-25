@@ -45,9 +45,7 @@ public class LVImage: LVObject {
         set {
             switch newValue {
             case .file(let file):
-                withUnsafePointer(to: file.cString(using: .utf8)!) {
-                    lv_img_set_src(object, $0)
-                }
+                lv_img_set_src(object, file)
             default:
                 fatalError("not implemented")
             }

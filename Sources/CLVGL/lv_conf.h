@@ -254,7 +254,7 @@
     #define LV_LOG_TRACE_TIMER      0
     #define LV_LOG_TRACE_INDEV      0
     #define LV_LOG_TRACE_DISP_REFR  1
-    #define LV_LOG_TRACE_EVENT      1
+    #define LV_LOG_TRACE_EVENT      0
     #define LV_LOG_TRACE_OBJ_CREATE 1
     #define LV_LOG_TRACE_LAYOUT     1
     #define LV_LOG_TRACE_ANIM       1
