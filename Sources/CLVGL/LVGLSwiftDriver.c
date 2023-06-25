@@ -7,7 +7,7 @@ static lv_disp_t *display;
 static lv_disp_draw_buf_t drawBuffer;
 static lv_indev_drv_t inputDrv;
 static lv_disp_drv_t displayDrv;
-    
+
 void LVGLSwiftDriverInit(void)
 {
     lv_color_t frameBuffer[LV_HOR_RES * LV_VER_RES];

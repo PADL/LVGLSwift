@@ -17,46 +17,81 @@
 import Foundation
 import CLVGL
 import LVGL
+import AsyncAlgorithms
+import ArgumentParser
 
 @main
 struct App {
-    static func main() async throws {
+    static func main() {
         let runLoop = LVRunLoop.shared
-        
-        var style = LVStyle()
-    
-        style.radius = 5
-        style.textColor = LVColor.white
-        style.backgroundColor = LVColor.black
-        
-        var theme = LVTheme { theme, object in
-            object.append(style: style, selector: lv_style_selector_t(LV_STATE_PRESSED))
+
+        /// example based on https://github.com/scottandrew/LVGLSwift
+        /// used with permission from author
+
+        let screenStyle = LVStyle()
+        screenStyle.backgroundColor = LVColor.black
+        screenStyle.backgroundOpacity = lv_opa_t(LV_OPA_COVER)
+        screenStyle.textColor = LVColor.white
+
+        let buttonStyle = LVStyle()
+        buttonStyle.backgroundColor = LVColor(red: 0, green: 0, blue: 255)
+        buttonStyle.borderWidth = 0
+        buttonStyle.radius = 5
+        buttonStyle.topPadding = 10
+        buttonStyle.leftPadding = 10
+        buttonStyle.backgroundOpacity = lv_opa_t(LV_OPA_COVER)
+
+        let arcStyle = LVStyle()
+        arcStyle.arcColor = LVColor(hexValue: 0x909090)
+        arcStyle.arcWidth = 15
+        arcStyle.arcIsRounded = true
+
+        let theme = LVTheme { theme, object in
+            switch object {
+            case is LVScreen:
+                object.append(style: screenStyle, selector: lv_style_selector_t(LV_STATE_ANY))
+                break
+            case is LVButton:
+                object.append(style: buttonStyle, selector: lv_style_selector_t(LV_STATE_PRESSED))
+                break
+            case is LVSlider:
+                object.append(style: arcStyle, selector: lv_style_selector_t(LV_STATE_ANY))
+                object.append(style: arcStyle, selector: lv_style_selector_t(LV_PART_INDICATOR))
+                break
+            case is LVArc:
+                object.append(style: arcStyle, selector: lv_style_selector_t(LV_STATE_ANY))
+                object.append(style: arcStyle, selector: lv_style_selector_t(LV_PART_INDICATOR))
+                break
+            default:
+                break
+            }
         }
         
         var display = LVDisplay()
         display.theme = theme
         
         let screen = LVScreen.current
-        
         let button = LVButton(with: screen)
         let label = LVLabel(with: button)
         let arc = LVArc(with: screen)
         let slider = LVSlider(with: screen)
         
-        arc.size = LVSize(width: 250, height: 500)
+        arc.size = LVSize(width: 250, height: 100)
         slider.size = LVSize(width: 150, height: 10)
         
         button.center()
         slider.center()
         
-        label.text = "Hello"
+        label.text = "Hello, world!"
         
         screen.load()
-        
-        for await event in screen.events {
-            debugPrint("received event \(event)")
+
+        Task { @MainActor in
+            for await event in screen.events {
+                debugPrint("\(event)")
+            }
         }
-        
-        await runLoop.run()
+
+        runLoop.run()
     }
 }

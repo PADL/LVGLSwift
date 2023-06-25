@@ -16,8 +16,11 @@
 
 import Foundation
 import CLVGL
+#if !os(Linux)
+import CoreFoundation
+#endif
 
-public actor LVRunLoop {
+public class LVRunLoop {
     public static let shared = LVRunLoop()
 
     private var task: Task<Void, Never>
@@ -34,17 +37,30 @@ public actor LVRunLoop {
         }
     }
 
-    public func run() {
-        repeat {
-            lv_task_handler()
-            usleep(5000)
-        } while !Task.isCancelled
-    }
-    
     deinit {
+        task.cancel()
         lv_deinit()
     }
-    
+
+    public func run() {
+        #if canImport(Darwin)
+        let timer = Timer(timeInterval: Double(LV_DISP_DEF_REFR_PERIOD) / 1000, repeats: true) { timer in
+            lv_task_handler()
+        }
+        let runLoop = RunLoop.main
+        runLoop.add(timer, forMode: .common)
+        runLoop.run()
+        #else
+        let timer = DispatchSource.makeTimerSource()
+        timer.schedule(deadline: .now(), repeating: .milliseconds(Int(LV_DISP_DEF_REFR_PERIOD)))
+        timer.setEventHandler {
+            lv_task_handler()
+        }
+        timer.activate()
+        dispatchMain()
+        #endif
+    }
+
     public var isInitialized: Bool {
         lv_is_initialized()
     }
