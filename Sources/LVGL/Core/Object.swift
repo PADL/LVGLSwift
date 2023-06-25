@@ -64,27 +64,26 @@ public class LVObject {
         }
     }
 
-    public var position: (lv_coord_t, lv_coord_t) {
+    public var position: lv_point_t {
         get {
-            (lv_obj_get_x(object), lv_obj_get_y(object))
+            lv_point_t(x: lv_obj_get_x(object), y: lv_obj_get_y(object))
         }
         set {
-            lv_obj_set_pos(object, newValue.0, newValue.1)
+            lv_obj_set_pos(object, newValue.x, newValue.y)
         }
     }
 
-    public var contentSize: (lv_coord_t, lv_coord_t) {
+    public var contentSize: lv_point_t {
         get {
-            (lv_obj_get_content_width(object), lv_obj_get_content_height(object))
+            lv_point_t(x: lv_obj_get_content_width(object), y: lv_obj_get_content_height(object))
         }
     }
     
-    public var selfSize: (lv_coord_t, lv_coord_t) {
+    public var selfSize: lv_point_t {
         get {
-            (lv_obj_get_self_width(object), lv_obj_get_self_height(object))
+            lv_point_t(x: lv_obj_get_self_width(object), y: lv_obj_get_self_height(object))
         }
     }
-
 
     public var isLayoutPositioned: Bool {
         get {

@@ -81,14 +81,14 @@ public class LVImage: LVObject {
         }
     }
     
-    public var pivot: (lv_coord_t, lv_coord_t) {
+    public var pivot: lv_point_t {
         get {
             var pivot = lv_point_t(x: 0, y: 0)
             lv_img_get_pivot(object, &pivot)
-            return (pivot.x, pivot.y)
+            return pivot
         }
         set {
-            lv_img_set_pivot(object, newValue.0, newValue.1)
+            lv_img_set_pivot(object, newValue.x, newValue.y)
         }
     }
     
