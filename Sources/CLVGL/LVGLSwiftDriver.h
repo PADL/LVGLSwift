@@ -1,3 +1,5 @@
 #pragma once
 
-void LVGLSwiftDriverInit(void);
+#include <inttypes.h>
+
+bool LVGLSwiftDriverInit(uint32_t width, uint32_t height);

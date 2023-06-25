@@ -27,7 +27,22 @@ struct App {
 
         /// example based on https://github.com/scottandrew/LVGLSwift
         /// used with permission from author
-
+        ///
+    
+        let screen = LVScreen.current
+        let button = LVButton(with: screen)
+        let label = LVLabel(with: button)
+        let arc = LVArc(with: screen)
+        let slider = LVSlider(with: screen)
+        
+        arc.size = LVSize(width: 250, height: 100)
+        slider.size = LVSize(width: 150, height: 10)
+        
+        button.center()
+        slider.center()
+        
+        label.text = "Hello, world!"
+        
         let screenStyle = LVStyle()
         screenStyle.backgroundColor = LVColor.black
         screenStyle.backgroundOpacity = lv_opa_t(LV_OPA_COVER)
@@ -69,20 +84,6 @@ struct App {
         
         var display = LVDisplay()
         display.theme = theme
-        
-        let screen = LVScreen.current
-        let button = LVButton(with: screen)
-        let label = LVLabel(with: button)
-        let arc = LVArc(with: screen)
-        let slider = LVSlider(with: screen)
-        
-        arc.size = LVSize(width: 250, height: 100)
-        slider.size = LVSize(width: 150, height: 10)
-        
-        button.center()
-        slider.center()
-        
-        label.text = "Hello, world!"
         
         screen.load()
 

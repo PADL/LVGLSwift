@@ -1,3 +1,5 @@
+#include <stdlib.h>
+
 #include "CLVGL.h"
 #include "LVGLSwiftDriver.h"
 
@@ -7,19 +9,23 @@ static lv_disp_t *display;
 static lv_disp_draw_buf_t drawBuffer;
 static lv_indev_drv_t inputDrv;
 static lv_disp_drv_t displayDrv;
+static lv_color_t *frameBuffer;
 
-void LVGLSwiftDriverInit(void)
+bool LVGLSwiftDriverInit(uint32_t width, uint32_t height)
 {
-    lv_color_t frameBuffer[LV_HOR_RES * LV_VER_RES];
+    free(frameBuffer);
+    frameBuffer = (lv_color_t *)calloc(width * height, sizeof(lv_color_t));
+    if (frameBuffer == NULL)
+        return false;
 
     sdl_init();
 
-    lv_disp_draw_buf_init(&drawBuffer, frameBuffer, NULL, LV_HOR_RES * LV_VER_RES);
+    lv_disp_draw_buf_init(&drawBuffer, frameBuffer, NULL, width * height);
     
     lv_disp_drv_init(&displayDrv);
     displayDrv.draw_buf = &drawBuffer;
-    displayDrv.hor_res = LV_HOR_RES;
-    displayDrv.ver_res = LV_VER_RES;
+    displayDrv.hor_res = width;
+    displayDrv.ver_res = height;
     displayDrv.flush_cb = sdl_display_flush;
     display = lv_disp_drv_register(&displayDrv);
     

@@ -37,6 +37,8 @@ public class LVObject: CustomStringConvertible, Equatable {
         self.object = object
         
         lv_obj_set_user_data(object, bridgeToCLVGL(self))
+        lv_theme_apply(object)
+
         lv_obj_add_event_cb(object, {
             guard let eventData = $0?.pointee else {
                 return
@@ -52,7 +54,6 @@ public class LVObject: CustomStringConvertible, Equatable {
                 await event.target.events.send(event)
             }
         }, filter, bridgeToCLVGL(self))
-        lv_theme_apply(object)
     }
     
     public static func == (lhs: LVObject, rhs: LVObject) -> Bool {

@@ -16,18 +16,15 @@
 
 import Foundation
 import CLVGL
-#if !os(Linux)
-import CoreFoundation
-#endif
 
 public class LVRunLoop {
     public static let shared = LVRunLoop()
 
     private var task: Task<Void, Never>
     
-    public init() {
+    public init(width: UInt32 = 1024, height: UInt32 = 768) {
         lv_init()
-        LVGLSwiftDriverInit()
+        LVGLSwiftDriverInit(width, height)
 
         task = Task.detached {
             repeat {
