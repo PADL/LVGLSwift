@@ -174,7 +174,7 @@ public class LVStyle {
     // TODO: LV_STYLE_ARC_WIDTH
     // TODO: LV_STYLE_ARC_ROUNDED
     @LVStyleColorProperty(LV_STYLE_ARC_COLOR) var arcColor: LVColor?
-    // TODO: LV_STYLE_ARC_OPA
+    @LVStyleIntegerProperty(LV_STYLE_ARC_OPA) var arcOpacity: lv_opa_t?
     // TODO: LV_STYLE_ARC_IMG_SRC
     @LVStyleColorProperty(LV_STYLE_TEXT_COLOR) var textColor: LVColor?
     @LVStyleIntegerProperty(LV_STYLE_TEXT_OPA) var textOpacity: lv_opa_t?

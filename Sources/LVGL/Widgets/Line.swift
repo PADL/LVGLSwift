@@ -23,9 +23,8 @@ public class LVLine: LVObject {
     }
     
     public func set(points: [lv_point_t]) {
-        //lv_line_set_points
         points.withUnsafeBufferPointer { (cArray: UnsafeBufferPointer<lv_point_t>) -> () in
-            cArray.count
+            lv_line_set_points(object, cArray.baseAddress, UInt16(cArray.count))
         }
     }
     public var yCoordinateInversion: Bool {
@@ -35,6 +34,5 @@ public class LVLine: LVObject {
         set {
             lv_line_set_y_invert(object, newValue)
         }
-        
     }
 }
