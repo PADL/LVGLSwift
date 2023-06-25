@@ -17,7 +17,7 @@
 import Foundation
 import CLVGL
 
-public struct LVStyle {
+public class LVStyle {
     private var style: lv_style_t = lv_style_t()
     
     init() {
@@ -67,7 +67,7 @@ public struct LVStyle {
         return LVFont(value.ptr.assumingMemoryBound(to: lv_font_t.self))
     }
     
-    mutating func _setProperty(_ property: lv_style_prop_t, _ value: lv_style_value_t?) {
+    func _setProperty(_ property: lv_style_prop_t, _ value: lv_style_value_t?) {
         if let value {
             lv_style_set_prop(&style, property, value)
         } else {
@@ -75,7 +75,7 @@ public struct LVStyle {
         }
     }
     
-    mutating func setProperty(_ property: lv_style_prop_t, _ value: Bool?) {
+    func setProperty(_ property: lv_style_prop_t, _ value: Bool?) {
         if let value {
             let value = lv_style_value_t(num: value ? 1 : 0)
             _setProperty(property, value)
@@ -84,7 +84,7 @@ public struct LVStyle {
         }
     }
     
-    mutating func setProperty<T: BinaryInteger>(_ property: lv_style_prop_t, _ value: T?) {
+    func setProperty<T: BinaryInteger>(_ property: lv_style_prop_t, _ value: T?) {
         if let value {
             let value = lv_style_value_t(num: Int32(value))
             _setProperty(property, value)
@@ -93,7 +93,7 @@ public struct LVStyle {
         }
     }
 
-    mutating func setProperty(_ property: lv_style_prop_t, _ value: LVColor?) {
+    func setProperty(_ property: lv_style_prop_t, _ value: LVColor?) {
         if let value {
             let value = lv_style_value_t(color: value.color)
             _setProperty(property, value)
@@ -102,7 +102,7 @@ public struct LVStyle {
         }
     }
     
-    mutating func setProperty(_ property: lv_style_prop_t, _ value: LVFont?) {
+    func setProperty(_ property: lv_style_prop_t, _ value: LVFont?) {
         if let value {
             let value = lv_style_value_t(ptr: value.font)
             _setProperty(property, value)
@@ -110,273 +110,36 @@ public struct LVStyle {
             _setProperty(property, nil)
         }
     }
-
-}
-
-// FIXME: we'd like to use a property wrapped but accessing the enclosing instance can only be done with class types, and we don't want to make LVStyle a class because of the allocation cost
-
-public extension LVStyle {
-    var width: lv_coord_t? {
-        get {
-            getProperty(LV_STYLE_WIDTH)
-        }
-        set {
-            setProperty(LV_STYLE_WIDTH, newValue)
-        }
-    }
     
-    var minWidth: lv_coord_t? {
-        get {
-            getProperty(LV_STYLE_MIN_WIDTH)
-        }
-        set {
-            setProperty(LV_STYLE_MIN_WIDTH, newValue)
-        }
-    }
-
-    var maxWidth: lv_coord_t? {
-        get {
-            getProperty(LV_STYLE_MAX_WIDTH)
-        }
-        set {
-            setProperty(LV_STYLE_MAX_WIDTH, newValue)
-        }
-    }
-
-    var height: lv_coord_t? {
-        get {
-            getProperty(LV_STYLE_HEIGHT)
-        }
-        set {
-            setProperty(LV_STYLE_HEIGHT, newValue)
-        }
-    }
-
-    var minHeight: lv_coord_t? {
-        get {
-            getProperty(LV_STYLE_MIN_HEIGHT)
-        }
-        set {
-            setProperty(LV_STYLE_MIN_HEIGHT, newValue)
-        }
-    }
-
-    var maxHeight: lv_coord_t? {
-        get {
-            getProperty(LV_STYLE_MAX_HEIGHT)
-        }
-        set {
-            setProperty(LV_STYLE_MAX_HEIGHT, newValue)
-        }
-    }
-
-    var x: lv_coord_t? {
-        get {
-            getProperty(LV_STYLE_X)
-        }
-        set {
-            setProperty(LV_STYLE_X, newValue)
-        }
-    }
-
-    var y: lv_coord_t? {
-        get {
-            getProperty(LV_STYLE_Y)
-        }
-        set {
-            setProperty(LV_STYLE_Y, newValue)
-        }
-    }
-
-    var alignment: lv_align_t? {
-        get {
-            getProperty(LV_STYLE_ALIGN)
-        }
-        set {
-            setProperty(LV_STYLE_ALIGN, newValue)
-        }
-    }
-
-    var widthTransformation: lv_coord_t? {
-        get {
-            getProperty(LV_STYLE_TRANSFORM_WIDTH)
-        }
-        set {
-            setProperty(LV_STYLE_TRANSFORM_WIDTH, newValue)
-        }
-    }
-    
-    var heighTransformation: lv_coord_t? {
-        get {
-            getProperty(LV_STYLE_TRANSFORM_HEIGHT)
-        }
-        set {
-            setProperty(LV_STYLE_TRANSFORM_HEIGHT, newValue)
-        }
-    }
-
-    var xTranslation: lv_coord_t? {
-        get {
-            getProperty(LV_STYLE_TRANSLATE_X)
-        }
-        set {
-            setProperty(LV_STYLE_TRANSLATE_X, newValue)
-        }
-    }
-
-    var yTranslation: lv_coord_t? {
-        get {
-            getProperty(LV_STYLE_TRANSLATE_Y)
-        }
-        set {
-            setProperty(LV_STYLE_TRANSLATE_Y, newValue)
-        }
-    }
-
-    var zoomTransform: lv_coord_t? {
-        get {
-            getProperty(LV_STYLE_TRANSFORM_ZOOM)
-        }
-        set {
-            setProperty(LV_STYLE_TRANSFORM_ZOOM, newValue)
-        }
-    }
-
-    var angleTransform: lv_coord_t? {
-        get {
-            getProperty(LV_STYLE_TRANSFORM_ANGLE)
-        }
-        set {
-            setProperty(LV_STYLE_TRANSFORM_ANGLE, newValue)
-        }
-    }
-
-    var xPivotTransform: lv_coord_t? {
-        get {
-            getProperty(LV_STYLE_TRANSFORM_PIVOT_X)
-        }
-        set {
-            setProperty(LV_STYLE_TRANSFORM_PIVOT_X, newValue)
-        }
-    }
-
-    var yPivotTransform: lv_coord_t? {
-        get {
-            getProperty(LV_STYLE_TRANSFORM_PIVOT_Y)
-        }
-        set {
-            setProperty(LV_STYLE_TRANSFORM_PIVOT_Y, newValue)
-        }
-    }
-
-    var topPadding: lv_coord_t? {
-        get {
-            getProperty(LV_STYLE_PAD_TOP)
-        }
-        set {
-            setProperty(LV_STYLE_PAD_TOP, newValue)
-        }
-    }
-
-    var bottomPadding: lv_coord_t? {
-        get {
-            getProperty(LV_STYLE_PAD_BOTTOM)
-        }
-        set {
-            setProperty(LV_STYLE_PAD_BOTTOM, newValue)
-        }
-    }
-    
-    var leftPadding: lv_coord_t? {
-        get {
-            getProperty(LV_STYLE_PAD_LEFT)
-        }
-        set {
-            setProperty(LV_STYLE_PAD_LEFT, newValue)
-        }
-    }
-    
-    var rightPadding: lv_coord_t? {
-        get {
-            getProperty(LV_STYLE_PAD_RIGHT)
-        }
-        set {
-            setProperty(LV_STYLE_PAD_RIGHT, newValue)
-        }
-    }
-
-    var rowPadding: lv_coord_t? {
-        get {
-            getProperty(LV_STYLE_PAD_ROW)
-        }
-        set {
-            setProperty(LV_STYLE_PAD_ROW, newValue)
-        }
-    }
-
-    var columnPadding: lv_coord_t? {
-        get {
-            getProperty(LV_STYLE_PAD_COLUMN)
-        }
-        set {
-            setProperty(LV_STYLE_PAD_COLUMN, newValue)
-        }
-    }
-
-    var backgroundColor: LVColor? {
-        get {
-            getProperty(LV_STYLE_BG_COLOR)
-        }
-        set {
-            setProperty(LV_STYLE_BG_COLOR, newValue)
-        }
-    }
-    
-    var backgroundOpacity: lv_opa_t? {
-        get {
-            getProperty(LV_STYLE_BG_OPA)
-        }
-        set {
-            setProperty(LV_STYLE_BG_OPA, newValue)
-        }
-    }
-
-    var backgroundGradientColor: LVColor? {
-        get {
-            getProperty(LV_STYLE_BG_GRAD_COLOR)
-        }
-        set {
-            setProperty(LV_STYLE_BG_GRAD_COLOR, newValue)
-        }
-    }
-
-    var backgroundGradientDirection: lv_grad_dir_t? {
-        get {
-            getProperty(LV_STYLE_BG_GRAD_DIR)
-        }
-        set {
-            setProperty(LV_STYLE_BG_GRAD_DIR, newValue)
-        }
-    }
-
-    var backgroundMainStop: lv_coord_t? {
-        get {
-            getProperty(LV_STYLE_BG_MAIN_STOP)
-        }
-        set {
-            setProperty(LV_STYLE_BG_MAIN_STOP, newValue)
-        }
-    }
-
-    var backgroundGradientStop: lv_coord_t? {
-        get {
-            getProperty(LV_STYLE_BG_GRAD_STOP)
-        }
-        set {
-            setProperty(LV_STYLE_BG_GRAD_STOP, newValue)
-        }
-    }
-
+    @LVStyleIntegerProperty(LV_STYLE_WIDTH) var width: lv_coord_t?
+    @LVStyleIntegerProperty(LV_STYLE_MIN_WIDTH) var minWidth: lv_coord_t?
+    @LVStyleIntegerProperty(LV_STYLE_MAX_WIDTH) var maxWidth: lv_coord_t?
+    @LVStyleIntegerProperty(LV_STYLE_HEIGHT) var height: lv_coord_t?
+    @LVStyleIntegerProperty(LV_STYLE_MIN_HEIGHT) var minHeight: lv_coord_t?
+    @LVStyleIntegerProperty(LV_STYLE_MAX_HEIGHT) var maxHeight: lv_coord_t?
+    @LVStyleIntegerProperty(LV_STYLE_X) var x: lv_coord_t?
+    @LVStyleIntegerProperty(LV_STYLE_Y) var y: lv_coord_t?
+    @LVStyleIntegerProperty(LV_STYLE_ALIGN) var alignment: lv_align_t?
+    @LVStyleIntegerProperty(LV_STYLE_TRANSFORM_WIDTH) var widthTransformation: lv_coord_t?
+    @LVStyleIntegerProperty(LV_STYLE_TRANSFORM_HEIGHT) var heightTransformation: lv_coord_t?
+    @LVStyleIntegerProperty(LV_STYLE_TRANSLATE_X) var xTranslation: lv_coord_t?
+    @LVStyleIntegerProperty(LV_STYLE_TRANSLATE_Y) var yTranslation: lv_coord_t?
+    @LVStyleIntegerProperty(LV_STYLE_TRANSFORM_ZOOM) var zoomTransform: lv_coord_t?
+    @LVStyleIntegerProperty(LV_STYLE_TRANSFORM_ANGLE) var angleTransform: lv_coord_t?
+    @LVStyleIntegerProperty(LV_STYLE_TRANSFORM_PIVOT_X) var xPivotTransform: lv_coord_t?
+    @LVStyleIntegerProperty(LV_STYLE_TRANSFORM_PIVOT_Y) var yPivotTransform: lv_coord_t?
+    @LVStyleIntegerProperty(LV_STYLE_PAD_TOP) var topPadding: lv_coord_t?
+    @LVStyleIntegerProperty(LV_STYLE_PAD_BOTTOM) var bottomPadding: lv_coord_t?
+    @LVStyleIntegerProperty(LV_STYLE_PAD_LEFT) var leftPadding: lv_coord_t?
+    @LVStyleIntegerProperty(LV_STYLE_PAD_RIGHT) var rightPadding: lv_coord_t?
+    @LVStyleIntegerProperty(LV_STYLE_PAD_ROW) var rowPadding: lv_coord_t?
+    @LVStyleIntegerProperty(LV_STYLE_PAD_COLUMN) var colunnPadding: lv_coord_t?
+    @LVStyleColorProperty(LV_STYLE_BG_COLOR) var backgroundColor: LVColor?
+    @LVStyleIntegerProperty(LV_STYLE_BG_OPA) var backgroundOpacity: lv_opa_t?
+    @LVStyleColorProperty(LV_STYLE_BG_GRAD_COLOR) var backgroundGradientColor: LVColor?
+    @LVStyleIntegerProperty(LV_STYLE_BG_GRAD_DIR) var backgroundGradientDirection: lv_grad_dir_t?
+    @LVStyleIntegerProperty(LV_STYLE_BG_MAIN_STOP) var backgroundMainStop: lv_coord_t?
+    @LVStyleIntegerProperty(LV_STYLE_BG_GRAD_STOP) var backgroundGradientStop: lv_coord_t?
     // TODO: LV_STYLE_BG_GRAD
     // TODO: LV_STYLE_BG_DITHER_MODE
     // TODO: LV_STYLE_BG_IMG_SRC
@@ -384,142 +147,21 @@ public extension LVStyle {
     // TODO: LV_STYLE_BG_IMG_RECOLOR
     // TODO: LV_STYLE_BG_IMG_RECOLOR_OPA
     // TODO: LV_STYLE_BG_IMG_TILED
-    
-    var borderColor: LVColor? {
-        get {
-            getProperty(LV_STYLE_BORDER_COLOR)
-        }
-        set {
-            setProperty(LV_STYLE_BORDER_COLOR, newValue)
-        }
-    }
-    
-    var borderOpacity: lv_opa_t? {
-        get {
-            getProperty(LV_STYLE_BORDER_OPA)
-        }
-        set {
-            setProperty(LV_STYLE_BORDER_OPA, newValue)
-        }
-    }
-
-    var borderWidth: lv_coord_t? {
-        get {
-            getProperty(LV_STYLE_BORDER_WIDTH)
-        }
-        set {
-            setProperty(LV_STYLE_BORDER_WIDTH, newValue)
-        }
-    }
-
-    var borderSide: lv_border_side_t? {
-        get {
-            getProperty(LV_STYLE_BORDER_SIDE)
-        }
-        set {
-            setProperty(LV_STYLE_BORDER_SIDE, newValue)
-        }
-    }
-
-    var borderPost: Bool? {
-        get {
-            getProperty(LV_STYLE_BORDER_POST)
-        }
-        set {
-            setProperty(LV_STYLE_BORDER_POST, newValue)
-        }
-    }
-    
-    var outlineWidth: lv_coord_t? {
-        get {
-            getProperty(LV_STYLE_OUTLINE_WIDTH)
-        }
-        set {
-            setProperty(LV_STYLE_OUTLINE_WIDTH, newValue)
-        }
-    }
-
-    var outlineColor: LVColor? {
-        get {
-            getProperty(LV_STYLE_OUTLINE_COLOR)
-        }
-        set {
-            setProperty(LV_STYLE_OUTLINE_COLOR, newValue)
-        }
-    }
-
-    var outlineOpacity: lv_opa_t? {
-        get {
-            getProperty(LV_STYLE_OUTLINE_OPA)
-        }
-        set {
-            setProperty(LV_STYLE_OUTLINE_OPA, newValue)
-        }
-    }
-
-    var outlinePad: lv_coord_t? {
-        get {
-            getProperty(LV_STYLE_OUTLINE_PAD)
-        }
-        set {
-            setProperty(LV_STYLE_OUTLINE_PAD, newValue)
-        }
-    }
-
-    var shadowWidth: lv_coord_t? {
-        get {
-            getProperty(LV_STYLE_SHADOW_WIDTH)
-        }
-        set {
-            setProperty(LV_STYLE_SHADOW_WIDTH, newValue)
-        }
-    }
-
-    var shadowXOffset: lv_coord_t? {
-        get {
-            getProperty(LV_STYLE_SHADOW_OFS_X)
-        }
-        set {
-            setProperty(LV_STYLE_SHADOW_OFS_X, newValue)
-        }
-    }
-
-    var shadowYOffset: lv_coord_t? {
-        get {
-            getProperty(LV_STYLE_SHADOW_OFS_Y)
-        }
-        set {
-            setProperty(LV_STYLE_SHADOW_OFS_Y, newValue)
-        }
-    }
-
-    var shadowSpread: lv_coord_t? {
-        get {
-            getProperty(LV_STYLE_SHADOW_SPREAD)
-        }
-        set {
-            setProperty(LV_STYLE_SHADOW_SPREAD, newValue)
-        }
-    }
-
-    var shadowColor: LVColor? {
-        get {
-            getProperty(LV_STYLE_SHADOW_COLOR)
-        }
-        set {
-            setProperty(LV_STYLE_SHADOW_COLOR, newValue)
-        }
-    }
-
-    var shadowOpacity: lv_opa_t? {
-        get {
-            getProperty(LV_STYLE_SHADOW_OPA)
-        }
-        set {
-            setProperty(LV_STYLE_SHADOW_OPA, newValue)
-        }
-    }
-    
+    @LVStyleColorProperty(LV_STYLE_BORDER_COLOR) var borderColor: LVColor?
+    @LVStyleIntegerProperty(LV_STYLE_BORDER_OPA) var borderOpacity: lv_opa_t?
+    @LVStyleIntegerProperty(LV_STYLE_BORDER_WIDTH) var borderWidth: lv_coord_t?
+    @LVStyleIntegerProperty(LV_STYLE_BORDER_SIDE) var borderSide: lv_border_side_t?
+    @LVStyleBooleanProperty(LV_STYLE_BORDER_POST) var borderPost: Bool?
+    @LVStyleIntegerProperty(LV_STYLE_OUTLINE_WIDTH) var outlineWidth: lv_coord_t?
+    @LVStyleColorProperty(LV_STYLE_OUTLINE_COLOR) var outlineColor: LVColor?
+    @LVStyleIntegerProperty(LV_STYLE_OUTLINE_OPA) var outlineOpacity: lv_opa_t?
+    @LVStyleIntegerProperty(LV_STYLE_OUTLINE_PAD) var outlinePad: lv_coord_t?
+    @LVStyleIntegerProperty(LV_STYLE_SHADOW_WIDTH) var shadowWidth: lv_coord_t?
+    @LVStyleIntegerProperty(LV_STYLE_SHADOW_OFS_X) var shadowXOffset: lv_coord_t?
+    @LVStyleIntegerProperty(LV_STYLE_SHADOW_OFS_Y) var shadowYOffset: lv_coord_t?
+    @LVStyleIntegerProperty(LV_STYLE_SHADOW_SPREAD) var shadowSpread: lv_coord_t?
+    @LVStyleColorProperty(LV_STYLE_SHADOW_COLOR) var shadowColor: LVColor?
+    @LVStyleIntegerProperty(LV_STYLE_SHADOW_OPA) var shadowOpacity: lv_opa_t?
     // TODO: LV_STYLE_IMG_OPA
     // TODO: LV_STYLE_IMG_RECOLOR
     // TODO: LV_STYLE_IMG_RECOLOR_OPA
@@ -531,150 +173,136 @@ public extension LVStyle {
     // TODO: LV_STYLE_LINE_OPA
     // TODO: LV_STYLE_ARC_WIDTH
     // TODO: LV_STYLE_ARC_ROUNDED
-
-
-    var arcColor: LVColor? {
-        get {
-            getProperty(LV_STYLE_ARC_COLOR)
-        }
-        set {
-            setProperty(LV_STYLE_ARC_COLOR, newValue)
-        }
-    }
-    
+    @LVStyleColorProperty(LV_STYLE_ARC_COLOR) var arcColor: LVColor?
     // TODO: LV_STYLE_ARC_OPA
     // TODO: LV_STYLE_ARC_IMG_SRC
-
-    var textColor: LVColor? {
-        get {
-            getProperty(LV_STYLE_TEXT_COLOR)
-        }
-        set {
-            setProperty(LV_STYLE_TEXT_COLOR, newValue)
-        }
-    }
-    
-    var textOpacity: lv_opa_t? {
-        get {
-            getProperty(LV_STYLE_TEXT_OPA)
-        }
-        set {
-            setProperty(LV_STYLE_TEXT_OPA, newValue)
-        }
-    }
-
-    var textFont: LVFont? {
-        get {
-            getProperty(LV_STYLE_TEXT_FONT)
-        }
-        set {
-            setProperty(LV_STYLE_TEXT_FONT, newValue)
-        }
-    }
-
-    var textLetterSpacing: lv_coord_t? {
-        get {
-            getProperty(LV_STYLE_TEXT_LETTER_SPACE)
-        }
-        set {
-            setProperty(LV_STYLE_TEXT_LETTER_SPACE, newValue)
-        }
-    }
-    
-    var textLineSpacing: lv_coord_t? {
-        get {
-            getProperty(LV_STYLE_TEXT_LINE_SPACE)
-        }
-        set {
-            setProperty(LV_STYLE_TEXT_LINE_SPACE, newValue)
-        }
-    }
-
-    var textDocor: lv_text_decor_t? {
-        get {
-            getProperty(LV_STYLE_TEXT_DECOR)
-        }
-        set {
-            setProperty(LV_STYLE_TEXT_DECOR, newValue)
-        }
-    }
-
-    var textAlignment: lv_text_align_t? {
-        get {
-            getProperty(LV_STYLE_TEXT_ALIGN)
-        }
-        set {
-            setProperty(LV_STYLE_TEXT_ALIGN, newValue)
-        }
-    }
-
-    var radius: lv_coord_t? {
-        get {
-            getProperty(LV_STYLE_RADIUS)
-        }
-        set {
-            setProperty(LV_STYLE_RADIUS, newValue)
-        }
-    }
-    
-    var clipCorner: Bool? {
-        get {
-            getProperty(LV_STYLE_CLIP_CORNER)
-        }
-        set {
-            setProperty(LV_STYLE_CLIP_CORNER, newValue)
-        }
-    }
-
-    var opacity: lv_opa_t? {
-        get {
-            getProperty(LV_STYLE_OPA)
-        }
-        set {
-            setProperty(LV_STYLE_OPA, newValue)
-        }
-    }
-    
+    @LVStyleColorProperty(LV_STYLE_TEXT_COLOR) var textColor: LVColor?
+    @LVStyleIntegerProperty(LV_STYLE_TEXT_OPA) var textOpacity: lv_opa_t?
+    @LVStyleFontProperty(LV_STYLE_TEXT_FONT) var textFont: LVFont?
+    @LVStyleIntegerProperty(LV_STYLE_TEXT_LETTER_SPACE) var textLetterSpacing: lv_coord_t?
+    @LVStyleIntegerProperty(LV_STYLE_TEXT_LINE_SPACE) var textLineSpacing: lv_coord_t?
+    @LVStyleIntegerProperty(LV_STYLE_TEXT_DECOR) var textDecor: lv_text_decor_t?
+    @LVStyleIntegerProperty(LV_STYLE_TEXT_ALIGN) var textAlignment: lv_text_align_t?
+    @LVStyleIntegerProperty(LV_STYLE_RADIUS) var radius: lv_coord_t?
+    @LVStyleBooleanProperty(LV_STYLE_CLIP_CORNER) var clipCorner: Bool?
+    @LVStyleIntegerProperty(LV_STYLE_OPA) var opacity: lv_opa_t?
     // TODO: LV_STYLE_COLOR_FILTER_DSC
-    
-    var colorFilterOpacity: lv_opa_t? {
-        get {
-            getProperty(LV_STYLE_COLOR_FILTER_OPA)
-        }
-        set {
-            setProperty(LV_STYLE_COLOR_FILTER_OPA, newValue)
-        }
-    }
-
+    @LVStyleIntegerProperty(LV_STYLE_COLOR_FILTER_OPA) var colorFilterOpacity: lv_opa_t?
     // TODO: LV_STYLE_ANIM
     // TODO: LV_STYLE_ANIM_TIME
     // TODO: LV_STYLE_ANIM_SPEED
     // TODO: LV_STYLE_TRANSITION
-    
-    var blendMode: lv_blend_mode_t? {
-        get {
-            getProperty(LV_STYLE_BLEND_MODE)
-        }
-        set {
-            setProperty(LV_STYLE_BLEND_MODE, newValue)
-        }
-    }
+    @LVStyleIntegerProperty(LV_STYLE_BLEND_MODE) var blendMode: lv_blend_mode_t?
+    @LVStyleIntegerProperty(LV_STYLE_LAYOUT) var layout: UInt16?
+    @LVStyleIntegerProperty(LV_STYLE_BASE_DIR) var baseDir: UInt16?
+}
 
-    var layout: UInt16? {
-        get {
-            getProperty(LV_STYLE_LAYOUT)
-        }
-        set {
-            setProperty(LV_STYLE_LAYOUT, newValue)
-        }
+@propertyWrapper
+public struct LVStyleIntegerProperty<Value> where Value: BinaryInteger {
+    let property: lv_style_prop_t
+    
+    init(_ property: lv_style_prop_t) {
+        self.property = property
     }
     
-    var baseDir: UInt16? {
+    public var wrappedValue: Value? {
+        get { fatalError() }
+        nonmutating set { fatalError() }
+    }
+    
+    public static subscript(
+        _enclosingInstance instance: LVStyle,
+        wrapped wrappedKeyPath: ReferenceWritableKeyPath<LVStyle, Value?>,
+        storage storageKeyPath: ReferenceWritableKeyPath<LVStyle, Self>) -> Value? {
         get {
-            getProperty(LV_STYLE_BASE_DIR)
+            instance.getProperty(instance[keyPath: storageKeyPath].property)
         }
         set {
-            setProperty(LV_STYLE_BASE_DIR, newValue)
+            instance.setProperty(instance[keyPath: storageKeyPath].property, newValue)
+        }
+    }
+}
+
+@propertyWrapper
+public struct LVStyleBooleanProperty {
+    public typealias Value = Bool
+    
+    let property: lv_style_prop_t
+    
+    init(_ property: lv_style_prop_t) {
+        self.property = property
+    }
+    
+    public var wrappedValue: Value? {
+        get { fatalError() }
+        nonmutating set { fatalError() }
+    }
+    
+    public static subscript(
+        _enclosingInstance instance: LVStyle,
+        wrapped wrappedKeyPath: ReferenceWritableKeyPath<LVStyle, Value?>,
+        storage storageKeyPath: ReferenceWritableKeyPath<LVStyle, Self>) -> Value? {
+        get {
+            instance.getProperty(instance[keyPath: storageKeyPath].property)
+        }
+        set {
+            instance.setProperty(instance[keyPath: storageKeyPath].property, newValue)
+        }
+    }
+}
+
+@propertyWrapper
+public struct LVStyleColorProperty {
+    public typealias Value = LVColor
+    
+    let property: lv_style_prop_t
+    
+    init(_ property: lv_style_prop_t) {
+        self.property = property
+    }
+    
+    public var wrappedValue: Value? {
+        get { fatalError() }
+        nonmutating set { fatalError() }
+    }
+    
+    public static subscript(
+        _enclosingInstance instance: LVStyle,
+        wrapped wrappedKeyPath: ReferenceWritableKeyPath<LVStyle, Value?>,
+        storage storageKeyPath: ReferenceWritableKeyPath<LVStyle, Self>) -> Value? {
+        get {
+            instance.getProperty(instance[keyPath: storageKeyPath].property)
+        }
+        set {
+            instance.setProperty(instance[keyPath: storageKeyPath].property, newValue)
+        }
+    }
+}
+
+@propertyWrapper
+public struct LVStyleFontProperty {
+    public typealias Value = LVFont
+    
+    let property: lv_style_prop_t
+    
+    init(_ property: lv_style_prop_t) {
+        self.property = property
+    }
+    
+    public var wrappedValue: Value? {
+        get { fatalError() }
+        nonmutating set { fatalError() }
+    }
+    
+    public static subscript(
+        _enclosingInstance instance: LVStyle,
+        wrapped wrappedKeyPath: ReferenceWritableKeyPath<LVStyle, Value?>,
+        storage storageKeyPath: ReferenceWritableKeyPath<LVStyle, Self>) -> Value? {
+        get {
+            instance.getProperty(instance[keyPath: storageKeyPath].property)
+        }
+        set {
+            instance.setProperty(instance[keyPath: storageKeyPath].property, newValue)
         }
     }
 }
