@@ -143,10 +143,10 @@ public class LVStyle {
     // TODO: LV_STYLE_BG_GRAD
     // TODO: LV_STYLE_BG_DITHER_MODE
     // TODO: LV_STYLE_BG_IMG_SRC
-    // TODO: LV_STYLE_BG_IMG_OPA
-    // TODO: LV_STYLE_BG_IMG_RECOLOR
-    // TODO: LV_STYLE_BG_IMG_RECOLOR_OPA
-    // TODO: LV_STYLE_BG_IMG_TILED
+    @LVStyleIntegerProperty(LV_STYLE_BG_IMG_OPA) var imageOpacity: lv_opa_t?
+    @LVStyleColorProperty(LV_STYLE_BG_IMG_RECOLOR) var imageRecolor: LVColor?
+    @LVStyleIntegerProperty(LV_STYLE_BG_IMG_RECOLOR_OPA) var imageRecolorOpacity: lv_opa_t?
+    @LVStyleBooleanProperty(LV_STYLE_BG_IMG_TILED) var imageIsTiled: Bool?
     @LVStyleColorProperty(LV_STYLE_BORDER_COLOR) var borderColor: LVColor?
     @LVStyleIntegerProperty(LV_STYLE_BORDER_OPA) var borderOpacity: lv_opa_t?
     @LVStyleIntegerProperty(LV_STYLE_BORDER_WIDTH) var borderWidth: lv_coord_t?
@@ -162,17 +162,14 @@ public class LVStyle {
     @LVStyleIntegerProperty(LV_STYLE_SHADOW_SPREAD) var shadowSpread: lv_coord_t?
     @LVStyleColorProperty(LV_STYLE_SHADOW_COLOR) var shadowColor: LVColor?
     @LVStyleIntegerProperty(LV_STYLE_SHADOW_OPA) var shadowOpacity: lv_opa_t?
-    // TODO: LV_STYLE_IMG_OPA
-    // TODO: LV_STYLE_IMG_RECOLOR
-    // TODO: LV_STYLE_IMG_RECOLOR_OPA
-    // TODO: LV_STYLE_LINE_WIDTH
-    // TODO: LV_STYLE_LINE_DASH_WIDTH
-    // TODO: LV_STYLE_LINE_DASH_GAP
-    // TODO: LV_STYLE_LINE_ROUNDED
-    // TODO: LV_STYLE_LINE_COLOR
-    // TODO: LV_STYLE_LINE_OPA
-    // TODO: LV_STYLE_ARC_WIDTH
-    // TODO: LV_STYLE_ARC_ROUNDED
+    @LVStyleIntegerProperty(LV_STYLE_LINE_WIDTH) var lineWidth: lv_coord_t?
+    @LVStyleIntegerProperty(LV_STYLE_LINE_DASH_WIDTH) var lineDashWidth: lv_coord_t?
+    @LVStyleIntegerProperty(LV_STYLE_LINE_DASH_GAP) var lineDashGap: lv_coord_t?
+    @LVStyleBooleanProperty(LV_STYLE_LINE_ROUNDED) var lineIsRounded: Bool?
+    @LVStyleColorProperty(LV_STYLE_LINE_COLOR) var lineColor: LVColor?
+    @LVStyleIntegerProperty(LV_STYLE_LINE_OPA) var lineOpacity: lv_opa_t?
+    @LVStyleIntegerProperty(LV_STYLE_ARC_WIDTH) var arcWidth: lv_coord_t?
+    @LVStyleBooleanProperty(LV_STYLE_ARC_ROUNDED) var arcIsRounded: Bool?
     @LVStyleColorProperty(LV_STYLE_ARC_COLOR) var arcColor: LVColor?
     @LVStyleIntegerProperty(LV_STYLE_ARC_OPA) var arcOpacity: lv_opa_t?
     // TODO: LV_STYLE_ARC_IMG_SRC

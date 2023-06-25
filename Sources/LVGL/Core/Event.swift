@@ -29,7 +29,13 @@ public struct LVEvent {
     }
     
     public var target: LVObject {
-        bridgeToSwift(lv_event_get_user_data(event))
+        let target = lv_event_get_target(event)!
+        return bridgeToSwift(lv_obj_get_user_data(target))
+    }
+    
+    public var currentTarget: LVObject {
+        let currentTarget = lv_event_get_current_target(event)!
+        return bridgeToSwift(lv_obj_get_user_data(currentTarget))
     }
     
     public var code: lv_event_code_t {
