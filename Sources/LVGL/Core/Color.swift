@@ -17,31 +17,32 @@
 import Foundation
 import CLVGL
 
-public struct LVEvent {
-    let event: UnsafeMutablePointer<lv_event_t>
+public struct LVColor {
+    var color: lv_color_t
     
-    static func registerID() -> UInt32 {
-        lv_event_register_id()
+    init(_ color: lv_color_t) {
+        self.color = color
     }
     
-    init(_ event: UnsafeMutablePointer<lv_event_t>) {
-        self.event = event
+    public init(hexValue: UInt32) {
+        self.init(lv_color_hex(hexValue))
     }
     
-    public var target: LVObject {
-        bridgeToSwift(lv_event_get_user_data(event))
+    public init(red: UInt8, green: UInt8, blue: UInt8) {
+        self.init(lv_color_make(red, green, blue))
     }
     
-    public var code: lv_event_code_t {
-        lv_event_get_code(event)
-    }
-    
-    public func stopBubbling() {
-        lv_event_stop_bubbling(event)
-    }
-    
-    public func stopProcessing() {
-        lv_event_stop_processing(event)
+    public func darken(by opacity: lv_opa_t) -> LVColor {
+        LVColor(lv_color_darken(color, opacity))
     }
 }
 
+extension LVColor {
+    public static var black: LVColor {
+        LVColor(lv_color_black())
+    }
+    
+    public static var white: LVColor {
+        LVColor(lv_color_white())
+    }
+}

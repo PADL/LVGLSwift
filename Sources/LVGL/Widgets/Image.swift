@@ -27,7 +27,6 @@ public class LVImage: LVObject {
         super.init(lv_img_create(parent.object))
     }
     
-    
     public var source: LVImageSource {
         get {
             let source = lv_img_get_src(object)

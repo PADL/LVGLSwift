@@ -17,31 +17,23 @@
 import Foundation
 import CLVGL
 
-public struct LVEvent {
-    let event: UnsafeMutablePointer<lv_event_t>
-    
-    static func registerID() -> UInt32 {
-        lv_event_register_id()
+public class LVScreen: LVObject {
+    public init() {
+        super.init(lv_obj_create(nil))
     }
     
-    init(_ event: UnsafeMutablePointer<lv_event_t>) {
-        self.event = event
+    static var current: LVScreen? {
+        let screen = lv_scr_act()
+        
+        guard let userData = screen?.pointee.user_data else {
+            return nil
+        }
+        
+        return bridgeToSwift(userData)
     }
     
-    public var target: LVObject {
-        bridgeToSwift(lv_event_get_user_data(event))
+    func load() {
+        lv_scr_load(object)
     }
-    
-    public var code: lv_event_code_t {
-        lv_event_get_code(event)
-    }
-    
-    public func stopBubbling() {
-        lv_event_stop_bubbling(event)
-    }
-    
-    public func stopProcessing() {
-        lv_event_stop_processing(event)
-    }
-}
 
+}
