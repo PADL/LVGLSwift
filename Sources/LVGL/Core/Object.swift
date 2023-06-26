@@ -35,6 +35,37 @@ public class LVObject: CustomStringConvertible, Equatable {
     public var associatedValue: Any? = nil
     private var styles = [LVStyle]() // keep references
     
+    @LVObjectFlag(LV_OBJ_FLAG_HIDDEN) public var isHidden
+    @LVObjectFlag(LV_OBJ_FLAG_CLICKABLE) public var isClickable
+    @LVObjectFlag(LV_OBJ_FLAG_CLICK_FOCUSABLE) public var isClickFocusable
+    @LVObjectFlag(LV_OBJ_FLAG_CHECKABLE) public var isCheckable
+    @LVObjectFlag(LV_OBJ_FLAG_SCROLLABLE) public var isScrollable
+    @LVObjectFlag(LV_OBJ_FLAG_SCROLL_ELASTIC) public var elasticScrolling
+    @LVObjectFlag(LV_OBJ_FLAG_SCROLL_MOMENTUM) public var momentumScrolling
+    @LVObjectFlag(LV_OBJ_FLAG_SCROLL_ONE) public var scrollOne
+    @LVObjectFlag(LV_OBJ_FLAG_SCROLL_CHAIN_HOR) public var scrollChainHorizontal
+    @LVObjectFlag(LV_OBJ_FLAG_SCROLL_CHAIN_VER) public var scrollChainVertical
+    @LVObjectFlag(LV_OBJ_FLAG_SCROLL_ON_FOCUS) public var scrollOnFocus
+    @LVObjectFlag(LV_OBJ_FLAG_SCROLL_WITH_ARROW) public var scrollWithArrow
+    @LVObjectFlag(LV_OBJ_FLAG_SNAPPABLE) public var isSnappable
+    @LVObjectFlag(LV_OBJ_FLAG_PRESS_LOCK) public var pressLock
+    @LVObjectFlag(LV_OBJ_FLAG_EVENT_BUBBLE) public var eventBubble
+    @LVObjectFlag(LV_OBJ_FLAG_GESTURE_BUBBLE) public var gestureBubble
+    @LVObjectFlag(LV_OBJ_FLAG_ADV_HITTEST) public var advHitTest
+    @LVObjectFlag(LV_OBJ_FLAG_IGNORE_LAYOUT) public var ignoreLayout
+    @LVObjectFlag(LV_OBJ_FLAG_FLOATING) public var isFloating
+    @LVObjectFlag(LV_OBJ_FLAG_OVERFLOW_VISIBLE) public var isOVerflowVisible
+    
+    @LVObjectFlag(LV_OBJ_FLAG_LAYOUT_1) public var layout1
+    @LVObjectFlag(LV_OBJ_FLAG_LAYOUT_2) public var layout2
+    
+    @LVObjectFlag(LV_OBJ_FLAG_WIDGET_1) public var widget1
+    @LVObjectFlag(LV_OBJ_FLAG_WIDGET_2) public var widget2
+    @LVObjectFlag(LV_OBJ_FLAG_USER_1) public var user1
+    @LVObjectFlag(LV_OBJ_FLAG_USER_2) public var user2
+    @LVObjectFlag(LV_OBJ_FLAG_USER_3) public var user3
+    @LVObjectFlag(LV_OBJ_FLAG_USER_4) public var user4
+
     init(_ object: UnsafeMutablePointer<lv_obj_t>, filter: lv_event_code_t = LV_EVENT_ALL) {
         self.object = object
         
@@ -233,6 +264,10 @@ public class LVObject: CustomStringConvertible, Equatable {
         lv_obj_clear_state(object, state)
     }
     
+    public func isSet(flag: lv_obj_flag_t) -> Bool {
+        lv_obj_has_flag(object, flag)
+    }
+    
     public var state: lv_state_t {
         lv_obj_get_state(object)
     }
@@ -249,3 +284,36 @@ public class LVObject: CustomStringConvertible, Equatable {
     
     // TODO: get/set local style property?
 }
+
+@propertyWrapper
+public struct LVObjectFlag {
+    public typealias Value = Bool
+    
+    let flag: lv_obj_flag_t
+    
+    init(_ flag: Int) {
+        self.flag = lv_obj_flag_t(flag)
+    }
+    
+    public var wrappedValue: Value {
+        get { fatalError() }
+        nonmutating set { fatalError() }
+    }
+    
+    public static subscript(
+        _enclosingInstance instance: LVObject,
+        wrapped wrappedKeyPath: ReferenceWritableKeyPath<LVObject, Bool>,
+        storage storageKeyPath: ReferenceWritableKeyPath<LVObject, Self>) -> Bool {
+        get {
+            instance.isSet(flag: instance[keyPath: storageKeyPath].flag)
+        }
+        set {
+            if newValue {
+                instance.set(flag: instance[keyPath: storageKeyPath].flag)
+            } else {
+                instance.clear(flag: instance[keyPath: storageKeyPath].flag)
+            }
+        }
+    }
+}
+
