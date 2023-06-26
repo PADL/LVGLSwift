@@ -53,6 +53,8 @@ bool LVGLSwiftDriverInit(uint32_t width, uint32_t height)
     
     inputDrv.read_cb = sdl_mouse_read;
     lv_indev_drv_register(&inputDrv);
+
+    return true;
 }
 
 const lv_font_t *LVGLSwiftDefaultFontWithSize(uint32_t size)
