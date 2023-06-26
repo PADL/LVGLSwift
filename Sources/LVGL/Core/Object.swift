@@ -306,7 +306,6 @@ public class LVObject: CustomStringConvertible, Equatable {
             return
         }
         
-        debugPrint("child count = \(lv_obj_get_child_cnt(object))")
         var stop = false
         for index in 0..<childCount {
             let childPointer = children[index]
