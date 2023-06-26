@@ -25,7 +25,7 @@ public extension lv_coord_t {
     static var minCoordinate = LVGLSwiftCoordMin()
 }
 
-public class LVFlags: OptionSet {
+public struct LVFlags: OptionSet {
     public static let hidden                = LV_OBJ_FLAG_HIDDEN
     public static let clickable             = LV_OBJ_FLAG_CLICKABLE
     public static let clickFocusable        = LV_OBJ_FLAG_CLICK_FOCUSABLE
@@ -59,7 +59,7 @@ public class LVFlags: OptionSet {
     
     public let rawValue: UInt32
     
-    public required init(rawValue: UInt32) {
+    public init(rawValue: UInt32) {
         self.rawValue = rawValue
     }
 }
