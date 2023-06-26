@@ -17,45 +17,6 @@
 import Foundation
 import CLVGL
 
-// FIXME: unused
-struct LVEventReference: CustomStringConvertible {
-    let event: UnsafeMutablePointer<lv_event_t>
-    
-    static func registerID() -> UInt32 {
-        lv_event_register_id()
-    }
-    
-    init(_ event: UnsafeMutablePointer<lv_event_t>) {
-        self.event = event
-    }
-    
-    public var target: LVObject {
-        let target = lv_event_get_target(event)!
-        return bridgeToSwift(lv_obj_get_user_data(target))
-    }
-    
-    public var currentTarget: LVObject {
-        let currentTarget = lv_event_get_current_target(event)!
-        return bridgeToSwift(lv_obj_get_user_data(currentTarget))
-    }
-    
-    public var code: lv_event_code_t {
-        lv_event_get_code(event)
-    }
-    
-    public func stopBubbling() {
-        lv_event_stop_bubbling(event)
-    }
-    
-    public func stopProcessing() {
-        lv_event_stop_processing(event)
-    }
-    
-    public var description: String {
-        return "LVGL.LVEventReference(target: \(target), currentTarget: \(currentTarget), code: \(code))"
-    }
-}
-
 public class LVEvent: CustomStringConvertible {
     var event: lv_event_t
     
