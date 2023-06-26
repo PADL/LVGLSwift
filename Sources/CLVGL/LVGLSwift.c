@@ -139,5 +139,5 @@ lv_coord_t LVGLSwiftCoordMax(void)
 
 lv_coord_t LVGLSwiftSizeContent(void)
 {
-    return LVGLSwiftSizeContent;
+    return LV_SIZE_CONTENT;
 }
