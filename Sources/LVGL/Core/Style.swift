@@ -203,6 +203,18 @@ public class LVStyle: Hashable {
     @LVStyleIntegerProperty(LV_STYLE_BLEND_MODE) public var blendMode: lv_blend_mode_t?
     @LVStyleIntegerProperty(LV_STYLE_LAYOUT) public var layout: UInt16?
     @LVStyleIntegerProperty(LV_STYLE_BASE_DIR) public var baseDir: UInt16?
+
+    // TODO: LV_STYLE_GRID_ROW_DSC_ARRAY
+    // TODO: LV_STYLE_GRID_COLUMN_DSC_ARRAY
+    @LVStyleIntegerProperty(LV_STYLE_GRID_ROW_ALIGN) public var gridRowAlignment: UInt32?
+    @LVStyleIntegerProperty(LV_STYLE_GRID_COLUMN_ALIGN) public var gridColumnAlignment: UInt32?
+    @LVStyleIntegerProperty(LV_STYLE_GRID_CELL_COLUMN_POS) public var gridCellColumnALignment: UInt32?
+    @LVStyleIntegerProperty(LV_STYLE_GRID_CELL_COLUMN_SPAN) public var gridCellColumnSpan: UInt32?
+    @LVStyleIntegerProperty(LV_STYLE_GRID_CELL_ROW_POS) public var gridCellRowPosition: UInt32?
+    @LVStyleIntegerProperty(LV_STYLE_GRID_CELL_ROW_SPAN) public var gridCellRowSPan: UInt32?
+    @LVStyleIntegerProperty(LV_STYLE_GRID_CELL_X_ALIGN) public var gridCellXAlignment: UInt32?
+    @LVStyleIntegerProperty(LV_STYLE_GRID_CELL_Y_ALIGN) public var gridCellYAlignment: UInt32?
+
 }
 
 @propertyWrapper
