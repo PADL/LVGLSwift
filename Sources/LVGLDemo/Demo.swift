@@ -118,6 +118,13 @@ private func GridDemo() {
     labelStyle.textColor = LVColor.white
     labelStyle.radius = 0
     
+    let pressedStyle = LVStyle()
+    pressedStyle.backgroundColor = LVColor(hexValue: 0x555500)
+    pressedStyle.backgroundOpacity = lv_opa_t(LV_OPA_COVER)
+    pressedStyle.textFont = LVFont(size: 48)
+    pressedStyle.textColor = LVColor.white
+    pressedStyle.radius = 0
+
     let textStyle = LVStyle()
 
     let screen = LVScreen.active
@@ -146,6 +153,18 @@ private func GridDemo() {
             label.append(style: textStyle)
             label.longMode = lv_label_long_mode_t(LV_LABEL_LONG_CLIP)
             label.center()
+            
+            Task {
+                for await event in object.events {
+                    if event.code == LV_EVENT_PRESSED {
+                        event.target.remove(style: labelStyle)
+                        event.target.append(style: pressedStyle)
+                    } else if event.code == LV_EVENT_CLICKED {
+                        event.target.remove(style: pressedStyle)
+                        event.target.append(style: labelStyle)
+                    }
+                }
+            }
         }
     }
 }

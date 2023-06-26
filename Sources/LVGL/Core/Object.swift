@@ -65,25 +65,28 @@ public class LVObject: CustomStringConvertible, Equatable {
     @LVObjectFlag(LV_OBJ_FLAG_USER_3) public var user3
     @LVObjectFlag(LV_OBJ_FLAG_USER_4) public var user4
 
-    init(_ object: UnsafeMutablePointer<lv_obj_t>, filter: lv_event_code_t = LV_EVENT_ALL, with parent: LVObject?) {
+    public init(_ object: UnsafeMutablePointer<lv_obj_t>,
+         filters: [lv_event_code_t]? = [LV_EVENT_ALL],
+         with parent: LVObject?) {
         self.object = object
 
         lv_obj_set_user_data(object, bridgeToCLVGL(self))
-        lv_obj_add_event_cb(object, {
-            guard let eventData = $0?.pointee else {
-                return
+        
+        if let filters {
+            for filter in filters {
+                lv_obj_add_event_cb(object, {
+                    guard let eventData = $0?.pointee else {
+                        return
+                    }
+                    
+                    let event = LVEvent(eventData)
+                    
+                    Task { @MainActor in
+                        await event.target.events.send(event)
+                    }
+                }, filter, bridgeToCLVGL(self))
             }
-            
-            if eventData.code == LV_EVENT_DELETE {
-                lv_obj_set_user_data(eventData.target, nil)
-            }
-            
-            let event = LVEvent(eventData)
-
-            Task { @MainActor in
-                await event.target.events.send(event)
-            }
-        }, filter, bridgeToCLVGL(self))
+        }
         
         // gotta keep references because event handler may run asynchronously
         parent?._children.append(self)

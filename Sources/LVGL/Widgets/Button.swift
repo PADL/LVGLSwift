@@ -19,6 +19,6 @@ import CLVGL
 
 public class LVButton: LVObject {
     convenience public init(with parent: LVObject) {
-        self.init(lv_btn_create(parent.object), filter: LV_EVENT_CLICKED, with: parent)
+        self.init(lv_btn_create(parent.object), filters: [LV_EVENT_PRESSED, LV_EVENT_CLICKED], with: parent)
     }
 }
