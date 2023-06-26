@@ -43,22 +43,12 @@ public class LVRunLoop {
     }
 
     public func run() {
-        #if canImport(Darwin)
         let timer = Timer(timeInterval: Double(LV_DISP_DEF_REFR_PERIOD) / 1000, repeats: true) { timer in
             lv_task_handler()
         }
         let runLoop = RunLoop.main
         runLoop.add(timer, forMode: .common)
         runLoop.run()
-        #else
-        let timer = DispatchSource.makeTimerSource()
-        timer.schedule(deadline: .now(), repeating: .milliseconds(Int(LV_DISP_DEF_REFR_PERIOD)))
-        timer.setEventHandler {
-            lv_task_handler()
-        }
-        timer.activate()
-        dispatchMain()
-        #endif
     }
 
     public var isInitialized: Bool {
