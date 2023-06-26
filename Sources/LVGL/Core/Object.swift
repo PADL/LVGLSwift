@@ -25,20 +25,6 @@ public extension lv_coord_t {
     static var minCoordinate = LVGLSwiftCoordMin()
 }
 
-public struct LVSize {
-    var width: lv_coord_t
-    var height: lv_coord_t
-    
-    public init(width: lv_coord_t, height: lv_coord_t) {
-        self.width = width
-        self.height = height
-    }
-    
-    public static var content: Self {
-        LVSize(width: .sizeContent, height: .sizeContent)
-    }
-}
-
 public class LVObject: CustomStringConvertible, Equatable {
     private let _children = [LVObject]() // keep reference
     private var _styles = [LVStyle]() // keep references

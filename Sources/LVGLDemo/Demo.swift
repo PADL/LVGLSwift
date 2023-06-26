@@ -107,17 +107,26 @@ private func CounterDemo() {
 
 @MainActor
 private func GridDemo() {
+    let screenStyle = LVStyle()
+    screenStyle.backgroundColor = LVColor.black
+    screenStyle.backgroundOpacity = lv_opa_t(LV_OPA_COVER)
+
     let labelStyle = LVStyle()
-    labelStyle.backgroundColor = LVColor(red: 0, green: 0, blue: 255)
+    labelStyle.backgroundColor = LVColor(hexValue: 0x333300)
     labelStyle.backgroundOpacity = lv_opa_t(LV_OPA_COVER)
     labelStyle.textFont = LVFont(size: 48)
     labelStyle.textColor = LVColor.white
+    labelStyle.radius = 0
     
     let textStyle = LVStyle()
-    textStyle.backgroundColor = LVColor(red: 0, green: 0, blue: 0)
-    textStyle.backgroundOpacity = lv_opa_t(LV_OPA_COVER)
 
     let screen = LVScreen.active
+    let theme = LVTheme { theme, object in
+        if object is LVScreen {
+            object.append(style: screenStyle)
+        }
+    }
+    LVDisplay.default.theme = theme
 
     let rowCount: UInt8 = 2, columnCount: UInt8 = 8
     let grid = LVGrid(with: screen, rows: rowCount, columns: columnCount)
@@ -128,6 +137,8 @@ private func GridDemo() {
         for y in 0..<rowCount {
             let object = LVButton(with: grid)
             object.append(style: labelStyle)
+            object.size = LVSize(width: screen.size.width / Int16(columnCount),
+                                 height: screen.size.height / Int16(rowCount))
             grid.set(cell: object, at: (x, y))
 
             let label = LVLabel(with: object)
@@ -145,8 +156,8 @@ struct App {
     static func main() {
         let runLoop = LVRunLoop.shared // FIXME: needs to be called at top to do global initialization
         
-        CounterDemo()
-        //GridDemo()
+        //CounterDemo()
+        GridDemo()
         
         runLoop.run()
     }

@@ -30,6 +30,13 @@ public class LVDisplay {
         self.display = display
     }
     
+    public var size: LVSize {
+        get {
+            LVSize(width: lv_disp_get_hor_res(display),
+                   height: lv_disp_get_ver_res(display))
+        }
+    }
+    
     public var backgroundColor: LVColor {
         get {
             LVColor(self.display.pointee.bg_color)

@@ -68,6 +68,11 @@ public class LVGrid: LVObject {
         
         cell.parent = self
         
+        if cell.size == .zero, self.size != .zero {
+            cell.size = LVSize(width: size.width / Int16(columnCount),
+                               height: size.height / Int16(rowCount))
+        }
+        
         // keep a reference
         _objects[(Int(coordinate.0) * rowCount) + Int(coordinate.1)] = cell
         lv_obj_set_grid_cell(cell.object,
