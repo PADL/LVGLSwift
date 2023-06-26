@@ -25,51 +25,59 @@ public extension lv_coord_t {
     static var minCoordinate = LVGLSwiftCoordMin()
 }
 
+public class LVFlags: OptionSet {
+    public static let hidden                = LV_OBJ_FLAG_HIDDEN
+    public static let clickable             = LV_OBJ_FLAG_CLICKABLE
+    public static let clickFocusable        = LV_OBJ_FLAG_CLICK_FOCUSABLE
+    public static let checkable             = LV_OBJ_FLAG_CHECKABLE
+    public static let scrollable            = LV_OBJ_FLAG_SCROLLABLE
+    public static let scrollElastic         = LV_OBJ_FLAG_SCROLL_ELASTIC
+    public static let scrollMomentum        = LV_OBJ_FLAG_SCROLL_MOMENTUM
+    public static let scrollOne             = LV_OBJ_FLAG_SCROLL_ONE
+    public static let scrollChainHorizontal = LV_OBJ_FLAG_SCROLL_CHAIN_HOR
+    public static let scrollChainVertical   = LV_OBJ_FLAG_SCROLL_CHAIN_VER
+    public static let scrollOnFocus         = LV_OBJ_FLAG_SCROLL_ON_FOCUS
+    public static let scrollWithArrow       = LV_OBJ_FLAG_SCROLL_WITH_ARROW
+    public static let snappable             = LV_OBJ_FLAG_SNAPPABLE
+    public static let pressLock             = LV_OBJ_FLAG_PRESS_LOCK
+    public static let eventBubble           = LV_OBJ_FLAG_EVENT_BUBBLE
+    public static let gestureBubble         = LV_OBJ_FLAG_GESTURE_BUBBLE
+    public static let advHitTest            = LV_OBJ_FLAG_ADV_HITTEST
+    public static let ignoreLayout          = LV_OBJ_FLAG_IGNORE_LAYOUT
+    public static let floating              = LV_OBJ_FLAG_FLOATING
+    public static let overflowVisible       = LV_OBJ_FLAG_OVERFLOW_VISIBLE
+    
+    public static let layout1               = LV_OBJ_FLAG_LAYOUT_1
+    public static let layout2               = LV_OBJ_FLAG_LAYOUT_2
+    
+    public static let widget1               = LV_OBJ_FLAG_WIDGET_1
+    public static let widget2               = LV_OBJ_FLAG_WIDGET_2
+    public static let user1                 = LV_OBJ_FLAG_USER_1
+    public static let user2                 = LV_OBJ_FLAG_USER_2
+    public static let user3                 = LV_OBJ_FLAG_USER_3
+    public static let user4                 = LV_OBJ_FLAG_USER_4
+    
+    public let rawValue: UInt32
+    
+    public required init(rawValue: UInt32) {
+        self.rawValue = rawValue
+    }
+}
+
 public class LVObject: CustomStringConvertible, Equatable {
     private let _children = [LVObject]() // keep reference
     private var _styles = [LVStyle]() // keep references
-
+    
     let object: UnsafeMutablePointer<lv_obj_t>
     
     public let events = AsyncChannel<LVEvent>()
     public var associatedValue: Any? = nil
     
-    @LVObjectFlag(LV_OBJ_FLAG_HIDDEN) public var isHidden
-    @LVObjectFlag(LV_OBJ_FLAG_CLICKABLE) public var isClickable
-    @LVObjectFlag(LV_OBJ_FLAG_CLICK_FOCUSABLE) public var isClickFocusable
-    @LVObjectFlag(LV_OBJ_FLAG_CHECKABLE) public var isCheckable
-    @LVObjectFlag(LV_OBJ_FLAG_SCROLLABLE) public var isScrollable
-    @LVObjectFlag(LV_OBJ_FLAG_SCROLL_ELASTIC) public var elasticScrolling
-    @LVObjectFlag(LV_OBJ_FLAG_SCROLL_MOMENTUM) public var momentumScrolling
-    @LVObjectFlag(LV_OBJ_FLAG_SCROLL_ONE) public var scrollOne
-    @LVObjectFlag(LV_OBJ_FLAG_SCROLL_CHAIN_HOR) public var scrollChainHorizontal
-    @LVObjectFlag(LV_OBJ_FLAG_SCROLL_CHAIN_VER) public var scrollChainVertical
-    @LVObjectFlag(LV_OBJ_FLAG_SCROLL_ON_FOCUS) public var scrollOnFocus
-    @LVObjectFlag(LV_OBJ_FLAG_SCROLL_WITH_ARROW) public var scrollWithArrow
-    @LVObjectFlag(LV_OBJ_FLAG_SNAPPABLE) public var isSnappable
-    @LVObjectFlag(LV_OBJ_FLAG_PRESS_LOCK) public var pressLock
-    @LVObjectFlag(LV_OBJ_FLAG_EVENT_BUBBLE) public var eventBubble
-    @LVObjectFlag(LV_OBJ_FLAG_GESTURE_BUBBLE) public var gestureBubble
-    @LVObjectFlag(LV_OBJ_FLAG_ADV_HITTEST) public var advHitTest
-    @LVObjectFlag(LV_OBJ_FLAG_IGNORE_LAYOUT) public var ignoreLayout
-    @LVObjectFlag(LV_OBJ_FLAG_FLOATING) public var isFloating
-    @LVObjectFlag(LV_OBJ_FLAG_OVERFLOW_VISIBLE) public var isOVerflowVisible
-    
-    @LVObjectFlag(LV_OBJ_FLAG_LAYOUT_1) public var layout1
-    @LVObjectFlag(LV_OBJ_FLAG_LAYOUT_2) public var layout2
-    
-    @LVObjectFlag(LV_OBJ_FLAG_WIDGET_1) public var widget1
-    @LVObjectFlag(LV_OBJ_FLAG_WIDGET_2) public var widget2
-    @LVObjectFlag(LV_OBJ_FLAG_USER_1) public var user1
-    @LVObjectFlag(LV_OBJ_FLAG_USER_2) public var user2
-    @LVObjectFlag(LV_OBJ_FLAG_USER_3) public var user3
-    @LVObjectFlag(LV_OBJ_FLAG_USER_4) public var user4
-
     public init(_ object: UnsafeMutablePointer<lv_obj_t>,
-         filters: [lv_event_code_t]? = [LV_EVENT_ALL],
-         with parent: LVObject?) {
+                filters: [lv_event_code_t]? = [LV_EVENT_ALL],
+                with parent: LVObject?) {
         self.object = object
-
+        
         lv_obj_set_user_data(object, bridgeToCLVGL(self))
         
         if let filters {
@@ -91,20 +99,20 @@ public class LVObject: CustomStringConvertible, Equatable {
         // gotta keep references because event handler may run asynchronously
         parent?._children.append(self)
     }
-
+    
     public convenience init(with parent: LVObject) {
         self.init(lv_obj_create(parent.object), with: parent)
     }
-
+    
     deinit {
         events.finish()
         lv_obj_del(object)
     }
-
+    
     public static func == (lhs: LVObject, rhs: LVObject) -> Bool {
         lhs.object == rhs.object
     }
-
+    
     public var parent: LVObject? {
         get {
             guard let parent = object.pointee.parent else {
@@ -141,7 +149,7 @@ public class LVObject: CustomStringConvertible, Equatable {
             lv_obj_set_size(object, newValue.width, newValue.height)
         }
     }
-
+    
     public var position: lv_point_t {
         get {
             lv_point_t(x: lv_obj_get_x(object), y: lv_obj_get_y(object))
@@ -150,7 +158,7 @@ public class LVObject: CustomStringConvertible, Equatable {
             lv_obj_set_pos(object, newValue.x, newValue.y)
         }
     }
-
+    
     public var contentSize: lv_point_t {
         get {
             lv_point_t(x: lv_obj_get_content_width(object), y: lv_obj_get_content_height(object))
@@ -162,7 +170,7 @@ public class LVObject: CustomStringConvertible, Equatable {
             lv_point_t(x: lv_obj_get_self_width(object), y: lv_obj_get_self_height(object))
         }
     }
-
+    
     public var isLayoutPositioned: Bool {
         get {
             lv_obj_is_layout_positioned(object)
@@ -172,7 +180,7 @@ public class LVObject: CustomStringConvertible, Equatable {
     public func markDirty() {
         lv_obj_mark_layout_as_dirty(object)
     }
-
+    
     public func updateLayout() {
         lv_obj_update_layout(object)
     }
@@ -265,24 +273,24 @@ public class LVObject: CustomStringConvertible, Equatable {
         lv_obj_enable_style_refresh(enabled)
     }
     
-    public func set(flag: lv_obj_flag_t) {
-        lv_obj_add_flag(object, flag)
+    public func set(flag: LVFlags) {
+        lv_obj_add_flag(object, flag.rawValue)
     }
-
-    public func clear(flag: lv_obj_flag_t) {
-        lv_obj_clear_flag(object, flag)
+    
+    public func clear(flag: LVFlags) {
+        lv_obj_clear_flag(object, flag.rawValue)
+    }
+    
+    public func isSet(flag: LVFlags) -> Bool {
+        lv_obj_has_flag(object, flag.rawValue)
     }
     
     public func set(state: lv_state_t) {
         lv_obj_add_state(object, state)
     }
-
+    
     public func clear(state: lv_state_t) {
         lv_obj_clear_state(object, state)
-    }
-    
-    public func isSet(flag: lv_obj_flag_t) -> Bool {
-        lv_obj_has_flag(object, flag)
     }
     
     public var state: lv_state_t {
@@ -322,37 +330,3 @@ public class LVObject: CustomStringConvertible, Equatable {
         Int(lv_obj_get_child_cnt(object))
     }
 }
-
-
-@propertyWrapper
-public struct LVObjectFlag {
-    public typealias Value = Bool
-    
-    let flag: lv_obj_flag_t
-    
-    init(_ flag: Int) {
-        self.flag = lv_obj_flag_t(flag)
-    }
-    
-    public var wrappedValue: Value {
-        get { fatalError() }
-        nonmutating set { fatalError() }
-    }
-    
-    public static subscript(
-        _enclosingInstance instance: LVObject,
-        wrapped wrappedKeyPath: ReferenceWritableKeyPath<LVObject, Bool>,
-        storage storageKeyPath: ReferenceWritableKeyPath<LVObject, Self>) -> Bool {
-        get {
-            instance.isSet(flag: instance[keyPath: storageKeyPath].flag)
-        }
-        set {
-            if newValue {
-                instance.set(flag: instance[keyPath: storageKeyPath].flag)
-            } else {
-                instance.clear(flag: instance[keyPath: storageKeyPath].flag)
-            }
-        }
-    }
-}
-
