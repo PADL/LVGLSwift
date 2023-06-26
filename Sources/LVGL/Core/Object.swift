@@ -32,6 +32,7 @@ public struct LVSize {
 public class LVObject: CustomStringConvertible, Equatable {
     let object: UnsafeMutablePointer<lv_obj_t>
     public let events = AsyncChannel<LVEvent>()
+    public var associatedValue: Any? = nil
     private var styles = [LVStyle]() // keep references
     
     init(_ object: UnsafeMutablePointer<lv_obj_t>, filter: lv_event_code_t = LV_EVENT_ALL) {
