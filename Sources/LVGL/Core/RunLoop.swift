@@ -43,6 +43,8 @@ public class LVRunLoop {
     }
 
     public func run() {
+        precondition(self.isInitialized)
+        
         let timer = Timer(timeInterval: Double(LV_DISP_DEF_REFR_PERIOD) / 1000, repeats: true) { timer in
             lv_task_handler()
         }
