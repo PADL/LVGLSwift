@@ -32,13 +32,12 @@ public struct LVSize {
 public class LVObject: CustomStringConvertible, Equatable {
     let object: UnsafeMutablePointer<lv_obj_t>
     public let events = AsyncChannel<LVEvent>()
+    private var styles = [LVStyle]() // keep references
     
     init(_ object: UnsafeMutablePointer<lv_obj_t>, filter: lv_event_code_t = LV_EVENT_ALL) {
         self.object = object
         
         lv_obj_set_user_data(object, bridgeToCLVGL(self))
-        lv_theme_apply(object)
-
         lv_obj_add_event_cb(object, {
             guard let eventData = $0?.pointee else {
                 return
@@ -56,6 +55,11 @@ public class LVObject: CustomStringConvertible, Equatable {
         }, filter, bridgeToCLVGL(self))
     }
     
+    deinit {
+        events.finish()
+        lv_obj_del(object)
+    }
+
     public static func == (lhs: LVObject, rhs: LVObject) -> Bool {
         lhs.object == rhs.object
     }
@@ -69,7 +73,7 @@ public class LVObject: CustomStringConvertible, Equatable {
     }
     
     public var description: String {
-        "\(type(of: self))(parent: \(String(describing: parent)))"
+        "LVGL.\(type(of: self))(parent: \(String(describing: parent)))"
     }
     
     func withObjectCast<T, U>(to type: T.Type, _ body: (T) -> U) -> U {
@@ -178,26 +182,30 @@ public class LVObject: CustomStringConvertible, Equatable {
         lv_obj_center(object)
     }
     
-    public func append(style: LVStyle?, selector: lv_style_selector_t) {
+    public func append(style: LVStyle?, selector: lv_style_selector_t = lv_style_selector_t(0)) {
         if let style {
-            var style = style.style
-            lv_obj_add_style(object, &style, selector)
+            styles.append(style)
+            lv_obj_add_style(object, &style.style, selector)
         } else {
             lv_obj_add_style(object, nil, selector)
         }
     }
     
-    public func remove(style: LVStyle?, selector: lv_style_selector_t) {
+    public func remove(style: LVStyle?, selector: lv_style_selector_t = lv_style_selector_t(0)) {
         if let style {
-            var style = style.style
-            lv_obj_remove_style(object, &style, selector)
+            styles.removeAll(where: { $0 == style })
+            lv_obj_remove_style(object, &style.style, selector)
         } else {
             lv_obj_remove_style(object, nil, selector)
         }
     }
     
     public func removeAllStyles() {
-        lv_obj_remove_style(object, nil, lv_style_selector_t(LV_PART_ANY | LV_STATE_ANY))
+        lv_obj_remove_style_all(object)
+    }
+    
+    public func applyTheme() {
+        lv_theme_apply(object)
     }
     
     public func refreshStyle(part: lv_part_t, property: lv_style_prop_t) {
@@ -229,12 +237,13 @@ public class LVObject: CustomStringConvertible, Equatable {
     }
     
     public var isValid: Bool {
-        lv_obj_is_valid(object)
+        precondition(object.pointee.user_data == bridgeToCLVGL(self))
+        return lv_obj_is_valid(object)
     }
-    // TODO: get/set local style property?
     
-    deinit {
-        events.finish()
-        lv_obj_del(object)
+    public func refresh() {
+        lv_event_send(object, LV_EVENT_REFRESH, nil)
     }
+    
+    // TODO: get/set local style property?
 }

@@ -24,6 +24,13 @@ public struct LVFont {
         self.font = font
     }
     
+    public init?(size: UInt32) {
+        guard let font = LVGLSwiftDefaultFontWithSize(size) else {
+            return nil
+        }
+        self.init(font)
+    }
+    
     static var defaultFont: LVFont {
         Self(lv_font_default())
     }

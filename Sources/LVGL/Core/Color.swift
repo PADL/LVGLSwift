@@ -45,4 +45,16 @@ extension LVColor {
     public static var white: LVColor {
         LVColor(lv_color_white())
     }
+    
+    public static var red: LVColor {
+        LVColor(red: 255, green: 0, blue: 0)
+    }
+
+    public static var green: LVColor {
+        LVColor(red: 0, green: 255, blue: 0)
+    }
+
+    public static var blue: LVColor {
+        LVColor(red: 0, green: 0, blue: 255)
+    }
 }

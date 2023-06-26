@@ -22,9 +22,12 @@ public class LVRunLoop {
 
     private var task: Task<Void, Never>
     
-    public init(width: UInt32 = 1024, height: UInt32 = 600) {
+    public init(width: UInt32 = LV_HOR_RES, height: UInt32 = LV_VER_RES) {
         lv_init()
         LVGLSwiftDriverInit(width, height)
+
+        // set user data for active screen (perhaps we should do for all screens?)
+        let _ = LVScreen.active
 
         task = Task.detached {
             repeat {

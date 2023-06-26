@@ -17,20 +17,26 @@
 import Foundation
 import CLVGL
 
-public class LVStyle {
+public class LVStyle: Hashable {
     var style: lv_style_t = lv_style_t()
     
     public init() {
         lv_style_init(&style)
     }
     
+    public static func == (lhs: LVStyle, rhs: LVStyle) -> Bool {
+        ObjectIdentifier(self) == ObjectIdentifier(self)
+    }
+    
+    public func hash(into hasher: inout Hasher) {
+        ObjectIdentifier(self).hash(into: &hasher)
+    }
+    
     public func reportChange() {
-        var style = style
         lv_obj_report_style_change(&style)
     }
     
     func _getProperty(_ property: lv_style_prop_t) -> lv_style_value_t? {
-        var style = self.style
         var value = lv_style_value_t()
         
         guard lv_style_get_prop(&style, property, &value) == lv_res_t(LV_RES_OK) else {

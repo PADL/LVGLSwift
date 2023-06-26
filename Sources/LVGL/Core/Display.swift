@@ -17,13 +17,37 @@
 import Foundation
 import CLVGL
 
-public struct LVDisplay {
+public class LVDisplay {
+    public static let `default` = LVDisplay()
+
     var display: UnsafeMutablePointer<lv_disp_t>
     
-    public init() {
-        self.display = lv_disp_get_default()
+    public convenience init() {
+        self.init(lv_disp_get_default())
     }
     
+    public init(_ display: UnsafeMutablePointer<lv_disp_t>) {
+        self.display = display
+    }
+    
+    public var backgroundColor: LVColor {
+        get {
+            LVColor(self.display.pointee.bg_color)
+        }
+        set{
+            lv_disp_set_bg_color(self.display, newValue.color)
+        }
+    }
+    
+    public var backgroundOpacity: lv_opa_t {
+        get {
+            self.display.pointee.bg_opa
+        }
+        set{
+            lv_disp_set_bg_opa(self.display, newValue)
+        }
+    }
+
     public var theme: LVTheme {
         get {
             bridgeToSwift(lv_disp_get_theme(display)!.pointee.user_data)

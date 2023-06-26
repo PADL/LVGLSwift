@@ -18,13 +18,15 @@ import Foundation
 import CLVGL
 
 public class LVScreen: LVObject {
+    public static let active = LVScreen()
+
     public init() {
         super.init(lv_scr_act())
+        precondition(self.isValid)
     }
-    
-    public static let current = LVScreen()
-    
+        
     public func load() {
         lv_scr_load(object)
+        precondition(self.isValid)
     }
 }

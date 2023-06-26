@@ -19,3 +19,4 @@
 #include <inttypes.h>
 
 bool LVGLSwiftDriverInit(uint32_t width, uint32_t height);
+const lv_font_t *LVGLSwiftDefaultFontWithSize(uint32_t size);

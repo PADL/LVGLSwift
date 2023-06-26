@@ -19,7 +19,7 @@ import CLVGL
 
 public class LVSlider: LVObject {
     public init(with parent: LVObject) {
-        super.init(lv_slider_create(parent.object))
+        super.init(lv_slider_create(parent.object), filter: LV_EVENT_VALUE_CHANGED)
     }
     
     public var value: Int32 {

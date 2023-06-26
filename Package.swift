@@ -20,7 +20,6 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/apple/swift-async-algorithms", from: "0.1.0"),
-        .package(url: "https://github.com/apple/swift-argument-parser", from: "1.2.2"),
         //.package(url: "https://github.com/apple/swift-foundation", .branch("main")),
         .package(url: "https://github.com/lhoward/AsyncExtensions", .branch("linux")),
     ],
@@ -48,7 +47,7 @@ let package = Package(
 	),
         .executableTarget(
             name: "LVGLDemo",
-            dependencies: ["LVGL", .product(name: "ArgumentParser", package: "swift-argument-parser")]
+            dependencies: ["LVGL"]
         )
     ]
 )    

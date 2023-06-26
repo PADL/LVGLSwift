@@ -24,10 +24,10 @@ public class LVLabel: LVObject {
     
     public var text: String {
         get {
-            String(cString: lv_checkbox_get_text(object), encoding: .utf8)!
+            String(cString: lv_label_get_text(object), encoding: .utf8)!
         }
         set {
-            lv_checkbox_set_text(object, newValue)
+            lv_label_set_text(object, newValue)
         }
     }
     
