@@ -40,17 +40,14 @@ public class LVTheme {
         self.flags = 0
         
         self.theme.apply_cb = { (themePointer: UnsafeMutablePointer<_lv_theme_t>?, objectPointer: UnsafeMutablePointer<lv_obj_t>?) in
-            guard let themePointer, let objectPointer else {
+            guard let themePointer,
+                  let theme = themePointer.swiftObject,
+                  let callback = theme.callback,
+                  let objectPointer else {
                 return
             }
             
-            let theme: LVTheme = bridgeToSwift(themePointer.pointee.user_data)
-            guard let callback = theme.callback else {
-                return
-            }
-            
-            if let objectUserData = lv_obj_get_user_data(objectPointer) {
-               let object: LVObject = bridgeToSwift(objectUserData)
+            if let object: LVObject = objectPointer.swiftObject {
                 callback(theme, object)
             } else if objectPointer.pointee.flags != 0 {
                 // check flags, because when zero we're likely constructing the object

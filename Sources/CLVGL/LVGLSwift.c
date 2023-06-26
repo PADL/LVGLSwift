@@ -18,7 +18,7 @@
 #include <unistd.h>
 
 #include "CLVGL.h"
-#include "LVGLSwiftDriver.h"
+#include "LVGLSwift.h"
 #include "lv_conf.h"
 #include "lv_drv_conf.h"
 
@@ -125,4 +125,14 @@ const lv_font_t *LVGLSwiftDefaultFontWithSize(uint32_t size)
         default:
             return NULL;
     }
+}
+
+lv_coord_t LVGLSwiftCoordMin()
+{
+    return LV_COORD_MIN;
+}
+
+lv_coord_t LVGLSwiftCoordMax()
+{
+    return LV_COORD_MAX;
 }

@@ -37,12 +37,12 @@ public class LVEvent: CustomStringConvertible {
     
     public var target: LVObject {
         let target = lv_event_get_target(&event)!
-        return bridgeToSwift(lv_obj_get_user_data(target))
+        return target.swiftObject!
     }
     
     public var currentTarget: LVObject {
         let currentTarget = lv_event_get_current_target(&event)!
-        return bridgeToSwift(lv_obj_get_user_data(currentTarget))
+        return currentTarget.swiftObject!
     }
     
     public var code: lv_event_code_t {

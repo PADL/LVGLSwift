@@ -97,11 +97,7 @@ public class LVObject: CustomStringConvertible, Equatable {
     }
 
     public var parent: LVObject? {
-        guard let parent = object.pointee.parent else {
-            return nil
-        }
-        
-        return bridgeToSwift(lv_obj_get_user_data(parent))
+        object.pointee.parent.swiftObject
     }
     
     public var description: String {
@@ -283,7 +279,21 @@ public class LVObject: CustomStringConvertible, Equatable {
     }
     
     // TODO: get/set local style property?
+    
+    func forEachChild(_ block: (LVObject) -> Void) {
+        guard let children = object.pointee.spec_attr.pointee.children else {
+            return
+        }
+        
+        for index in 0..<Int(lv_obj_get_child_cnt(object)) {
+            let childPointer = children[index]
+            let objectUserData = lv_obj_get_user_data(childPointer)!
+            
+            block(objectUserData.swiftObject as! LVObject)
+        }
+    }
 }
+
 
 @propertyWrapper
 public struct LVObjectFlag {

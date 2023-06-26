@@ -48,3 +48,29 @@ func LVRetainEventUserData(_ object: UnsafeMutablePointer<lv_event_t>) {
 func LVReleaseEventUserData(_ object: UnsafeMutablePointer<lv_event_t>) {
     _ = bridgeToCLVGL(releasingBridgeToSwift(lv_event_get_user_data(object)) as LVObject)
 }
+
+extension UnsafeMutablePointer where Pointee == lv_obj_t {
+    var swiftObject: LVObject? {
+        if self.pointee.user_data == nil {
+            return nil
+        } else {
+            return bridgeToSwift(self.pointee.user_data)
+        }
+    }
+}
+
+extension UnsafeMutablePointer where Pointee == lv_theme_t {
+    var swiftObject: LVTheme? {
+        if self.pointee.user_data == nil {
+            return nil
+        } else {
+            return bridgeToSwift(self.pointee.user_data)
+        }
+    }
+}
+
+extension UnsafeMutableRawPointer {
+    var swiftObject: AnyObject? {
+        return bridgeToSwift(self)
+    }
+}

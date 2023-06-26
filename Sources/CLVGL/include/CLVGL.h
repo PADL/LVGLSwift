@@ -4,4 +4,4 @@
 #include "../lv_drv_conf.h"
 
 #include "../lvgl/lvgl.h"
-#include "../LVGLSwiftDriver.h"
+#include "../LVGLSwift.h"

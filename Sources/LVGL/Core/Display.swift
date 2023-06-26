@@ -50,7 +50,7 @@ public class LVDisplay {
 
     public var theme: LVTheme {
         get {
-            bridgeToSwift(lv_disp_get_theme(display)!.pointee.user_data)
+            lv_disp_get_theme(display).swiftObject!
         }
         set {
             lv_disp_set_theme(display, &newValue.theme)
