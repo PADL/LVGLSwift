@@ -30,19 +30,23 @@ public class LVButtonMatrix: LVObject {
             lv_btnmatrix_get_selected_btn(object)
         }
         set {
+            precondition(isValid)
             lv_btnmatrix_set_selected_btn(object, newValue)
         }
     }
     
     public func buttonText(for id: UInt16) -> String {
-        String(cString: lv_btnmatrix_get_btn_text(object, id), encoding: .utf8)!
+        precondition(isValid)
+        return String(cString: lv_btnmatrix_get_btn_text(object, id), encoding: .utf8)!
     }
     
     public func hasButtonControl(id: UInt16, control: lv_btnmatrix_ctrl_t) -> Bool {
-        lv_btnmatrix_has_btn_ctrl(object, id, control)
+        precondition(isValid)
+        return lv_btnmatrix_has_btn_ctrl(object, id, control)
     }
     
     public func setButtonControl(id: UInt16? = nil, control: lv_btnmatrix_ctrl_t) {
+        precondition(isValid)
         if let id {
             lv_btnmatrix_set_btn_ctrl(object, id, control)
         } else {
@@ -51,6 +55,7 @@ public class LVButtonMatrix: LVObject {
     }
     
     public func clearButtonControl(id: UInt16? = nil, control: lv_btnmatrix_ctrl_t) {
+        precondition(isValid)
         if let id {
             lv_btnmatrix_clear_btn_ctrl(object, id, control)
         } else {
@@ -59,6 +64,7 @@ public class LVButtonMatrix: LVObject {
     }
     
     public func setButtonWidth(id: UInt16, width: UInt8) {
+        precondition(isValid)
         lv_btnmatrix_set_btn_width(object, id, width)
     }
     
@@ -67,6 +73,7 @@ public class LVButtonMatrix: LVObject {
             lv_btnmatrix_get_one_checked(object)
         }
         set {
+            precondition(isValid)
             lv_btnmatrix_set_one_checked(object, newValue)
         }
     }

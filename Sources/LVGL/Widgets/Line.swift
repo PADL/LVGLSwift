@@ -32,6 +32,7 @@ public class LVLine: LVObject {
             lv_line_get_y_invert(object)
         }
         set {
+            precondition(isValid)
             lv_line_set_y_invert(object, newValue)
         }
     }

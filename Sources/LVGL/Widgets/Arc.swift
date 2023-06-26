@@ -27,6 +27,7 @@ public class LVArc: LVObject {
             lv_arc_get_angle_start(object)
         }
         set {
+            precondition(isValid)
             lv_arc_set_start_angle(object, newValue)
         }
     }
@@ -36,6 +37,7 @@ public class LVArc: LVObject {
             lv_arc_get_angle_end(object)
         }
         set {
+            precondition(isValid)
             lv_arc_set_end_angle(object, newValue)
         }
     }
@@ -45,6 +47,7 @@ public class LVArc: LVObject {
             lv_arc_get_bg_angle_start(object)
         }
         set {
+            precondition(isValid)
             lv_arc_set_bg_start_angle(object, newValue)
         }
     }
@@ -54,6 +57,7 @@ public class LVArc: LVObject {
             lv_arc_get_bg_angle_end(object)
         }
         set {
+            precondition(isValid)
             lv_arc_set_bg_end_angle(object, newValue)
         }
     }
@@ -63,6 +67,7 @@ public class LVArc: LVObject {
             lv_arc_get_mode(object)
         }
         set {
+            precondition(isValid)
             lv_arc_set_mode(object, newValue)
         }
     }
@@ -74,6 +79,7 @@ public class LVArc: LVObject {
             }
         }
         set {
+            precondition(isValid)
             lv_arc_set_rotation(object, newValue)
         }
     }
@@ -83,6 +89,7 @@ public class LVArc: LVObject {
             lv_arc_get_value(object)
         }
         set {
+            precondition(isValid)
             lv_arc_set_value(object, newValue)
         }
     }
@@ -94,6 +101,7 @@ public class LVArc: LVObject {
             }
         }
         set {
+            precondition(isValid)
             lv_arc_set_range(object, newValue.lowerBound, newValue.upperBound)
         }
     }
@@ -105,6 +113,7 @@ public class LVArc: LVObject {
             }
         }
         set {
+            precondition(isValid)
             lv_arc_set_change_rate(object, newValue)
         }
     }

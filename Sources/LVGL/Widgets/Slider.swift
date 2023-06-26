@@ -27,6 +27,7 @@ public class LVSlider: LVObject {
             lv_slider_get_value(object)
         }
         set {
+            precondition(isValid)
             lv_slider_set_value(object, newValue, LV_ANIM_OFF)
         }
     }
@@ -36,6 +37,7 @@ public class LVSlider: LVObject {
             lv_slider_get_value(object)
         }
         set {
+            precondition(isValid)
             lv_slider_set_value(object, newValue, LV_ANIM_ON)
         }
     }
@@ -45,6 +47,7 @@ public class LVSlider: LVObject {
             lv_slider_get_min_value(object)...lv_bar_get_max_value(object)
         }
         set {
+            precondition(isValid)
             lv_slider_set_range(object, newValue.lowerBound, newValue.upperBound)
         }
     }
@@ -54,6 +57,7 @@ public class LVSlider: LVObject {
             lv_slider_get_mode(object)
         }
         set {
+            precondition(isValid)
             lv_slider_set_mode(object, newValue)
         }
     }

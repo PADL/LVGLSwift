@@ -27,8 +27,9 @@ public class LVCheckbox: LVObject {
             String(cString: lv_checkbox_get_text(object), encoding: .utf8)!
         }
         set {
+            precondition(isValid)
             lv_checkbox_set_text(object, newValue)
         }
     }
 }
-    
+

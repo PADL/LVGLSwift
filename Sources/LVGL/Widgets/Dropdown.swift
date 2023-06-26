@@ -31,6 +31,7 @@ public class LVDropdown: LVObject {
             String(cString: lv_dropdown_get_text(object), encoding: .utf8)!
         }
         set {
+            precondition(isValid)
             lv_dropdown_set_text(object, newValue)
         }
     }
@@ -40,15 +41,18 @@ public class LVDropdown: LVObject {
             String(cString: lv_dropdown_get_options(object), encoding: .utf8)!
         }
         set {
+            precondition(isValid)
             lv_dropdown_set_options(object, newValue)
         }
     }
     
     public func add(option: String, at position: UInt32) {
+        precondition(isValid)
         lv_dropdown_add_option(object, option, position)
     }
     
     public func clearOptions() {
+        precondition(isValid)
         lv_dropdown_clear_options(object)
     }
 
@@ -57,6 +61,7 @@ public class LVDropdown: LVObject {
             lv_dropdown_get_selected(object)
         }
         set {
+            precondition(isValid)
             lv_dropdown_set_selected(object, newValue)
         }
     }
@@ -66,6 +71,7 @@ public class LVDropdown: LVObject {
             lv_dropdown_get_dir(object)
         }
         set {
+            precondition(isValid)
             lv_dropdown_set_dir(object, newValue)
         }
     }
@@ -75,6 +81,7 @@ public class LVDropdown: LVObject {
             String(cString: lv_dropdown_get_symbol(object), encoding: .utf8)!
         }
         set {
+            precondition(isValid)
             lv_dropdown_set_symbol(object, newValue)
         }
     }
@@ -84,6 +91,7 @@ public class LVDropdown: LVObject {
             lv_dropdown_get_selected_highlight(object)
         }
         set {
+            precondition(isValid)
             lv_dropdown_set_selected_highlight(object, newValue)
         }
     }
@@ -93,10 +101,12 @@ public class LVDropdown: LVObject {
     }
     
     public func open() {
+        precondition(isValid)
         lv_dropdown_open(object)
     }
     
     public func close() {
+        precondition(isValid)
         lv_dropdown_close(object)
     }
     
@@ -105,6 +115,7 @@ public class LVDropdown: LVObject {
             lv_dropdown_is_open(object)
         }
         set {
+            precondition(isValid)
             if newValue {
                 open()
             } else {

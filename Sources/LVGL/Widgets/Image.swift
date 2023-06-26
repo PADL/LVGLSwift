@@ -43,6 +43,7 @@ public class LVImage: LVObject {
             }
         }
         set {
+            precondition(isValid)
             switch newValue {
             case .file(let file):
                 lv_img_set_src(object, file)
@@ -57,6 +58,7 @@ public class LVImage: LVObject {
             lv_img_get_offset_x(object)
         }
         set {
+            precondition(isValid)
             lv_img_set_offset_x(object, newValue)
         }
     }
@@ -66,6 +68,7 @@ public class LVImage: LVObject {
             lv_img_get_offset_y(object)
         }
         set {
+            precondition(isValid)
             lv_img_set_offset_y(object, newValue)
         }
     }
@@ -75,6 +78,7 @@ public class LVImage: LVObject {
             Int16(lv_img_get_angle(object))
         }
         set {
+            precondition(isValid)
             lv_img_set_angle(object, newValue)
         }
     }
@@ -86,6 +90,7 @@ public class LVImage: LVObject {
             return pivot
         }
         set {
+            precondition(isValid)
             lv_img_set_pivot(object, newValue.x, newValue.y)
         }
     }
@@ -95,6 +100,7 @@ public class LVImage: LVObject {
             lv_img_get_zoom(object)
         }
         set {
+            precondition(isValid)
             lv_img_set_zoom(object, newValue)
         }
     }
@@ -104,6 +110,7 @@ public class LVImage: LVObject {
             lv_img_get_antialias(object)
         }
         set {
+            precondition(isValid)
             lv_img_set_antialias(object, newValue)
         }
     }
@@ -113,6 +120,7 @@ public class LVImage: LVObject {
             lv_img_get_size_mode(object)
         }
         set {
+            precondition(isValid)
             lv_img_set_size_mode(object, newValue)
         }
     }

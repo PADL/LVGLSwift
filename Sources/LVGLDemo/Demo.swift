@@ -87,7 +87,7 @@ struct App {
                 debugPrint("state: \(state)")
                 if state {
                     buttonLabel.text = "Stop Counter"
-                    task = Task { @MainActor in
+                    task = Task {
                         for await count in Clock(limit: nil) {
                             anotherLabel.text = "\(count)"
                         }

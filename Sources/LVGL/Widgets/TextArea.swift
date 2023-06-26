@@ -27,6 +27,7 @@ public class LVTextArea: LVObject {
             String(cString: lv_textarea_get_text(object), encoding: .utf8)!
         }
         set {
+            precondition(isValid)
             lv_textarea_set_text(object, newValue)
         }
     }
@@ -36,6 +37,7 @@ public class LVTextArea: LVObject {
             String(cString: lv_textarea_get_placeholder_text(object), encoding: .utf8)!
         }
         set {
+            precondition(isValid)
             lv_textarea_set_placeholder_text(object, newValue)
         }
     }
@@ -45,6 +47,7 @@ public class LVTextArea: LVObject {
             Int32(lv_textarea_get_cursor_pos(object))
         }
         set {
+            precondition(isValid)
             lv_textarea_set_cursor_pos(object, newValue)
         }
     }
@@ -54,6 +57,7 @@ public class LVTextArea: LVObject {
             lv_textarea_get_cursor_click_pos(object)
         }
         set {
+            precondition(isValid)
             lv_textarea_set_cursor_click_pos(object, newValue)
         }
     }
@@ -63,6 +67,7 @@ public class LVTextArea: LVObject {
             lv_textarea_get_password_mode(object)
         }
         set {
+            precondition(isValid)
             lv_textarea_set_password_mode(object, newValue)
         }
     }
@@ -72,6 +77,7 @@ public class LVTextArea: LVObject {
             String(cString: lv_textarea_get_password_bullet(object), encoding: .utf8)!
         }
         set {
+            precondition(isValid)
             lv_textarea_set_password_bullet(object, newValue)
         }
     }
@@ -81,6 +87,7 @@ public class LVTextArea: LVObject {
             lv_textarea_get_one_line(object)
         }
         set {
+            precondition(isValid)
             lv_textarea_set_one_line(object, newValue)
         }
     }
@@ -90,6 +97,7 @@ public class LVTextArea: LVObject {
             !isSingleline
         }
         set {
+            precondition(isValid)
             isSingleline = !newValue
         }
     }
@@ -99,6 +107,7 @@ public class LVTextArea: LVObject {
             String(cString: lv_textarea_get_accepted_chars(object), encoding: .utf8)!
         }
         set {
+            precondition(isValid)
             lv_textarea_set_accepted_chars(object, newValue)
         }
     }
@@ -108,11 +117,13 @@ public class LVTextArea: LVObject {
             lv_textarea_get_max_length(object)
         }
         set {
+            precondition(isValid)
             lv_textarea_set_max_length(object, newValue)
         }
     }
     
     public func setInsertReplacement(to newValue: String) {
+        precondition(isValid)
         lv_textarea_set_insert_replace(object, newValue)
     }
     
@@ -121,6 +132,7 @@ public class LVTextArea: LVObject {
             lv_textarea_get_text_selection(object)
         }
         set {
+            precondition(isValid)
             lv_textarea_set_text_selection(object, newValue)
         }
     }
@@ -130,47 +142,58 @@ public class LVTextArea: LVObject {
             TimeInterval(lv_textarea_get_password_show_time(object) / 1000)
         }
         set {
+            precondition(isValid)
             lv_textarea_set_password_show_time(object, UInt16(newValue * 1000))
         }
     }
     
     public func setTxtAlignment(to newValue: lv_text_align_t) {
+        precondition(isValid)
         lv_textarea_set_align(object, newValue)
     }
     
     public func append(_ character: Character) {
+        precondition(isValid)
         lv_textarea_add_char(object, _lv_txt_encoded_conv_wc(character.unicodeScalarCodePoint))
     }
     
     public func append(_ text: String) {
+        precondition(isValid)
         lv_textarea_add_text(object, text)
     }
     
     public func removeLeadingCharacter() {
+        precondition(isValid)
         lv_textarea_del_char(object)
     }
     
     public func removeTrailingCharacter() {
+        precondition(isValid)
         lv_textarea_del_char_forward(object)
     }
     
     public func clearSelection() {
+        precondition(isValid)
         lv_textarea_clear_selection(object)
     }
     
     public func moveCrsorRight() {
+        precondition(isValid)
         lv_textarea_cursor_right(object)
     }
     
     public func moveCursorLeft() {
+        precondition(isValid)
         lv_textarea_cursor_left(object)
     }
 
     public func moveCursorUp() {
+        precondition(isValid)
         lv_textarea_cursor_up(object)
     }
 
     public func moveCursorDown() {
+        precondition(isValid)
         lv_textarea_cursor_down(object)
     }
 }

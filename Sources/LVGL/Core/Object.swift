@@ -238,6 +238,7 @@ public class LVObject: CustomStringConvertible, Equatable {
     
     public var isValid: Bool {
         precondition(object.pointee.user_data == bridgeToCLVGL(self))
+        precondition(Thread.isMainThread)
         return lv_obj_is_valid(object)
     }
     
