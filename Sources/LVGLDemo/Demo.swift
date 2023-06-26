@@ -25,6 +25,7 @@ import AsyncExtensions
 
 @main
 struct App {
+    @MainActor
     static func main() {
         let runLoop = LVRunLoop.shared // FIXME: needs to be called at top to do global initialization
         
@@ -38,10 +39,15 @@ struct App {
         buttonStyle.backgroundOpacity = lv_opa_t(LV_OPA_COVER)
         buttonStyle.textFont = LVFont(size: 18)
 
+        let buttonStylePressed = LVStyle()
+        buttonStylePressed.backgroundColor = LVColor(red: 100, green: 0, blue: 0)
+        buttonStylePressed.backgroundOpacity = lv_opa_t(LV_OPA_COVER)
+        buttonStylePressed.textFont = LVFont(size: 18)
+
         let labelStyle = LVStyle()
         labelStyle.backgroundColor = LVColor(red: 0, green: 0, blue: 0)
         labelStyle.backgroundOpacity = 0
-        labelStyle.textFont = LVFont(size: 24)
+        labelStyle.textFont = LVFont(size: 48)
         
         let theme = LVTheme { theme, object in
             debugPrint("Callback for theme \(theme) object \(object)")
@@ -58,57 +64,57 @@ struct App {
         let button = LVButton(with: screen)
         button.size = LVSize(width: 200, height: 50)
         button.center()
-        button.append(style: buttonStyle, selector: lv_style_selector_t(LV_PART_MAIN))
+        button.append(style: buttonStyle, selector: lv_style_selector_t(LV_STATE_DEFAULT))
+        button.append(style: buttonStylePressed, selector: lv_style_selector_t(LV_STATE_PRESSED))
         button.center()
 
         let buttonLabel = LVLabel(with: button)
         buttonLabel.text = "Stop Counter"
         buttonLabel.center()
-        //buttonLabel.append(style: labelStyle, selector: lv_style_selector_t(LV_PART_MAIN))
         
-        let anotherLabel = LVLabel(with: screen)
-        anotherLabel.text = "Stopped"
-        anotherLabel.center()
-        anotherLabel.position.y = 150
-        anotherLabel.append(style: labelStyle, selector: lv_style_selector_t(LV_PART_MAIN))
+        let counterLabel = LVLabel(with: screen)
+        counterLabel.text = ""
+        counterLabel.center()
+        counterLabel.position.y = 150
+        counterLabel.append(style: labelStyle, selector: lv_style_selector_t(LV_PART_MAIN))
         
         let counterRunning = AsyncCurrentValueSubject(false)
         
-        Task { @MainActor in
+        Task {
             for await _ in button.events {
                 counterRunning.value.toggle()
             }
         }
         
-        Task { @MainActor in
+        Task {
             var task: Task<Void, Never>? = nil
             
             for await state in counterRunning {
-                debugPrint("state: \(state)")
                 if state {
                     buttonLabel.text = "Stop Counter"
                     task = Task {
-                        for await count in Clock(limit: nil) {
-                            anotherLabel.text = "\(count)"
+                        for await count in Counter(limit: nil) {
+                            counterLabel.text = "\(count)"
+                            try? await Task.sleep(nanoseconds: 500_000_000)
                         }
                     }
                 } else {
                     if let task {
-                        buttonLabel.text = "Start Counter"
-                        anotherLabel.text = "Stopped"
                         task.cancel()
+                        buttonLabel.text = "Start Counter"
+                        counterLabel.text = "Stopped"
                     }
                     task = nil
                 }
             }
         }
-        
 
         runLoop.run()
     }
 }
 
-struct Clock: AsyncSequence, AsyncIteratorProtocol {
+/// https://www.avanderlee.com/concurrency/asyncsequence/
+fileprivate struct Counter: AsyncSequence, AsyncIteratorProtocol {
     typealias Element = Int
 
     let limit: Int?
@@ -127,11 +133,10 @@ struct Clock: AsyncSequence, AsyncIteratorProtocol {
         
         let result = current
         current += 1
-        try? await Task.sleep(nanoseconds: 1_000_000_000)
         return result
     }
 
-    func makeAsyncIterator() -> Clock {
+    func makeAsyncIterator() -> Counter {
         self
     }
 }
