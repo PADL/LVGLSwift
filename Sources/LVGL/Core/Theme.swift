@@ -52,7 +52,8 @@ public class LVTheme {
             if let objectUserData = lv_obj_get_user_data(objectPointer) {
                let object: LVObject = bridgeToSwift(objectUserData)
                 callback(theme, object)
-            } else {
+            } else if objectPointer.pointee.flags != 0 {
+                // check flags, because when zero we're likely constructing the object
                 debugPrint("LVGL object \(objectPointer) is missing associated Swift object!")
             }
         }
