@@ -18,8 +18,8 @@ import Foundation
 import CLVGL
 
 public class LVBar: LVObject {
-    public init(with parent: LVObject) {
-        super.init(lv_bar_create(parent.object))
+    convenience public init(with parent: LVObject) {
+        self.init(lv_bar_create(parent.object), with: parent)
     }
     
     public var value: Int32 {

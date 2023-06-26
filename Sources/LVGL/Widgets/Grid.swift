@@ -18,9 +18,6 @@ import Foundation
 import CLVGL
 
 extension lv_coord_t {
-    static var maxCoordinate = LVGLSwiftCoordMax()
-    static var minCoordinate = LVGLSwiftCoordMin()
-
     static var gridContent: lv_coord_t {
         // TODO: don't calculate this here
         maxCoordinate - 101
@@ -35,61 +32,46 @@ extension lv_coord_t {
     }
 }
 
-public class LVGrid {
-    var container: LVObject
+public class LVGrid: LVObject {
     var rowDescriptor: [lv_coord_t]
     var columnDescriptor: [lv_coord_t]
+    private var _objects: [LVObject?]
     
-    public init(with container: LVObject,
-                rows: lv_coord_t,
-                columns: lv_coord_t,
+    public init(with parent: LVObject,
+                rows: UInt8,
+                columns: UInt8,
                 padding: lv_coord_t? = nil) {
-        self.container = container
         self.columnDescriptor = Array(repeating: .gridContent, count: Int(columns))
         self.columnDescriptor.append(.gridTemplateLast)
         self.rowDescriptor = Array(repeating: .gridContent, count: Int(rows))
         self.rowDescriptor.append(.gridTemplateLast)
+        self._objects = Array(repeating: nil, count: Int(columns * rows))
         
-        lv_obj_set_grid_dsc_array(container.object, rowDescriptor, columnDescriptor)
-    }
-    
-    var columnCount: Int {
-        columnDescriptor.count - 1
+        super.init(lv_obj_create(parent.object), with: parent)
+        
+        lv_obj_set_style_grid_column_dsc_array(object, columnDescriptor, 0);
+        lv_obj_set_style_grid_row_dsc_array(object, rowDescriptor, 0);
+        lv_obj_set_layout(object, UInt32(LV_LAYOUT_GRID));
     }
     
     var rowCount: Int {
         rowDescriptor.count - 1
     }
     
-    func advance(_ cursor: inout lv_point_t) -> Bool {
-        cursor.x += 1
-        
-        precondition(cursor.x <= columnCount)
-        
-        if cursor.x == columnCount {
-            cursor.x = 0
-            cursor.y += 1
-            
-            precondition(cursor.y <= rowCount)
-            
-            if cursor.y == rowCount {
-                return false
-            }
-        }
-        
-        return true
+    var columnCount: Int {
+        columnDescriptor.count - 1
     }
     
-    public func apply() {
-        var cursor = lv_point_t()
-        container.forEachChild { child in
-            guard advance(&cursor) else {
-                return // TODO: add stop variable
-            }
-            
-            lv_obj_set_grid_cell(child.object,
-                                 LV_GRID_ALIGN_STRETCH, UInt8(cursor.x), 1,
-                                 LV_GRID_ALIGN_CENTER, UInt8(cursor.y), 1)
-        }
+    public func set(cell: LVObject, at coordinate: (UInt8, UInt8)) {
+        precondition(coordinate.0 < columnDescriptor.count - 1)
+        precondition(coordinate.1 < rowDescriptor.count - 1)
+        
+        cell.parent = self
+        
+        // keep a reference
+        _objects[(Int(coordinate.0) * rowCount) + Int(coordinate.1)] = cell
+        lv_obj_set_grid_cell(cell.object,
+                             LV_GRID_ALIGN_STRETCH, coordinate.0, 1,
+                             LV_GRID_ALIGN_STRETCH, coordinate.1, 1)
     }
 }

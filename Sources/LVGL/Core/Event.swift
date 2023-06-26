@@ -24,8 +24,6 @@ public class LVEvent: CustomStringConvertible {
         lv_event_register_id()
     }
     
-    /// unbalanced retain required in case event outlives target
-    
     init(_ event: lv_event_t) {
         self.event = event
         LVRetainEventUserData(&self.event)

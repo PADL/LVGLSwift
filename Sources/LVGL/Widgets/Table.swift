@@ -18,8 +18,8 @@ import Foundation
 import CLVGL
 
 public class LVTable: LVObject {
-    public init(with parent: LVObject) {
-        super.init(lv_table_create(parent.object))
+    convenience public init(with parent: LVObject) {
+        self.init(lv_table_create(parent.object), with: parent)
     }
     
     // TODO: implement

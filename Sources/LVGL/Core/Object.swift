@@ -19,6 +19,12 @@ import AsyncAlgorithms
 import AsyncExtensions
 import CLVGL
 
+public extension lv_coord_t {
+    static var sizeContent = LVGLSwiftSizeContent()
+    static var maxCoordinate = LVGLSwiftCoordMax()
+    static var minCoordinate = LVGLSwiftCoordMin()
+}
+
 public struct LVSize {
     var width: lv_coord_t
     var height: lv_coord_t
@@ -27,13 +33,20 @@ public struct LVSize {
         self.width = width
         self.height = height
     }
+    
+    public static var content: Self {
+        LVSize(width: .sizeContent, height: .sizeContent)
+    }
 }
 
 public class LVObject: CustomStringConvertible, Equatable {
+    private let _children = [LVObject]() // keep reference
+    private var _styles = [LVStyle]() // keep references
+
     let object: UnsafeMutablePointer<lv_obj_t>
+    
     public let events = AsyncChannel<LVEvent>()
     public var associatedValue: Any? = nil
-    private var styles = [LVStyle]() // keep references
     
     @LVObjectFlag(LV_OBJ_FLAG_HIDDEN) public var isHidden
     @LVObjectFlag(LV_OBJ_FLAG_CLICKABLE) public var isClickable
@@ -66,9 +79,9 @@ public class LVObject: CustomStringConvertible, Equatable {
     @LVObjectFlag(LV_OBJ_FLAG_USER_3) public var user3
     @LVObjectFlag(LV_OBJ_FLAG_USER_4) public var user4
 
-    init(_ object: UnsafeMutablePointer<lv_obj_t>, filter: lv_event_code_t = LV_EVENT_ALL) {
+    init(_ object: UnsafeMutablePointer<lv_obj_t>, filter: lv_event_code_t = LV_EVENT_ALL, with parent: LVObject?) {
         self.object = object
-        
+
         lv_obj_set_user_data(object, bridgeToCLVGL(self))
         lv_obj_add_event_cb(object, {
             guard let eventData = $0?.pointee else {
@@ -85,8 +98,15 @@ public class LVObject: CustomStringConvertible, Equatable {
                 await event.target.events.send(event)
             }
         }, filter, bridgeToCLVGL(self))
+        
+        // gotta keep references because event handler may run asynchronously
+        parent?._children.append(self)
     }
-    
+
+    public convenience init(with parent: LVObject) {
+        self.init(lv_obj_create(parent.object), with: parent)
+    }
+
     deinit {
         events.finish()
         lv_obj_del(object)
@@ -97,7 +117,19 @@ public class LVObject: CustomStringConvertible, Equatable {
     }
 
     public var parent: LVObject? {
-        object.pointee.parent.swiftObject
+        get {
+            guard let parent = object.pointee.parent else {
+                return nil
+            }
+            return parent.swiftObject
+        }
+        set {
+            if let parent = newValue {
+                lv_obj_set_parent(object, parent.object)
+            } else {
+                lv_obj_set_parent(object, nil)
+            }
+        }
     }
     
     public var description: String {
@@ -210,18 +242,18 @@ public class LVObject: CustomStringConvertible, Equatable {
         lv_obj_center(object)
     }
     
-    public func append(style: LVStyle?, selector: lv_style_selector_t = lv_style_selector_t(0)) {
+    public func append(style: LVStyle?, selector: lv_style_selector_t = lv_style_selector_t(LV_PART_MAIN)) {
         if let style {
-            styles.append(style)
+            _styles.append(style)
             lv_obj_add_style(object, &style.style, selector)
         } else {
             lv_obj_add_style(object, nil, selector)
         }
     }
     
-    public func remove(style: LVStyle?, selector: lv_style_selector_t = lv_style_selector_t(0)) {
+    public func remove(style: LVStyle?, selector: lv_style_selector_t = lv_style_selector_t(LV_PART_MAIN)) {
         if let style {
-            styles.removeAll(where: { $0 == style })
+            _styles.removeAll(where: { $0 == style })
             lv_obj_remove_style(object, &style.style, selector)
         } else {
             lv_obj_remove_style(object, nil, selector)
@@ -280,17 +312,26 @@ public class LVObject: CustomStringConvertible, Equatable {
     
     // TODO: get/set local style property?
     
-    func forEachChild(_ block: (LVObject) -> Void) {
+    func forEachChild(_ block: (LVObject, inout Bool) -> Void) {
         guard let children = object.pointee.spec_attr.pointee.children else {
             return
         }
         
-        for index in 0..<Int(lv_obj_get_child_cnt(object)) {
+        debugPrint("child count = \(lv_obj_get_child_cnt(object))")
+        var stop = false
+        for index in 0..<childCount {
             let childPointer = children[index]
             let objectUserData = lv_obj_get_user_data(childPointer)!
             
-            block(objectUserData.swiftObject as! LVObject)
+            block(objectUserData.swiftObject as! LVObject, &stop)
+            if stop {
+                break
+            }
         }
+    }
+    
+    public var childCount: Int {
+        Int(lv_obj_get_child_cnt(object))
     }
 }
 

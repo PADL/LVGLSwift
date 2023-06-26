@@ -18,8 +18,8 @@ import Foundation
 import CLVGL
 
 public class LVArc: LVObject {
-    public init(with parent: LVObject) {
-        super.init(lv_arc_create(parent.object))
+    public convenience init(with parent: LVObject) {
+        self.init(lv_arc_create(parent.object), with: parent)
     }
 
     public var startAngle: UInt16 {

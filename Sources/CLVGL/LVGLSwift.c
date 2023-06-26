@@ -127,12 +127,17 @@ const lv_font_t *LVGLSwiftDefaultFontWithSize(uint32_t size)
     }
 }
 
-lv_coord_t LVGLSwiftCoordMin()
+lv_coord_t LVGLSwiftCoordMin(void)
 {
     return LV_COORD_MIN;
 }
 
-lv_coord_t LVGLSwiftCoordMax()
+lv_coord_t LVGLSwiftCoordMax(void)
 {
     return LV_COORD_MAX;
+}
+
+lv_coord_t LVGLSwiftSizeContent(void)
+{
+    return LVGLSwiftSizeContent;
 }

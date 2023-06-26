@@ -18,8 +18,8 @@ import Foundation
 import CLVGL
 
 public class LVButtonMatrix: LVObject {
-    public init(with parent: LVObject) {
-        super.init(lv_btnmatrix_create(parent.object))
+    convenience public init(with parent: LVObject) {
+        self.init(lv_btnmatrix_create(parent.object), with: parent)
     }
     
     // TODO: lv_btnmatrix_set_map

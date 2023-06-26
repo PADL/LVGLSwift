@@ -18,12 +18,8 @@ import Foundation
 import CLVGL
 
 public class LVDropdown: LVObject {
-    public let list: LVObject
-    
-    public init(with parent: LVObject) {
-        let object = lv_dropdown_create(parent.object)!
-        self.list = LVObject(lv_dropdown_get_list(object))
-        super.init(object)
+    convenience public init(with parent: LVObject) {
+        self.init(lv_dropdown_create(parent.object), with: parent)
     }
     
     public var text: String {

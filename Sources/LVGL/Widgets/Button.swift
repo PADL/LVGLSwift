@@ -18,7 +18,7 @@ import Foundation
 import CLVGL
 
 public class LVButton: LVObject {
-    public init(with parent: LVObject) {
-        super.init(lv_btn_create(parent.object), filter: LV_EVENT_CLICKED)
+    convenience public init(with parent: LVObject) {
+        self.init(lv_btn_create(parent.object), filter: LV_EVENT_CLICKED, with: parent)
     }
 }

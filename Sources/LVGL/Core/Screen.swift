@@ -21,7 +21,7 @@ public class LVScreen: LVObject {
     public static let active = LVScreen()
 
     public init() {
-        super.init(lv_scr_act())
+        super.init(lv_scr_act(), with: nil)
         precondition(self.isValid)
     }
         
