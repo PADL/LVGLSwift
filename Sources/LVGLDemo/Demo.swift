@@ -50,7 +50,6 @@ struct App {
         labelStyle.textFont = LVFont(size: 48)
         
         let theme = LVTheme { theme, object in
-            debugPrint("Callback for theme \(theme) object \(object)")
             if object is LVScreen {
                 object.append(style: screenStyle, selector: lv_style_selector_t(LV_PART_MAIN))
             }
