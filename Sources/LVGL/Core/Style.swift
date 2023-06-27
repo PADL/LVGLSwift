@@ -437,10 +437,26 @@ public struct LVStyleFontProperty: LVStylePropertyRepresentable {
     }
 }
 
-public class LVStyle: LVReferenceStyle {
-    var storage = lv_style_t()
-    
+@dynamicMemberLookup
+public class LVStyle: Hashable {
+    private var storage: lv_style_t
+    private var reference: LVReferenceStyle
+
     public init() {
-        super.init(&storage)
+        self.storage = lv_style_t()
+        self.reference = LVReferenceStyle(&self.storage)
+    }
+
+    public subscript<T>(dynamicMember keyPath: WritableKeyPath<LVReferenceStyle, T>) -> T {
+        get { reference[keyPath: keyPath] }
+        set { reference[keyPath: keyPath] = newValue }
+    }
+
+    public static func == (lhs: LVStyle, rhs: LVStyle) -> Bool {
+        lhs.reference == rhs.reference
+    }
+
+    public func hash(into hasher: inout Hasher) {
+        reference.hash(into: &hasher)
     }
 }
