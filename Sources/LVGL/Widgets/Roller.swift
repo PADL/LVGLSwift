@@ -65,7 +65,10 @@ public class LVRoller: LVObject {
         buffer.withUnsafeMutableBufferPointer {
             lv_roller_get_selected_str(object, $0.baseAddress, UInt32($0.count))
         }
-        return String(cString: buffer, encoding: .utf8)
+        guard let string = String(cString: buffer, encoding: .utf8), !string.isEmpty else {
+            return nil
+        }
+        return string
     }
 
     public func setVisibleRowCount(_ rowCount: UInt8) {
