@@ -311,8 +311,20 @@ public class LVStyle: Hashable {
     public var flexGrow: UInt8?
 }
 
+protocol LVStylePropertyRepresentable {
+    var property: lv_style_prop_t { get }
+}
+
+extension LVStylePropertyRepresentable {
+    func refresh(on object: LVObject, selector: lv_style_selector_t = 0) {
+        lv_obj_refresh_style(object.object, selector, property)
+    }
+}
+
 @propertyWrapper
-public struct LVStyleIntegerProperty<Value> where Value: BinaryInteger {
+public struct LVStyleIntegerProperty<Value>: LVStylePropertyRepresentable
+    where Value: BinaryInteger
+{
     let property: lv_style_prop_t
 
     init(_ property: lv_style_prop_t) {
@@ -339,7 +351,7 @@ public struct LVStyleIntegerProperty<Value> where Value: BinaryInteger {
 }
 
 @propertyWrapper
-public struct LVStyleBooleanProperty {
+public struct LVStyleBooleanProperty: LVStylePropertyRepresentable {
     public typealias Value = Bool
 
     let property: lv_style_prop_t
@@ -368,7 +380,7 @@ public struct LVStyleBooleanProperty {
 }
 
 @propertyWrapper
-public struct LVStyleColorProperty {
+public struct LVStyleColorProperty: LVStylePropertyRepresentable {
     public typealias Value = LVColor
 
     let property: lv_style_prop_t
@@ -397,7 +409,7 @@ public struct LVStyleColorProperty {
 }
 
 @propertyWrapper
-public struct LVStyleFontProperty {
+public struct LVStyleFontProperty: LVStylePropertyRepresentable {
     public typealias Value = LVFont
 
     let property: lv_style_prop_t

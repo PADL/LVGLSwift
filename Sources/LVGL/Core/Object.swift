@@ -371,6 +371,24 @@ public class LVObject: CustomStringConvertible, Equatable {
         LVDisplay(lv_obj_get_disp(object))
     }
 
+    public func withLocalStyle(
+        for selector: lv_style_selector_t = 0,
+        _ block: (LVStyle) -> ()
+    ) {
+        for index in 0..<object.pointee.style_cnt {
+            let style = object.pointee.styles[Int(index)]
+            guard style.is_local != 0, style.selector == selector else {
+                continue
+            }
+            // FIXME: is this allocation-safe? we should at least avoid a copy
+            let lvStyle = LVStyle()
+            lvStyle.style = style.style.pointee
+            block(lvStyle)
+            style.style.pointee = lvStyle.style
+        }
+    }
+
+    // FIXME: local styles should remove these methods
     public func setFlexAlign(
         mainPlace: lv_flex_align_t,
         crossPlace: lv_flex_align_t,
