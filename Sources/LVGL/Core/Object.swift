@@ -69,7 +69,7 @@ public struct LVFlags: OptionSet {
 }
 
 public class LVObject: CustomStringConvertible, Equatable {
-    private let _children = [LVObject]() // keep reference
+    private var _children = [LVObject]() // keep reference
     private var _styles = [LVStyle]() // keep references
     
     let object: UnsafeMutablePointer<lv_obj_t>
@@ -124,10 +124,11 @@ public class LVObject: CustomStringConvertible, Equatable {
             return parent.swiftObject
         }
         set {
-            if let parent = newValue {
-                lv_obj_set_parent(object, parent.object)
-            } else {
-                lv_obj_set_parent(object, nil)
+            let oldParent = object.pointee.parent?.swiftObject
+            if let newParent = newValue, newParent != oldParent {
+                oldParent?._children.removeAll(where: { $0 == self })
+                lv_obj_set_parent(object, newParent.object)
+                newParent._children.append(self)
             }
         }
     }
@@ -218,6 +219,19 @@ public class LVObject: CustomStringConvertible, Equatable {
     public var isVisible: Bool {
         get {
             lv_obj_is_visible(object)
+        }
+    }
+    
+    public var isHidden: Bool {
+        get {
+            self.isSet(flag: .hidden)
+        }
+        set {
+            if newValue {
+                self.set(flag: .hidden)
+            } else {
+                self.clear(flag: .hidden)
+            }
         }
     }
     
