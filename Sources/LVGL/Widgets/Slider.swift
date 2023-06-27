@@ -18,55 +18,55 @@ import CLVGL
 import Foundation
 
 public class LVSlider: LVObject {
-  public required init(with parent: LVObject!) {
-    super.init(
-      lv_slider_create(parent.object),
-      filters: [LV_EVENT_VALUE_CHANGED],
-      with: parent
-    )
-  }
+    public required init(with parent: LVObject!) {
+        super.init(
+            lv_slider_create(parent.object),
+            filters: [LV_EVENT_VALUE_CHANGED],
+            with: parent
+        )
+    }
 
-  public var value: Int32 {
-    get {
-      lv_slider_get_value(object)
+    public var value: Int32 {
+        get {
+            lv_slider_get_value(object)
+        }
+        set {
+            precondition(isValid)
+            lv_slider_set_value(object, newValue, LV_ANIM_OFF)
+        }
     }
-    set {
-      precondition(isValid)
-      lv_slider_set_value(object, newValue, LV_ANIM_OFF)
-    }
-  }
 
-  public var animatedValue: Int32 {
-    get {
-      lv_slider_get_value(object)
+    public var animatedValue: Int32 {
+        get {
+            lv_slider_get_value(object)
+        }
+        set {
+            precondition(isValid)
+            lv_slider_set_value(object, newValue, LV_ANIM_ON)
+        }
     }
-    set {
-      precondition(isValid)
-      lv_slider_set_value(object, newValue, LV_ANIM_ON)
-    }
-  }
 
-  public var range: ClosedRange<Int32> {
-    get {
-      lv_slider_get_min_value(object)...lv_bar_get_max_value(object)
+    public var range: ClosedRange<Int32> {
+        get {
+            lv_slider_get_min_value(object)...lv_bar_get_max_value(object)
+        }
+        set {
+            precondition(isValid)
+            lv_slider_set_range(object, newValue.lowerBound, newValue.upperBound)
+        }
     }
-    set {
-      precondition(isValid)
-      lv_slider_set_range(object, newValue.lowerBound, newValue.upperBound)
-    }
-  }
 
-  public var mode: lv_slider_mode_t {
-    get {
-      lv_slider_get_mode(object)
+    public var mode: lv_slider_mode_t {
+        get {
+            lv_slider_get_mode(object)
+        }
+        set {
+            precondition(isValid)
+            lv_slider_set_mode(object, newValue)
+        }
     }
-    set {
-      precondition(isValid)
-      lv_slider_set_mode(object, newValue)
-    }
-  }
 
-  public var isDragged: Bool {
-    lv_slider_is_dragged(object)
-  }
+    public var isDragged: Bool {
+        lv_slider_is_dragged(object)
+    }
 }

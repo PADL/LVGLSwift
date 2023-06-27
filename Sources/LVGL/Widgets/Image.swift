@@ -18,110 +18,110 @@ import CLVGL
 import Foundation
 
 public enum LVImageSource {
-  case file(String)
-  // TODO: other image source types
+    case file(String)
+    // TODO: other image source types
 }
 
 public class LVImage: LVObject {
-  public required init(with parent: LVObject!) {
-    super.init(lv_img_create(parent.object), with: parent)
-  }
+    public required init(with parent: LVObject!) {
+        super.init(lv_img_create(parent.object), with: parent)
+    }
 
-  public var source: LVImageSource {
-    get {
-      let source = lv_img_get_src(object)
-      switch Int(lv_img_src_get_type(source)) {
-      case LV_IMG_SRC_FILE:
-        return withUnsafePointer(to: source) {
-          $0.withMemoryRebound(to: UnsafePointer<CChar>.self, capacity: 1) {
-            let file = String(cString: $0.pointee, encoding: .utf8)!
-            return LVImageSource.file(file)
-          }
+    public var source: LVImageSource {
+        get {
+            let source = lv_img_get_src(object)
+            switch Int(lv_img_src_get_type(source)) {
+            case LV_IMG_SRC_FILE:
+                return withUnsafePointer(to: source) {
+                    $0.withMemoryRebound(to: UnsafePointer<CChar>.self, capacity: 1) {
+                        let file = String(cString: $0.pointee, encoding: .utf8)!
+                        return LVImageSource.file(file)
+                    }
+                }
+            default:
+                fatalError("not implemented")
+            }
         }
-      default:
-        fatalError("not implemented")
-      }
+        set {
+            precondition(isValid)
+            switch newValue {
+            case let .file(file):
+                lv_img_set_src(object, file)
+            default:
+                fatalError("not implemented")
+            }
+        }
     }
-    set {
-      precondition(isValid)
-      switch newValue {
-      case let .file(file):
-        lv_img_set_src(object, file)
-      default:
-        fatalError("not implemented")
-      }
-    }
-  }
 
-  public var xOffset: lv_coord_t {
-    get {
-      lv_img_get_offset_x(object)
+    public var xOffset: lv_coord_t {
+        get {
+            lv_img_get_offset_x(object)
+        }
+        set {
+            precondition(isValid)
+            lv_img_set_offset_x(object, newValue)
+        }
     }
-    set {
-      precondition(isValid)
-      lv_img_set_offset_x(object, newValue)
-    }
-  }
 
-  public var yOffset: lv_coord_t {
-    get {
-      lv_img_get_offset_y(object)
+    public var yOffset: lv_coord_t {
+        get {
+            lv_img_get_offset_y(object)
+        }
+        set {
+            precondition(isValid)
+            lv_img_set_offset_y(object, newValue)
+        }
     }
-    set {
-      precondition(isValid)
-      lv_img_set_offset_y(object, newValue)
-    }
-  }
 
-  public var angle: Int16 {
-    get {
-      Int16(lv_img_get_angle(object))
+    public var angle: Int16 {
+        get {
+            Int16(lv_img_get_angle(object))
+        }
+        set {
+            precondition(isValid)
+            lv_img_set_angle(object, newValue)
+        }
     }
-    set {
-      precondition(isValid)
-      lv_img_set_angle(object, newValue)
-    }
-  }
 
-  public var pivot: lv_point_t {
-    get {
-      var pivot = lv_point_t(x: 0, y: 0)
-      lv_img_get_pivot(object, &pivot)
-      return pivot
+    public var pivot: lv_point_t {
+        get {
+            var pivot = lv_point_t(x: 0, y: 0)
+            lv_img_get_pivot(object, &pivot)
+            return pivot
+        }
+        set {
+            precondition(isValid)
+            lv_img_set_pivot(object, newValue.x, newValue.y)
+        }
     }
-    set {
-      precondition(isValid)
-      lv_img_set_pivot(object, newValue.x, newValue.y)
-    }
-  }
 
-  public var zoom: UInt16 {
-    get {
-      lv_img_get_zoom(object)
+    public var zoom: UInt16 {
+        get {
+            lv_img_get_zoom(object)
+        }
+        set {
+            precondition(isValid)
+            lv_img_set_zoom(object, newValue)
+        }
     }
-    set {
-      precondition(isValid)
-      lv_img_set_zoom(object, newValue)
-    }
-  }
 
-  public var isAntialiased: Bool {
-    get {
-      lv_img_get_antialias(object)
+    public var isAntialiased: Bool {
+        get {
+            lv_img_get_antialias(object)
+        }
+        set {
+            precondition(isValid)
+            lv_img_set_antialias(object, newValue)
+        }
     }
-    set {
-      precondition(isValid)
-      lv_img_set_antialias(object, newValue)
-    }
-  }
 
-  public var sizeMode: lv_img_size_mode_t {
-    get {
-      lv_img_get_size_mode(object)
+    public var sizeMode: lv_img_size_mode_t {
+        get {
+            lv_img_get_size_mode(object)
+        }
+        set {
+            precondition(isValid)
+            lv_img_set_size_mode(object, newValue)
+        }
     }
-    set {
-      precondition(isValid)
-      lv_img_set_size_mode(object, newValue)
-    }
-  }
 }

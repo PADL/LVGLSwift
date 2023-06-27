@@ -18,7 +18,7 @@ import CLVGL
 import Foundation
 
 public class LVSwitch: LVObject {
-  public required init(with parent: LVObject!) {
-    super.init(lv_switch_create(parent.object), with: parent)
-  }
+    public required init(with parent: LVObject!) {
+        super.init(lv_switch_create(parent.object), with: parent)
+    }
 }

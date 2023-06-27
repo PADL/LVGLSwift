@@ -18,23 +18,23 @@ import CLVGL
 import Foundation
 
 public class LVLine: LVObject {
-  public required init(with parent: LVObject!) {
-    super.init(lv_label_create(parent.object), with: parent)
-  }
+    public required init(with parent: LVObject!) {
+        super.init(lv_label_create(parent.object), with: parent)
+    }
 
-  public func set(points: [lv_point_t]) {
-    points.withUnsafeBufferPointer { (cArray: UnsafeBufferPointer<lv_point_t>) in
-      lv_line_set_points(object, cArray.baseAddress, UInt16(cArray.count))
+    public func set(points: [lv_point_t]) {
+        points.withUnsafeBufferPointer { (cArray: UnsafeBufferPointer<lv_point_t>) in
+            lv_line_set_points(object, cArray.baseAddress, UInt16(cArray.count))
+        }
     }
-  }
 
-  public var yCoordinateInversion: Bool {
-    get {
-      lv_line_get_y_invert(object)
+    public var yCoordinateInversion: Bool {
+        get {
+            lv_line_get_y_invert(object)
+        }
+        set {
+            precondition(isValid)
+            lv_line_set_y_invert(object, newValue)
+        }
     }
-    set {
-      precondition(isValid)
-      lv_line_set_y_invert(object, newValue)
-    }
-  }
 }
