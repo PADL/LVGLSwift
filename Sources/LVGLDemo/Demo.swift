@@ -76,7 +76,7 @@ private func CounterDemo() {
     let counterRunning = AsyncCurrentValueSubject(false)
     
     Task {
-        for await _ in button.events {
+        for await _ in button.events.filter( { $0.code == LV_EVENT_PRESSED } ) {
             counterRunning.value.toggle()
         }
     }
@@ -175,8 +175,8 @@ struct App {
     static func main() {
         let runLoop = LVRunLoop.shared // FIXME: needs to be called at top to do global initialization
         
-        //CounterDemo()
-        GridDemo()
+        CounterDemo()
+        //GridDemo()
         
         runLoop.run()
     }
