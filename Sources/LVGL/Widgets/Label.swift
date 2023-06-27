@@ -18,8 +18,8 @@ import Foundation
 import CLVGL
 
 public class LVLabel: LVObject {
-    convenience public init(with parent: LVObject) {
-        self.init(lv_label_create(parent.object), with: parent)
+    required public init(with parent: LVObject!) {
+        super.init(lv_label_create(parent.object), with: parent)
     }
     
     public var text: String {

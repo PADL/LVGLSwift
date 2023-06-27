@@ -76,35 +76,27 @@ public class LVObject: CustomStringConvertible, Equatable {
     
     public let events = AsyncChannel<LVEvent>()
     
-    public init(_ object: UnsafeMutablePointer<lv_obj_t>,
-                filters: [lv_event_code_t]? = [LV_EVENT_ALL],
-                with parent: LVObject?) {
+    private func addEventCallback(filter: lv_event_code_t) {
+        lv_obj_add_event_cb(self.object, eventCallback, filter, bridgeToCLVGL(self))
+    }
+    
+    init(_ object: UnsafeMutablePointer<lv_obj_t>,
+         filters: [lv_event_code_t]? = [LV_EVENT_ALL],
+         with parent: LVObject!) {
         self.object = object
         
         lv_obj_set_user_data(object, bridgeToCLVGL(self))
-        
-        if let filters {
-            for filter in filters {
-                lv_obj_add_event_cb(object, {
-                    guard let eventData = $0?.pointee else {
-                        return
-                    }
-                    
-                    let event = LVEvent(eventData)
-                    
-                    Task { @MainActor in
-                        await event.target.events.send(event)
-                    }
-                }, filter, bridgeToCLVGL(self))
-            }
-        }
-        
+        filters?.forEach { addEventCallback(filter: $0) }
         // gotta keep references because event handler may run asynchronously
         parent?._children.append(self)
     }
     
-    public convenience init(with parent: LVObject) {
-        self.init(lv_obj_create(parent.object), with: parent)
+    public required init(with parent: LVObject!) {
+        precondition(parent != nil)
+        self.object = lv_obj_create(parent.object)
+        lv_obj_set_user_data(object, bridgeToCLVGL(self))
+        addEventCallback(filter: LV_EVENT_ALL)
+        parent._children.append(self)
     }
     
     deinit {
@@ -345,5 +337,17 @@ public class LVObject: CustomStringConvertible, Equatable {
     
     public var childCount: Int {
         Int(lv_obj_get_child_cnt(object))
+    }
+}
+
+private func eventCallback(_ eventData: UnsafeMutablePointer<lv_event_t>?) {
+    guard let eventData = eventData?.pointee else {
+        return
+    }
+    
+    let event = LVEvent(eventData)
+    
+    Task { @MainActor in
+        await event.target.events.send(event)
     }
 }

@@ -18,8 +18,8 @@ import Foundation
 import CLVGL
 
 public class LVLine: LVObject {
-    convenience public init(with parent: LVObject) {
-        self.init(lv_label_create(parent.object), with: parent)
+    required public init(with parent: LVObject!) {
+        super.init(lv_label_create(parent.object), with: parent)
     }
     
     public func set(points: [lv_point_t]) {

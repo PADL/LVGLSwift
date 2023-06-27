@@ -23,8 +23,8 @@ public enum LVImageSource {
 }
 
 public class LVImage: LVObject {
-    convenience public init(with parent: LVObject) {
-        self.init(lv_img_create(parent.object), with: parent)
+    required public init(with parent: LVObject!) {
+        super.init(lv_img_create(parent.object), with: parent)
     }
     
     public var source: LVImageSource {

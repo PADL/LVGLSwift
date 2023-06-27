@@ -39,7 +39,7 @@ public class LVGrid: LVObject {
     
     public init(with parent: LVObject,
                 rows: UInt8,
-                columns: UInt8,
+                columns: UInt8 ,
                 padding: lv_coord_t? = nil) {
         self.columnDescriptor = Array(repeating: .gridContent, count: Int(columns))
         self.columnDescriptor.append(.gridTemplateLast)
@@ -49,6 +49,20 @@ public class LVGrid: LVObject {
         
         super.init(lv_obj_create(parent.object), with: parent)
         
+        lv_obj_set_style_grid_column_dsc_array(object, columnDescriptor, 0);
+        lv_obj_set_style_grid_row_dsc_array(object, rowDescriptor, 0);
+        lv_obj_set_layout(object, UInt32(LV_LAYOUT_GRID));
+    }
+    
+    public required init(with parent: LVObject!) {
+        self.columnDescriptor = Array(repeating: .gridContent, count: 1)
+        self.columnDescriptor.append(.gridTemplateLast)
+        self.rowDescriptor = Array(repeating: .gridContent, count: 1)
+        self.rowDescriptor.append(.gridTemplateLast)
+        self._objects = Array(repeating: nil, count: 1)
+        
+        super.init(lv_obj_create(parent.object), with: parent)
+
         lv_obj_set_style_grid_column_dsc_array(object, columnDescriptor, 0);
         lv_obj_set_style_grid_row_dsc_array(object, rowDescriptor, 0);
         lv_obj_set_layout(object, UInt32(LV_LAYOUT_GRID));

@@ -20,11 +20,14 @@ import CLVGL
 public class LVScreen: LVObject {
     public static let active = LVScreen()
 
-    public init() {
-        super.init(lv_scr_act(), with: nil)
-        precondition(self.isValid)
+    convenience public init() {
+        self.init(with: nil)
     }
-        
+    
+    public required init(with parent: LVObject!) {
+        super.init(lv_scr_act(), with: parent)
+    }
+    
     public func load() {
         lv_scr_load(object)
         precondition(self.isValid)

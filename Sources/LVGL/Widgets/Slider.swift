@@ -18,8 +18,9 @@ import Foundation
 import CLVGL
 
 public class LVSlider: LVObject {
-    convenience public init(with parent: LVObject) {
-        self.init(lv_slider_create(parent.object), filters: [LV_EVENT_VALUE_CHANGED], with: parent)
+    required public init(with parent: LVObject!) {
+        super.init(lv_slider_create(parent.object),
+                   filters: [LV_EVENT_VALUE_CHANGED], with: parent)
     }
     
     public var value: Int32 {

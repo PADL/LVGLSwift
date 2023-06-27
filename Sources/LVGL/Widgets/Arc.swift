@@ -18,7 +18,7 @@ import Foundation
 import CLVGL
 
 public class LVArc: LVObject {
-    public convenience init(with parent: LVObject) {
+    required convenience init(with parent: LVObject) {
         self.init(lv_arc_create(parent.object), with: parent)
     }
 

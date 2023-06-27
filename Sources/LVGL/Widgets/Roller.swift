@@ -18,8 +18,8 @@ import Foundation
 import CLVGL
 
 public class LVRoller: LVObject {
-    convenience public init(with parent: LVObject) {
-        self.init(lv_roller_create(parent.object), with: parent)
+    required public init(with parent: LVObject!) {
+        super.init(lv_roller_create(parent.object), with: parent)
     }
     
     // TODO: implement
