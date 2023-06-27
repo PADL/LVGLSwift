@@ -383,6 +383,7 @@ public class LVObject: CustomStringConvertible, Equatable {
             let ref = LVReferenceStyle(style.style)
             block(ref)
         }
+        lv_obj_refresh_style(object, selector, LV_STYLE_PROP_ANY)
     }
 
     // FIXME: local styles should remove these methods
