@@ -14,47 +14,47 @@
 // limitations under the License.
 //
 
-import Foundation
 import CLVGL
+import Foundation
 
 public struct LVColor {
-    var color: lv_color_t
-    
-    init(_ color: lv_color_t) {
-        self.color = color
-    }
-    
-    public init(hexValue: UInt32) {
-        self.init(lv_color_hex(hexValue))
-    }
-    
-    public init(red: UInt8, green: UInt8, blue: UInt8) {
-        self.init(lv_color_make(red, green, blue))
-    }
-    
-    public func darken(by opacity: lv_opa_t) -> LVColor {
-        LVColor(lv_color_darken(color, opacity))
-    }
+  var color: lv_color_t
+
+  init(_ color: lv_color_t) {
+    self.color = color
+  }
+
+  public init(hexValue: UInt32) {
+    self.init(lv_color_hex(hexValue))
+  }
+
+  public init(red: UInt8, green: UInt8, blue: UInt8) {
+    self.init(lv_color_make(red, green, blue))
+  }
+
+  public func darken(by opacity: lv_opa_t) -> LVColor {
+    LVColor(lv_color_darken(color, opacity))
+  }
 }
 
-extension LVColor {
-    public static var black: LVColor {
-        LVColor(lv_color_black())
-    }
-    
-    public static var white: LVColor {
-        LVColor(lv_color_white())
-    }
-    
-    public static var red: LVColor {
-        LVColor(red: 255, green: 0, blue: 0)
-    }
+public extension LVColor {
+  static var black: LVColor {
+    LVColor(lv_color_black())
+  }
 
-    public static var green: LVColor {
-        LVColor(red: 0, green: 255, blue: 0)
-    }
+  static var white: LVColor {
+    LVColor(lv_color_white())
+  }
 
-    public static var blue: LVColor {
-        LVColor(red: 0, green: 0, blue: 255)
-    }
+  static var red: LVColor {
+    LVColor(red: 255, green: 0, blue: 0)
+  }
+
+  static var green: LVColor {
+    LVColor(red: 0, green: 255, blue: 0)
+  }
+
+  static var blue: LVColor {
+    LVColor(red: 0, green: 0, blue: 255)
+  }
 }

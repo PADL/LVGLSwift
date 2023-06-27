@@ -14,13 +14,13 @@
 // limitations under the License.
 //
 
-import Foundation
 import CLVGL
+import Foundation
 
 public class LVTable: LVObject {
-    required public init(with parent: LVObject!) {
-        super.init(lv_table_create(parent.object), with: parent)
-    }
-    
-    // TODO: implement
+  public required init(with parent: LVObject!) {
+    super.init(lv_table_create(parent.object), with: parent)
+  }
+
+  // TODO: implement
 }

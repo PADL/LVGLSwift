@@ -14,27 +14,25 @@
 // limitations under the License.
 //
 
-import Foundation
 import CLVGL
+import Foundation
 
 public struct LVSize {
-    public let width: lv_coord_t
-    public let height: lv_coord_t
-    
-    public init(width: lv_coord_t, height: lv_coord_t) {
-        self.width = width
-        self.height = height
-    }
-    
-    public static var content: Self {
-        LVSize(width: .sizeContent, height: .sizeContent)
-    }
-    
-    public static var zero: Self {
-        LVSize(width: 0, height: 0)
-    }
+  public let width: lv_coord_t
+  public let height: lv_coord_t
+
+  public init(width: lv_coord_t, height: lv_coord_t) {
+    self.width = width
+    self.height = height
+  }
+
+  public static var content: Self {
+    LVSize(width: .sizeContent, height: .sizeContent)
+  }
+
+  public static var zero: Self {
+    LVSize(width: 0, height: 0)
+  }
 }
 
-extension LVSize: Equatable {
-
-}
+extension LVSize: Equatable {}

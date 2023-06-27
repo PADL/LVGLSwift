@@ -14,40 +14,40 @@
 // limitations under the License.
 //
 
-import Foundation
 import CLVGL
+import Foundation
 
 public class LVEvent: CustomStringConvertible {
-    var event: lv_event_t
-    
-    static func registerID() -> UInt32 {
-        lv_event_register_id()
-    }
-    
-    init(_ event: lv_event_t) {
-        self.event = event
-        LVRetainEventUserData(&self.event)
-    }
-    
-    deinit {
-        LVReleaseEventUserData(&event)
-    }
-    
-    public var target: LVObject {
-        let target = lv_event_get_target(&event)!
-        return target.swiftObject!
-    }
-    
-    public var currentTarget: LVObject {
-        let currentTarget = lv_event_get_current_target(&event)!
-        return currentTarget.swiftObject!
-    }
-    
-    public var code: lv_event_code_t {
-        return lv_event_get_code(&event)
-    }
-    
-    public var description: String {
-        return "LVGL.LVEvent(target: \(target), currentTarget: \(currentTarget), code: \(code))"
-    }
+  var event: lv_event_t
+
+  static func registerID() -> UInt32 {
+    lv_event_register_id()
+  }
+
+  init(_ event: lv_event_t) {
+    self.event = event
+    LVRetainEventUserData(&self.event)
+  }
+
+  deinit {
+    LVReleaseEventUserData(&event)
+  }
+
+  public var target: LVObject {
+    let target = lv_event_get_target(&event)!
+    return target.swiftObject!
+  }
+
+  public var currentTarget: LVObject {
+    let currentTarget = lv_event_get_current_target(&event)!
+    return currentTarget.swiftObject!
+  }
+
+  public var code: lv_event_code_t {
+    lv_event_get_code(&event)
+  }
+
+  public var description: String {
+    "LVGL.LVEvent(target: \(target), currentTarget: \(currentTarget), code: \(code))"
+  }
 }

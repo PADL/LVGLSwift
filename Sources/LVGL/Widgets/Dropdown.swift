@@ -14,109 +14,109 @@
 // limitations under the License.
 //
 
-import Foundation
 import CLVGL
+import Foundation
 
 public class LVDropdown: LVObject {
-    required public init(with parent: LVObject!) {
-        super.init(lv_dropdown_create(parent.object), with: parent)
-    }
-    
-    public var text: String {
-        get {
-            String(cString: lv_dropdown_get_text(object), encoding: .utf8)!
-        }
-        set {
-            precondition(isValid)
-            lv_dropdown_set_text(object, newValue)
-        }
-    }
-    
-    public var options: String {
-        get {
-            String(cString: lv_dropdown_get_options(object), encoding: .utf8)!
-        }
-        set {
-            precondition(isValid)
-            lv_dropdown_set_options(object, newValue)
-        }
-    }
-    
-    public func add(option: String, at position: UInt32) {
-        precondition(isValid)
-        lv_dropdown_add_option(object, option, position)
-    }
-    
-    public func clearOptions() {
-        precondition(isValid)
-        lv_dropdown_clear_options(object)
-    }
+  public required init(with parent: LVObject!) {
+    super.init(lv_dropdown_create(parent.object), with: parent)
+  }
 
-    public var selected: UInt16 {
-        get {
-            lv_dropdown_get_selected(object)
-        }
-        set {
-            precondition(isValid)
-            lv_dropdown_set_selected(object, newValue)
-        }
+  public var text: String {
+    get {
+      String(cString: lv_dropdown_get_text(object), encoding: .utf8)!
     }
-    
-    public var direction: lv_dir_t {
-        get {
-            lv_dropdown_get_dir(object)
-        }
-        set {
-            precondition(isValid)
-            lv_dropdown_set_dir(object, newValue)
-        }
+    set {
+      precondition(isValid)
+      lv_dropdown_set_text(object, newValue)
     }
-    
-    public var symbol: String {
-        get {
-            String(cString: lv_dropdown_get_symbol(object), encoding: .utf8)!
-        }
-        set {
-            precondition(isValid)
-            lv_dropdown_set_symbol(object, newValue)
-        }
+  }
+
+  public var options: String {
+    get {
+      String(cString: lv_dropdown_get_options(object), encoding: .utf8)!
     }
-    
-    public var isHighlighted: Bool {
-        get {
-            lv_dropdown_get_selected_highlight(object)
-        }
-        set {
-            precondition(isValid)
-            lv_dropdown_set_selected_highlight(object, newValue)
-        }
+    set {
+      precondition(isValid)
+      lv_dropdown_set_options(object, newValue)
     }
-    
-    public func index(of option: String) -> Int32 {
-        lv_dropdown_get_option_index(object, option)
+  }
+
+  public func add(option: String, at position: UInt32) {
+    precondition(isValid)
+    lv_dropdown_add_option(object, option, position)
+  }
+
+  public func clearOptions() {
+    precondition(isValid)
+    lv_dropdown_clear_options(object)
+  }
+
+  public var selected: UInt16 {
+    get {
+      lv_dropdown_get_selected(object)
     }
-    
-    public func open() {
-        precondition(isValid)
-        lv_dropdown_open(object)
+    set {
+      precondition(isValid)
+      lv_dropdown_set_selected(object, newValue)
     }
-    
-    public func close() {
-        precondition(isValid)
-        lv_dropdown_close(object)
+  }
+
+  public var direction: lv_dir_t {
+    get {
+      lv_dropdown_get_dir(object)
     }
-    
-    public var isOpen: Bool {
-        get {
-            lv_dropdown_is_open(object)
-        }
-        set {
-            precondition(isValid)
-            if newValue {
-                open()
-            } else {
-                close()
-            }
-        }
+    set {
+      precondition(isValid)
+      lv_dropdown_set_dir(object, newValue)
     }
+  }
+
+  public var symbol: String {
+    get {
+      String(cString: lv_dropdown_get_symbol(object), encoding: .utf8)!
+    }
+    set {
+      precondition(isValid)
+      lv_dropdown_set_symbol(object, newValue)
+    }
+  }
+
+  public var isHighlighted: Bool {
+    get {
+      lv_dropdown_get_selected_highlight(object)
+    }
+    set {
+      precondition(isValid)
+      lv_dropdown_set_selected_highlight(object, newValue)
+    }
+  }
+
+  public func index(of option: String) -> Int32 {
+    lv_dropdown_get_option_index(object, option)
+  }
+
+  public func open() {
+    precondition(isValid)
+    lv_dropdown_open(object)
+  }
+
+  public func close() {
+    precondition(isValid)
+    lv_dropdown_close(object)
+  }
+
+  public var isOpen: Bool {
+    get {
+      lv_dropdown_is_open(object)
+    }
+    set {
+      precondition(isValid)
+      if newValue {
+        open()
+      } else {
+        close()
+      }
+    }
+  }
 }

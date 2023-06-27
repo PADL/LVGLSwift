@@ -14,53 +14,53 @@
 // limitations under the License.
 //
 
-import Foundation
 import CLVGL
+import Foundation
 
 public class LVDisplay {
-    public static let `default` = LVDisplay()
+  public static let `default` = LVDisplay()
 
-    var display: UnsafeMutablePointer<lv_disp_t>
-    
-    public convenience init() {
-        self.init(lv_disp_get_default())
-    }
-    
-    public init(_ display: UnsafeMutablePointer<lv_disp_t>) {
-        self.display = display
-    }
-    
-    public var size: LVSize {
-        get {
-            LVSize(width: lv_disp_get_hor_res(display),
-                   height: lv_disp_get_ver_res(display))
-        }
-    }
-    
-    public var backgroundColor: LVColor {
-        get {
-            LVColor(self.display.pointee.bg_color)
-        }
-        set{
-            lv_disp_set_bg_color(self.display, newValue.color)
-        }
-    }
-    
-    public var backgroundOpacity: lv_opa_t {
-        get {
-            self.display.pointee.bg_opa
-        }
-        set{
-            lv_disp_set_bg_opa(self.display, newValue)
-        }
-    }
+  var display: UnsafeMutablePointer<lv_disp_t>
 
-    public var theme: LVTheme {
-        get {
-            lv_disp_get_theme(display).swiftObject!
-        }
-        set {
-            lv_disp_set_theme(display, &newValue.theme)
-        }
+  public convenience init() {
+    self.init(lv_disp_get_default())
+  }
+
+  public init(_ display: UnsafeMutablePointer<lv_disp_t>) {
+    self.display = display
+  }
+
+  public var size: LVSize {
+    LVSize(
+      width: lv_disp_get_hor_res(display),
+      height: lv_disp_get_ver_res(display)
+    )
+  }
+
+  public var backgroundColor: LVColor {
+    get {
+      LVColor(display.pointee.bg_color)
     }
+    set {
+      lv_disp_set_bg_color(display, newValue.color)
+    }
+  }
+
+  public var backgroundOpacity: lv_opa_t {
+    get {
+      display.pointee.bg_opa
+    }
+    set {
+      lv_disp_set_bg_opa(display, newValue)
+    }
+  }
+
+  public var theme: LVTheme {
+    get {
+      lv_disp_get_theme(display).swiftObject!
+    }
+    set {
+      lv_disp_set_theme(display, &newValue.theme)
+    }
+  }
 }

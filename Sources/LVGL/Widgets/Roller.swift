@@ -14,56 +14,57 @@
 // limitations under the License.
 //
 
-import Foundation
 import CLVGL
+import Foundation
 
 public class LVRoller: LVObject {
-    required public init(with parent: LVObject!) {
-        super.init(lv_roller_create(parent.object), with: parent)
+  public required init(with parent: LVObject!) {
+    super.init(lv_roller_create(parent.object), with: parent)
+  }
+
+  public var options: [String] {
+    get {
+      guard let options = String(cString: lv_roller_get_options(object), encoding: .utf8)
+      else {
+        return []
+      }
+      return options.components(separatedBy: "\n")
     }
-    
-    public var options: [String] {
-        get {
-            guard let options = String(cString: lv_roller_get_options(object), encoding: .utf8) else {
-                return []
-            }
-            return options.components(separatedBy: "\n")
-        }
-        set {
-            withObjectCast(to: lv_roller_t.self) {
-                let options = newValue.joined(separator: "\n")
-                lv_roller_set_options(object, options, $0.mode)
-            }
-        }
+    set {
+      withObjectCast(to: lv_roller_t.self) {
+        let options = newValue.joined(separator: "\n")
+        lv_roller_set_options(object, options, $0.mode)
+      }
     }
-    
-    public var mode: lv_roller_mode_t {
-        get {
-            withObjectCast(to: lv_roller_t.self) {
-                $0.mode
-            }
-        }
-        set {
-            withObjectCast(to: lv_roller_t.self) {
-                $0.mode = newValue
-            }
-        }
+  }
+
+  public var mode: lv_roller_mode_t {
+    get {
+      withObjectCast(to: lv_roller_t.self) {
+        $0.mode
+      }
     }
-    
-    public var selected: UInt16 {
-        get {
-            lv_roller_get_selected(object)
-        }
-        set {
-            lv_roller_set_selected(object, newValue, LV_ANIM_ON)
-        }
+    set {
+      withObjectCast(to: lv_roller_t.self) {
+        $0.mode = newValue
+      }
     }
-    
-    public func setVisibleRowCount(_ rowCount: UInt8) {
-        lv_roller_set_visible_row_count(object, rowCount)
+  }
+
+  public var selected: UInt16 {
+    get {
+      lv_roller_get_selected(object)
     }
-    
-    public var optionCount: Int {
-        Int(lv_roller_get_option_cnt(object))
+    set {
+      lv_roller_set_selected(object, newValue, LV_ANIM_ON)
     }
+  }
+
+  public func setVisibleRowCount(_ rowCount: UInt8) {
+    lv_roller_set_visible_row_count(object, rowCount)
+  }
+
+  public var optionCount: Int {
+    Int(lv_roller_get_option_cnt(object))
+  }
 }

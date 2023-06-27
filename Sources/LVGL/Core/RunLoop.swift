@@ -14,46 +14,49 @@
 // limitations under the License.
 //
 
-import Foundation
 import CLVGL
+import Foundation
 
 public class LVRunLoop {
-    public static let shared = LVRunLoop()
+  public static let shared = LVRunLoop()
 
-    private var task: Task<Void, Never>
-    
-    public init(width: UInt32 = LV_HOR_RES, height: UInt32 = LV_VER_RES) {
-        lv_init()
-        LVGLSwiftDriverInit(width, height)
+  private var task: Task<(), Never>
 
-        // set user data for active screen (perhaps we should do for all screens?)
-        let _ = LVScreen.active
+  public init(width: UInt32 = LV_HOR_RES, height: UInt32 = LV_VER_RES) {
+    lv_init()
+    LVGLSwiftDriverInit(width, height)
 
-        task = Task.detached {
-            repeat {
-                try? await Task.sleep(nanoseconds: 5 * 1_000_000)
-                lv_tick_inc(5)
-            } while !Task.isCancelled
-        }
+    // set user data for active screen (perhaps we should do for all screens?)
+    let _ = LVScreen.active
+
+    task = Task.detached {
+      repeat {
+        try? await Task.sleep(nanoseconds: 5 * 1_000_000)
+        lv_tick_inc(5)
+      } while !Task.isCancelled
     }
+  }
 
-    deinit {
-        task.cancel()
-        lv_deinit()
-    }
+  deinit {
+    task.cancel()
+    lv_deinit()
+  }
 
-    public func run() {
-        precondition(self.isInitialized)
-        
-        let timer = Timer(timeInterval: Double(LV_DISP_DEF_REFR_PERIOD) / 1000, repeats: true) { timer in
-            lv_task_handler()
-        }
-        let runLoop = RunLoop.main
-        runLoop.add(timer, forMode: .common)
-        runLoop.run()
-    }
+  public func run() {
+    precondition(isInitialized)
 
-    public var isInitialized: Bool {
-        lv_is_initialized()
+    let timer = Timer(
+      timeInterval: Double(LV_DISP_DEF_REFR_PERIOD) / 1000,
+      repeats: true
+    ) { _ in
+      lv_task_handler()
     }
+    let runLoop = RunLoop.main
+    runLoop.add(timer, forMode: .common)
+    runLoop.run()
+  }
+
+  public var isInitialized: Bool {
+    lv_is_initialized()
+  }
 }

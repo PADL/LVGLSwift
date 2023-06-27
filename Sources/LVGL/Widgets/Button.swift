@@ -14,12 +14,15 @@
 // limitations under the License.
 //
 
-import Foundation
 import CLVGL
+import Foundation
 
 public class LVButton: LVObject {
-    required public init(with parent: LVObject!) {
-        super.init(lv_btn_create(parent.object),
-                   filters: [LV_EVENT_PRESSED, LV_EVENT_CLICKED], with: parent)
-    }
+  public required init(with parent: LVObject!) {
+    super.init(
+      lv_btn_create(parent.object),
+      filters: [LV_EVENT_PRESSED, LV_EVENT_CLICKED],
+      with: parent
+    )
+  }
 }

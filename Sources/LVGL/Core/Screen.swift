@@ -14,22 +14,22 @@
 // limitations under the License.
 //
 
-import Foundation
 import CLVGL
+import Foundation
 
 public class LVScreen: LVObject {
-    public static let active = LVScreen()
+  public static let active = LVScreen()
 
-    convenience public init() {
-        self.init(with: nil)
-    }
-    
-    public required init(with parent: LVObject!) {
-        super.init(lv_scr_act(), with: parent)
-    }
-    
-    public func load() {
-        lv_scr_load(object)
-        precondition(self.isValid)
-    }
+  public convenience init() {
+    self.init(with: nil)
+  }
+
+  public required init(with parent: LVObject!) {
+    super.init(lv_scr_act(), with: parent)
+  }
+
+  public func load() {
+    lv_scr_load(object)
+    precondition(isValid)
+  }
 }

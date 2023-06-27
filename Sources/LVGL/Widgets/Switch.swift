@@ -14,11 +14,11 @@
 // limitations under the License.
 //
 
-import Foundation
 import CLVGL
+import Foundation
 
 public class LVSwitch: LVObject {
-    required public init(with parent: LVObject!) {
-        super.init(lv_switch_create(parent.object), with: parent)
-    }
+  public required init(with parent: LVObject!) {
+    super.init(lv_switch_create(parent.object), with: parent)
+  }
 }
