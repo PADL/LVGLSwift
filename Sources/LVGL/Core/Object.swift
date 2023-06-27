@@ -72,7 +72,7 @@ public class LVObject: CustomStringConvertible, Equatable {
     private var _children = [LVObject]() // keep reference
     private var _styles = [LVStyle]() // keep references
     
-    let object: UnsafeMutablePointer<lv_obj_t>
+    var object: UnsafeMutablePointer<lv_obj_t>
     
     public let events = AsyncChannel<LVEvent>()
     
@@ -129,10 +129,10 @@ public class LVObject: CustomStringConvertible, Equatable {
         "LVGL.\(type(of: self))(parent: \(String(describing: parent)))"
     }
     
-    func withObjectCast<T, U>(to type: T.Type, _ body: (T) -> U) -> U {
-        withUnsafePointer(to: object) {
+    func withObjectCast<T, U>(to type: T.Type, _ body: (inout T) -> U) -> U {
+        withUnsafeMutablePointer(to: &object) {
             $0.withMemoryRebound(to: type, capacity: 1) {
-                body($0.pointee)
+                body(&$0.pointee)
             }
         }
     }

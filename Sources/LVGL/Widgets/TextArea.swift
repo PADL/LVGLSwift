@@ -147,6 +147,12 @@ public class LVTextArea: LVObject {
         }
     }
     
+    public var label: LVLabel {
+        get {
+            lv_textarea_get_label(object)!.swiftObject as! LVLabel
+        }
+    }
+    
     public func setTxtAlignment(to newValue: lv_text_align_t) {
         precondition(isValid)
         lv_textarea_set_align(object, newValue)
