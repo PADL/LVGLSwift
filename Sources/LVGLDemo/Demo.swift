@@ -171,6 +171,77 @@ private func GridDemo() {
     }
 }
 
+@MainActor
+private func FlexDemo() {
+    let screenStyle = LVStyle()
+    screenStyle.backgroundColor = LVColor.black
+    screenStyle.backgroundOpacity = lv_opa_t(LV_OPA_COVER)
+
+    let labelStyle = LVStyle()
+    labelStyle.backgroundColor = LVColor(hexValue: 0x555500)
+    labelStyle.backgroundOpacity = lv_opa_t(LV_OPA_COVER)
+    labelStyle.textFont = LVFont(size: 48)
+    labelStyle.textColor = LVColor.white
+    labelStyle.radius = 0
+
+    let pressedStyle = LVStyle()
+    pressedStyle.backgroundColor = LVColor(hexValue: 0xff4000)
+    pressedStyle.backgroundOpacity = lv_opa_t(LV_OPA_COVER)
+    pressedStyle.textFont = LVFont(size: 48)
+    pressedStyle.textColor = LVColor.white
+    pressedStyle.radius = 0
+
+    let textStyle = LVStyle()
+
+    let screen = LVScreen.active
+    let theme = LVTheme { _, object in
+        if object is LVScreen {
+            object.append(style: screenStyle)
+        }
+    }
+    LVDisplay.default.theme = theme
+
+    let container = LVObject(with: screen)
+    //container.size = .content
+    container.size = screen.size
+    container.center()
+    
+    container.set(layout: LV_LAYOUT_FLEX)
+    let style = LVStyle()
+    style.flexFlow = LV_FLEX_FLOW_ROW_WRAP.rawValue
+    style.flexGrow = 1
+    style.flexMainPlace = LV_FLEX_ALIGN_SPACE_EVENLY.rawValue
+    style.flexCrossPlace = LV_FLEX_ALIGN_SPACE_EVENLY.rawValue
+    style.flexTrackPlace = LV_FLEX_ALIGN_SPACE_AROUND.rawValue
+    container.append(style: style)
+    
+    for x in 0..<16 {
+        let object = LVButton(with: container)
+        object.append(style: labelStyle)
+        object.size = LVSize.percentage(width: 0.2, height: 0.2)
+        //object.size = .content
+
+        let label = LVLabel(with: object)
+        label.text = String(x + 1)
+        label.append(style: textStyle)
+        label.longMode = lv_label_long_mode_t(LV_LABEL_LONG_CLIP)
+        label.center()
+
+        Task {
+            for await event in object.events {
+                if event.code == LV_EVENT_PRESSED {
+                    event.target.remove(style: labelStyle)
+                    event.target.append(style: pressedStyle)
+                } else if event.code == LV_EVENT_CLICKED {
+                    event.target.remove(style: pressedStyle)
+                    event.target.append(style: labelStyle)
+                }
+            }
+        }
+    }
+}
+
+
 @main
 enum App {
     @MainActor
@@ -178,8 +249,9 @@ enum App {
         let runLoop = LVRunLoop
             .shared // FIXME: needs to be called at top to do global initialization
 
-        CounterDemo()
-        // GridDemo()
+        //CounterDemo()
+        //GridDemo()
+        FlexDemo()
 
         runLoop.run()
     }
