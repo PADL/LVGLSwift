@@ -59,6 +59,14 @@ public class LVRoller: LVObject {
             lv_roller_set_selected(object, newValue, LV_ANIM_ON)
         }
     }
+    
+    public var selectedString: String? {
+        var buffer = Array<CChar>(repeating: 0, count: 128)
+        buffer.withUnsafeMutableBufferPointer {
+            lv_roller_get_selected_str(object, $0.baseAddress, UInt32($0.count))
+        }
+        return String(cString: buffer, encoding: .utf8)
+    }
 
     public func setVisibleRowCount(_ rowCount: UInt8) {
         lv_roller_set_visible_row_count(object, rowCount)
