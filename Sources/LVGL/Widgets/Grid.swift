@@ -33,36 +33,31 @@ extension lv_coord_t {
 }
 
 public class LVGrid: LVObject {
-    var rowDescriptor: [lv_coord_t]
-    var columnDescriptor: [lv_coord_t]
-    private var _objects: [LVObject?]
+    var rowDescriptor = [lv_coord_t]()
+    var columnDescriptor = [lv_coord_t]()
+    private var _objects = [LVObject?]()
     
     public init(with parent: LVObject,
                 rows: UInt8,
                 columns: UInt8 ,
                 padding: lv_coord_t? = nil) {
+        super.init(lv_obj_create(parent.object), with: parent)
+        self.resize(rows: rows, columns: columns, padding: padding)
+    }
+    
+    public required init(with parent: LVObject!) {
+        super.init(lv_obj_create(parent.object), with: parent)
+        self.resize(rows: 1, columns: 1, padding: nil)
+    }
+    
+    public func resize(rows: UInt8,
+                       columns: UInt8 ,
+                       padding: lv_coord_t? = nil) {
         self.columnDescriptor = Array(repeating: .gridContent, count: Int(columns))
         self.columnDescriptor.append(.gridTemplateLast)
         self.rowDescriptor = Array(repeating: .gridContent, count: Int(rows))
         self.rowDescriptor.append(.gridTemplateLast)
         self._objects = Array(repeating: nil, count: Int(columns * rows))
-        
-        super.init(lv_obj_create(parent.object), with: parent)
-        
-        lv_obj_set_style_grid_column_dsc_array(object, columnDescriptor, 0);
-        lv_obj_set_style_grid_row_dsc_array(object, rowDescriptor, 0);
-        lv_obj_set_layout(object, UInt32(LV_LAYOUT_GRID));
-    }
-    
-    public required init(with parent: LVObject!) {
-        self.columnDescriptor = Array(repeating: .gridContent, count: 1)
-        self.columnDescriptor.append(.gridTemplateLast)
-        self.rowDescriptor = Array(repeating: .gridContent, count: 1)
-        self.rowDescriptor.append(.gridTemplateLast)
-        self._objects = Array(repeating: nil, count: 1)
-        
-        super.init(lv_obj_create(parent.object), with: parent)
-
         lv_obj_set_style_grid_column_dsc_array(object, columnDescriptor, 0);
         lv_obj_set_style_grid_row_dsc_array(object, rowDescriptor, 0);
         lv_obj_set_layout(object, UInt32(LV_LAYOUT_GRID));

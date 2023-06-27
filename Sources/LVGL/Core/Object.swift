@@ -318,7 +318,7 @@ public class LVObject: CustomStringConvertible, Equatable {
     
     // TODO: get/set local style property?
     
-    func forEachChild(_ block: (LVObject, inout Bool) -> Void) {
+    public func forEachChild(_ block: (LVObject, inout Bool) -> Void) {
         guard let children = object.pointee.spec_attr.pointee.children else {
             return
         }
@@ -335,8 +335,37 @@ public class LVObject: CustomStringConvertible, Equatable {
         }
     }
     
+    public func removeAllChildren() {
+        self._children.removeAll()
+        lv_obj_clean(object)
+    }
+    
+    public var index: Int {
+        Int(lv_obj_get_index(object))
+    }
+    
+    public func child(at index: Int) -> LVObject? {
+        guard let child = lv_obj_get_child(object, Int32(index)) else {
+            return nil
+        }
+        
+        return child.swiftObject
+    }
+    
+    public func move(to index: Int) {
+        lv_obj_move_to_index(object, Int32(index))
+    }
+    
     public var childCount: Int {
         Int(lv_obj_get_child_cnt(object))
+    }
+    
+    public var screen: LVObject {
+        lv_obj_get_screen(object).swiftObject!
+    }
+    
+    public var display: LVDisplay {
+        LVDisplay(lv_obj_get_disp(object))
     }
 }
 
