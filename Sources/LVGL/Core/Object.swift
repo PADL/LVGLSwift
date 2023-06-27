@@ -26,41 +26,45 @@ public extension lv_coord_t {
 }
 
 public struct LVFlags: OptionSet {
-    public static let hidden                = LV_OBJ_FLAG_HIDDEN
-    public static let clickable             = LV_OBJ_FLAG_CLICKABLE
-    public static let clickFocusable        = LV_OBJ_FLAG_CLICK_FOCUSABLE
-    public static let checkable             = LV_OBJ_FLAG_CHECKABLE
-    public static let scrollable            = LV_OBJ_FLAG_SCROLLABLE
-    public static let scrollElastic         = LV_OBJ_FLAG_SCROLL_ELASTIC
-    public static let scrollMomentum        = LV_OBJ_FLAG_SCROLL_MOMENTUM
-    public static let scrollOne             = LV_OBJ_FLAG_SCROLL_ONE
-    public static let scrollChainHorizontal = LV_OBJ_FLAG_SCROLL_CHAIN_HOR
-    public static let scrollChainVertical   = LV_OBJ_FLAG_SCROLL_CHAIN_VER
-    public static let scrollOnFocus         = LV_OBJ_FLAG_SCROLL_ON_FOCUS
-    public static let scrollWithArrow       = LV_OBJ_FLAG_SCROLL_WITH_ARROW
-    public static let snappable             = LV_OBJ_FLAG_SNAPPABLE
-    public static let pressLock             = LV_OBJ_FLAG_PRESS_LOCK
-    public static let eventBubble           = LV_OBJ_FLAG_EVENT_BUBBLE
-    public static let gestureBubble         = LV_OBJ_FLAG_GESTURE_BUBBLE
-    public static let advHitTest            = LV_OBJ_FLAG_ADV_HITTEST
-    public static let ignoreLayout          = LV_OBJ_FLAG_IGNORE_LAYOUT
-    public static let floating              = LV_OBJ_FLAG_FLOATING
-    public static let overflowVisible       = LV_OBJ_FLAG_OVERFLOW_VISIBLE
+    public static let hidden                = LVFlags(rawValue: LV_OBJ_FLAG_HIDDEN)
+    public static let clickable             = LVFlags(rawValue: LV_OBJ_FLAG_CLICKABLE)
+    public static let clickFocusable        = LVFlags(rawValue: LV_OBJ_FLAG_CLICK_FOCUSABLE)
+    public static let checkable             = LVFlags(rawValue: LV_OBJ_FLAG_CHECKABLE)
+    public static let scrollable            = LVFlags(rawValue: LV_OBJ_FLAG_SCROLLABLE)
+    public static let scrollElastic         = LVFlags(rawValue: LV_OBJ_FLAG_SCROLL_ELASTIC)
+    public static let scrollMomentum        = LVFlags(rawValue: LV_OBJ_FLAG_SCROLL_MOMENTUM)
+    public static let scrollOne             = LVFlags(rawValue: LV_OBJ_FLAG_SCROLL_ONE)
+    public static let scrollChainHorizontal = LVFlags(rawValue: LV_OBJ_FLAG_SCROLL_CHAIN_HOR)
+    public static let scrollChainVertical   = LVFlags(rawValue: LV_OBJ_FLAG_SCROLL_CHAIN_VER)
+    public static let scrollOnFocus         = LVFlags(rawValue: LV_OBJ_FLAG_SCROLL_ON_FOCUS)
+    public static let scrollWithArrow       = LVFlags(rawValue: LV_OBJ_FLAG_SCROLL_WITH_ARROW)
+    public static let snappable             = LVFlags(rawValue: LV_OBJ_FLAG_SNAPPABLE)
+    public static let pressLock             = LVFlags(rawValue: LV_OBJ_FLAG_PRESS_LOCK)
+    public static let eventBubble           = LVFlags(rawValue: LV_OBJ_FLAG_EVENT_BUBBLE)
+    public static let gestureBubble         = LVFlags(rawValue: LV_OBJ_FLAG_GESTURE_BUBBLE)
+    public static let advHitTest            = LVFlags(rawValue: LV_OBJ_FLAG_ADV_HITTEST)
+    public static let ignoreLayout          = LVFlags(rawValue: LV_OBJ_FLAG_IGNORE_LAYOUT)
+    public static let floating              = LVFlags(rawValue: LV_OBJ_FLAG_FLOATING)
+    public static let overflowVisible       = LVFlags(rawValue: LV_OBJ_FLAG_OVERFLOW_VISIBLE)
     
-    public static let layout1               = LV_OBJ_FLAG_LAYOUT_1
-    public static let layout2               = LV_OBJ_FLAG_LAYOUT_2
+    public static let layout1               = LVFlags(rawValue: LV_OBJ_FLAG_LAYOUT_1)
+    public static let layout2               = LVFlags(rawValue: LV_OBJ_FLAG_LAYOUT_2)
     
-    public static let widget1               = LV_OBJ_FLAG_WIDGET_1
-    public static let widget2               = LV_OBJ_FLAG_WIDGET_2
-    public static let user1                 = LV_OBJ_FLAG_USER_1
-    public static let user2                 = LV_OBJ_FLAG_USER_2
-    public static let user3                 = LV_OBJ_FLAG_USER_3
-    public static let user4                 = LV_OBJ_FLAG_USER_4
+    public static let widget1               = LVFlags(rawValue: LV_OBJ_FLAG_WIDGET_1)
+    public static let widget2               = LVFlags(rawValue: LV_OBJ_FLAG_WIDGET_2)
+    public static let user1                 = LVFlags(rawValue: LV_OBJ_FLAG_USER_1)
+    public static let user2                 = LVFlags(rawValue: LV_OBJ_FLAG_USER_2)
+    public static let user3                 = LVFlags(rawValue: LV_OBJ_FLAG_USER_3)
+    public static let user4                 = LVFlags(rawValue: LV_OBJ_FLAG_USER_4)
     
     public let rawValue: UInt32
     
     public init(rawValue: UInt32) {
         self.rawValue = rawValue
+    }
+                 
+    init(rawValue: Int) {
+        self.init(rawValue: UInt32(rawValue))
     }
 }
 
@@ -71,7 +75,6 @@ public class LVObject: CustomStringConvertible, Equatable {
     let object: UnsafeMutablePointer<lv_obj_t>
     
     public let events = AsyncChannel<LVEvent>()
-    public var associatedValue: Any? = nil
     
     public init(_ object: UnsafeMutablePointer<lv_obj_t>,
                 filters: [lv_event_code_t]? = [LV_EVENT_ALL],
