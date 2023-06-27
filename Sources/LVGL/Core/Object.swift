@@ -147,7 +147,7 @@ public class LVObject: CustomStringConvertible, Equatable {
             lv_obj_set_size(object, newValue.width, newValue.height)
         }
     }
-    
+
     public var position: lv_point_t {
         get {
             lv_point_t(x: lv_obj_get_x(object), y: lv_obj_get_y(object))
@@ -169,7 +169,7 @@ public class LVObject: CustomStringConvertible, Equatable {
         // TODO: do we need a get accessor?
         lv_obj_set_layout(object, UInt32(layout))
     }
-    
+
     public var isLayoutPositioned: Bool {
         lv_obj_is_layout_positioned(object)
     }
@@ -370,11 +370,21 @@ public class LVObject: CustomStringConvertible, Equatable {
     public var display: LVDisplay {
         LVDisplay(lv_obj_get_disp(object))
     }
-    
-    public func setFlexAlign(mainPlace: lv_flex_align_t,
-                             crossPlace: lv_flex_align_t,
-                             trackPlace: lv_flex_align_t) {
+
+    public func setFlexAlign(
+        mainPlace: lv_flex_align_t,
+        crossPlace: lv_flex_align_t,
+        trackPlace: lv_flex_align_t
+    ) {
         lv_obj_set_flex_align(object, mainPlace, crossPlace, trackPlace)
+    }
+
+    public func setFlexFlow(_ flow: lv_flex_flow_t) {
+        lv_obj_set_flex_flow(object, flow)
+    }
+
+    public func setFlexGrow(_ grow: UInt8) {
+        lv_obj_set_flex_grow(object, grow)
     }
 }
 

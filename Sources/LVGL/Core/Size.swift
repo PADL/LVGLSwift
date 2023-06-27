@@ -25,11 +25,11 @@ public struct LVSize {
         self.width = width
         self.height = height
     }
-    
+
     public static func percentage(width: Float, height: Float) -> LVSize {
         LVSize(width: lv_pct(Int16(width * 100)), height: lv_pct(Int16(height * 100)))
     }
-    
+
     public static var content: Self {
         LVSize(width: .sizeContent, height: .sizeContent)
     }
