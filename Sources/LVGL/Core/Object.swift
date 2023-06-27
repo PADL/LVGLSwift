@@ -251,7 +251,7 @@ public class LVObject: CustomStringConvertible, Equatable {
     ) {
         if let style {
             _styles.append(style)
-            lv_obj_add_style(object, &style.style, selector)
+            lv_obj_add_style(object, style.style, selector)
         } else {
             lv_obj_add_style(object, nil, selector)
         }
@@ -263,7 +263,7 @@ public class LVObject: CustomStringConvertible, Equatable {
     ) {
         if let style {
             _styles.removeAll(where: { $0 == style })
-            lv_obj_remove_style(object, &style.style, selector)
+            lv_obj_remove_style(object, style.style, selector)
         } else {
             lv_obj_remove_style(object, nil, selector)
         }
@@ -373,18 +373,15 @@ public class LVObject: CustomStringConvertible, Equatable {
 
     public func withLocalStyle(
         for selector: lv_style_selector_t = 0,
-        _ block: (LVStyle) -> ()
+        _ block: (LVReferenceStyle) -> ()
     ) {
         for index in 0..<object.pointee.style_cnt {
             let style = object.pointee.styles[Int(index)]
             guard style.is_local != 0, style.selector == selector else {
                 continue
             }
-            // FIXME: is this allocation-safe? we should at least avoid a copy
-            let lvStyle = LVStyle()
-            lvStyle.style = style.style.pointee
-            block(lvStyle)
-            style.style.pointee = lvStyle.style
+            let ref = LVReferenceStyle(style.style)
+            block(ref)
         }
     }
 

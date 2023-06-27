@@ -207,13 +207,13 @@ private func FlexDemo() {
     container.center()
     
     container.set(layout: LV_LAYOUT_FLEX)
-    let style = LVStyle()
-    style.flexFlow = LV_FLEX_FLOW_ROW_WRAP.rawValue
-    style.flexGrow = 1
-    style.flexMainPlace = LV_FLEX_ALIGN_SPACE_EVENLY.rawValue
-    style.flexCrossPlace = LV_FLEX_ALIGN_SPACE_EVENLY.rawValue
-    style.flexTrackPlace = LV_FLEX_ALIGN_SPACE_AROUND.rawValue
-    container.append(style: style)
+    container.withLocalStyle { style in
+        style.flexFlow = LV_FLEX_FLOW_ROW_WRAP.rawValue
+        style.flexGrow = 1
+        style.flexMainPlace = LV_FLEX_ALIGN_SPACE_EVENLY.rawValue
+        style.flexCrossPlace = LV_FLEX_ALIGN_SPACE_EVENLY.rawValue
+        style.flexTrackPlace = LV_FLEX_ALIGN_SPACE_AROUND.rawValue
+    }
     
     for x in 0..<16 {
         let object = LVButton(with: container)

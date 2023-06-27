@@ -17,14 +17,14 @@
 import CLVGL
 import Foundation
 
-public class LVStyle: Hashable {
-    var style: lv_style_t = .init()
+public class LVReferenceStyle: Hashable {
+    var style: UnsafeMutablePointer<lv_style_t>
 
-    public init() {
-        lv_style_init(&style)
+    init(_ style: UnsafeMutablePointer<lv_style_t>) {
+        self.style = style
     }
 
-    public static func == (lhs: LVStyle, rhs: LVStyle) -> Bool {
+    public static func == (lhs: LVReferenceStyle, rhs: LVReferenceStyle) -> Bool {
         ObjectIdentifier(self) == ObjectIdentifier(self)
     }
 
@@ -33,13 +33,13 @@ public class LVStyle: Hashable {
     }
 
     public func reportChange() {
-        lv_obj_report_style_change(&style)
+        lv_obj_report_style_change(style)
     }
 
     func _getProperty(_ property: lv_style_prop_t) -> lv_style_value_t? {
         var value = lv_style_value_t()
 
-        guard lv_style_get_prop(&style, property, &value) == lv_res_t(LV_RES_OK) else {
+        guard lv_style_get_prop(style, property, &value) == lv_res_t(LV_RES_OK) else {
             return nil
         }
 
@@ -80,9 +80,9 @@ public class LVStyle: Hashable {
 
     func _setProperty(_ property: lv_style_prop_t, _ value: lv_style_value_t?) {
         if let value {
-            lv_style_set_prop(&style, property, value)
+            lv_style_set_prop(style, property, value)
         } else {
-            lv_style_remove_prop(&style, property)
+            lv_style_remove_prop(style, property)
         }
     }
 
@@ -337,9 +337,9 @@ public struct LVStyleIntegerProperty<Value>: LVStylePropertyRepresentable
     }
 
     public static subscript(
-        _enclosingInstance instance: LVStyle,
-        wrapped wrappedKeyPath: ReferenceWritableKeyPath<LVStyle, Value?>,
-        storage storageKeyPath: ReferenceWritableKeyPath<LVStyle, Self>
+        _enclosingInstance instance: LVReferenceStyle,
+        wrapped wrappedKeyPath: ReferenceWritableKeyPath<LVReferenceStyle, Value?>,
+        storage storageKeyPath: ReferenceWritableKeyPath<LVReferenceStyle, Self>
     ) -> Value? {
         get {
             instance.getProperty(instance[keyPath: storageKeyPath].property)
@@ -366,9 +366,9 @@ public struct LVStyleBooleanProperty: LVStylePropertyRepresentable {
     }
 
     public static subscript(
-        _enclosingInstance instance: LVStyle,
-        wrapped wrappedKeyPath: ReferenceWritableKeyPath<LVStyle, Value?>,
-        storage storageKeyPath: ReferenceWritableKeyPath<LVStyle, Self>
+        _enclosingInstance instance: LVReferenceStyle,
+        wrapped wrappedKeyPath: ReferenceWritableKeyPath<LVReferenceStyle, Value?>,
+        storage storageKeyPath: ReferenceWritableKeyPath<LVReferenceStyle, Self>
     ) -> Value? {
         get {
             instance.getProperty(instance[keyPath: storageKeyPath].property)
@@ -395,9 +395,9 @@ public struct LVStyleColorProperty: LVStylePropertyRepresentable {
     }
 
     public static subscript(
-        _enclosingInstance instance: LVStyle,
-        wrapped wrappedKeyPath: ReferenceWritableKeyPath<LVStyle, Value?>,
-        storage storageKeyPath: ReferenceWritableKeyPath<LVStyle, Self>
+        _enclosingInstance instance: LVReferenceStyle,
+        wrapped wrappedKeyPath: ReferenceWritableKeyPath<LVReferenceStyle, Value?>,
+        storage storageKeyPath: ReferenceWritableKeyPath<LVReferenceStyle, Self>
     ) -> Value? {
         get {
             instance.getProperty(instance[keyPath: storageKeyPath].property)
@@ -424,9 +424,9 @@ public struct LVStyleFontProperty: LVStylePropertyRepresentable {
     }
 
     public static subscript(
-        _enclosingInstance instance: LVStyle,
-        wrapped wrappedKeyPath: ReferenceWritableKeyPath<LVStyle, Value?>,
-        storage storageKeyPath: ReferenceWritableKeyPath<LVStyle, Self>
+        _enclosingInstance instance: LVReferenceStyle,
+        wrapped wrappedKeyPath: ReferenceWritableKeyPath<LVReferenceStyle, Value?>,
+        storage storageKeyPath: ReferenceWritableKeyPath<LVReferenceStyle, Self>
     ) -> Value? {
         get {
             instance.getProperty(instance[keyPath: storageKeyPath].property)
@@ -434,5 +434,13 @@ public struct LVStyleFontProperty: LVStylePropertyRepresentable {
         set {
             instance.setProperty(instance[keyPath: storageKeyPath].property, newValue)
         }
+    }
+}
+
+public class LVStyle: LVReferenceStyle {
+    var storage = lv_style_t()
+    
+    public init() {
+        super.init(&storage)
     }
 }
