@@ -167,7 +167,7 @@ public class LVStyle: Hashable {
     @LVStyleIntegerProperty(LV_STYLE_PAD_ROW)
     public var rowPadding: lv_coord_t?
     @LVStyleIntegerProperty(LV_STYLE_PAD_COLUMN)
-    public var colunnPadding: lv_coord_t?
+    public var columnPadding: lv_coord_t?
     @LVStyleColorProperty(LV_STYLE_BG_COLOR)
     public var backgroundColor: LVColor?
     @LVStyleIntegerProperty(LV_STYLE_BG_OPA)
