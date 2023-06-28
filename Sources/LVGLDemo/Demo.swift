@@ -264,6 +264,15 @@ private func ListDemo() {
     LVScreen.active.debugViewTree()
   }
 
+@MainActor
+private func RollerDemo() {
+  let container = LVRoller(with: LVScreen.active)
+  container.size = LVScreen.active.size
+  container.center()
+  container.options = ["a", "b", "c", "d"]
+  
+  LVScreen.active.debugViewTree()
+}
 
 @main
 enum App {
@@ -275,7 +284,8 @@ enum App {
         //CounterDemo()
         //GridDemo()
         //FlexDemo()
-        ListDemo()
+        //ListDemo()
+        RollerDemo()
 
         runLoop.run()
     }

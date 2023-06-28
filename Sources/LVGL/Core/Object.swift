@@ -341,7 +341,10 @@ open class LVObject: CustomStringConvertible, Equatable {
         var stop = false
         for index in 0..<childCount {
             let childPointer = children[index]
-            let objectUserData = lv_obj_get_user_data(childPointer)!
+            guard let objectUserData = lv_obj_get_user_data(childPointer) else {
+                debugPrint("\(self) child at index \(index) is missing Swift object!")
+                continue
+            }
 
             block(objectUserData.swiftObject as! LVObject, &stop)
             if stop {

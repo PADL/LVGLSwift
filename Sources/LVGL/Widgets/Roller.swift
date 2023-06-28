@@ -31,9 +31,10 @@ public class LVRoller: LVObject {
             return options.components(separatedBy: "\n")
         }
         set {
+            let options = newValue.joined(separator: "\n")
+            let capturedPointer = object
             withObjectCast(to: lv_roller_t.self) {
-                let options = newValue.joined(separator: "\n")
-                lv_roller_set_options(object, options, $0.mode)
+                lv_roller_set_options(capturedPointer, options, $0.mode)
             }
         }
     }
