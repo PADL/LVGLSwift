@@ -70,7 +70,7 @@ open class LVObject: CustomStringConvertible, Equatable {
     fileprivate var _children = [LVObject]() // keep reference
     fileprivate var _styles = [LVStyle]() // keep references
 
-    var object: UnsafeMutablePointer<lv_obj_t>!
+    fileprivate(set) var object: UnsafeMutablePointer<lv_obj_t>!
     public var onEvent: ((LVEvent) -> ())?
 
     private func addEventCallback(filter: lv_event_code_t) {
