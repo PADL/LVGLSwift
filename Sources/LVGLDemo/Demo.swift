@@ -250,7 +250,7 @@ private func ListDemo() {
     let labelStyle = LVStyle()
     labelStyle.backgroundColor = LVColor(hexValue: 0x545454)
     labelStyle.backgroundOpacity = lv_opa_t(LV_OPA_COVER)
-    labelStyle.textFont = LVFont(size: 12)
+    labelStyle.textFont = LVFont(size: 14)
     labelStyle.textColor = LVColor.white
     labelStyle.radius = 0
 
@@ -272,10 +272,10 @@ private func ListDemo() {
     container.set(layout: LV_LAYOUT_FLEX)
     container.withLocalStyle { style in
         style.flexFlow = LV_FLEX_FLOW_COLUMN.rawValue
-        //style.flexMainPlace = LV_FLEX_ALIGN_SPACE_EVENLY.rawValue
+        style.flexMainPlace = LV_FLEX_ALIGN_SPACE_EVENLY.rawValue
     }
     
-    for x in 0..<10 {
+    for x in 0..<20 {
         let label = LVLabel(with: container)
         label.append(style: labelStyle)
         label.size = .content
@@ -283,6 +283,7 @@ private func ListDemo() {
         label.append(style: textStyle)
         //label.longMode = lv_label_long_mode_t(LV_LABEL_LONG_CLIP)
         label.center()
+        debugPrint("Label \(label)")
     }
   
     // now try to reparent to real screen

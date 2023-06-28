@@ -128,7 +128,15 @@ public class LVObject: CustomStringConvertible, Equatable {
     }
 
     public var description: String {
-        "LVGL.\(type(of: self))(parent: \(String(describing: parent)))"
+        var description = "/\(type(of: self))"
+        var parent: LVObject? = parent
+
+        repeat {
+            if let parent { description = "/\(type(of: parent))" + description }
+            parent = parent?.parent
+        } while parent != nil
+
+        return description + "(\(Unmanaged.passUnretained(self).toOpaque()))"
     }
 
     func withObjectCast<T, U>(to type: T.Type, _ body: (inout T) -> U) -> U {
