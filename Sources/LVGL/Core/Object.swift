@@ -68,7 +68,7 @@ public struct LVFlags: OptionSet {
     }
 }
 
-public class LVObject: CustomStringConvertible, Equatable {
+open class LVObject: CustomStringConvertible, Equatable {
     private var _children = [LVObject]() // keep reference
     private var _styles = [LVStyle]() // keep references
 
