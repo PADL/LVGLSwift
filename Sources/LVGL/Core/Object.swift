@@ -404,6 +404,17 @@ open class LVObject: CustomStringConvertible, Equatable {
     var isDeleted: Bool {
         object == nil
     }
+
+    public func debugViewTree(level: Int = 0) {
+        let prefix = Array(repeating: "  ", count: level).joined(separator: "")
+        print(
+            prefix + description +
+                " (width=\(size.width), height=\(size.height), x=\(position.x), y=\(position.y))"
+        )
+        forEachChild { child, _ in
+            child.debugViewTree(level: level + 1)
+        }
+    }
 }
 
 private func eventCallback(_ eventData: UnsafeMutablePointer<lv_event_t>?) {
