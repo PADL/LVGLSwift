@@ -14,10 +14,9 @@
 // limitations under the License.
 //
 
-import AsyncAlgorithms
+import Foundation
 import AsyncExtensions
 import CLVGL
-import Foundation
 import LVGL
 
 /// example based on https://github.com/scottandrew/LVGLSwift
@@ -75,19 +74,19 @@ private func CounterDemo() {
 
     let counterRunning = AsyncCurrentValueSubject(false)
 
-    Task {
-        for await _ in button.events.filter({ $0.code == LV_EVENT_PRESSED }) {
+    button.onEvent = { event in
+        if event.code == LV_EVENT_PRESSED {
             counterRunning.value.toggle()
         }
     }
 
-    Task {
+    Task { @MainActor in
         var task: Task<(), Never>?
 
         for await state in counterRunning {
             if state {
                 buttonLabel.text = "Stop Counter"
-                task = Task {
+                task = Task { @MainActor in
                     for await count in Counter(limit: nil) {
                         counterLabel.text = "\(count)"
                         try? await Task.sleep(nanoseconds: 500_000_000)
@@ -156,15 +155,13 @@ private func GridDemo() {
             label.longMode = lv_label_long_mode_t(LV_LABEL_LONG_CLIP)
             label.center()
 
-            Task {
-                for await event in object.events {
-                    if event.code == LV_EVENT_PRESSED {
-                        event.target.remove(style: labelStyle)
-                        event.target.append(style: pressedStyle)
-                    } else if event.code == LV_EVENT_CLICKED {
-                        event.target.remove(style: pressedStyle)
-                        event.target.append(style: labelStyle)
-                    }
+            object.onEvent = { event in
+                if event.code == LV_EVENT_PRESSED {
+                    event.target?.remove(style: labelStyle)
+                    event.target?.append(style: pressedStyle)
+                } else if event.code == LV_EVENT_CLICKED {
+                    event.target?.remove(style: pressedStyle)
+                    event.target?.append(style: labelStyle)
                 }
             }
         }
@@ -219,25 +216,22 @@ private func FlexDemo() {
         let object = LVButton(with: container)
         object.append(style: labelStyle)
         object.size = LVSize.percentage(width: 0.2, height: 0.2)
-        //object.size = .content
+
+        object.onEvent = { event in
+            if event.code == LV_EVENT_PRESSED {
+                event.target?.remove(style: labelStyle)
+                event.target?.append(style: pressedStyle)
+            } else if event.code == LV_EVENT_CLICKED {
+                event.target?.remove(style: pressedStyle)
+                event.target?.append(style: labelStyle)
+            }
+        }
 
         let label = LVLabel(with: object)
         label.text = String(x + 1)
         label.append(style: textStyle)
         label.longMode = lv_label_long_mode_t(LV_LABEL_LONG_CLIP)
         label.center()
-
-        Task {
-            for await event in object.events {
-                if event.code == LV_EVENT_PRESSED {
-                    event.target.remove(style: labelStyle)
-                    event.target.append(style: pressedStyle)
-                } else if event.code == LV_EVENT_CLICKED {
-                    event.target.remove(style: pressedStyle)
-                    event.target.append(style: labelStyle)
-                }
-            }
-        }
     }
 }
 
@@ -300,8 +294,8 @@ enum App {
 
         //CounterDemo()
         //GridDemo()
-        //FlexDemo()
-        ListDemo()
+        FlexDemo()
+        //ListDemo()
 
         runLoop.run()
     }

@@ -33,14 +33,14 @@ public class LVEvent: CustomStringConvertible {
         LVReleaseEventUserData(&event)
     }
 
-    public var target: LVObject {
+    public var target: LVObject? {
         let target = lv_event_get_target(&event)!
-        return target.swiftObject!
+        return target.swiftObject
     }
 
-    public var currentTarget: LVObject {
+    public var currentTarget: LVObject? {
         let currentTarget = lv_event_get_current_target(&event)!
-        return currentTarget.swiftObject!
+        return currentTarget.swiftObject
     }
 
     public var code: lv_event_code_t {
@@ -48,6 +48,10 @@ public class LVEvent: CustomStringConvertible {
     }
 
     public var description: String {
-        "LVGL.LVEvent(target: \(target), currentTarget: \(currentTarget), code: \(code))"
+        if let target, let currentTarget {
+            return "LVGL.LVEvent(target: \(target), currentTarget: \(currentTarget), code: \(code))"
+        } else {
+            return "LVGL.LVEvent(code: \(code))"
+        }
     }
 }

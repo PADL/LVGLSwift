@@ -19,7 +19,6 @@ let package = Package(
         .library(name: "LVGL", targets: ["LVGL"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/apple/swift-async-algorithms", from: "0.1.0"),
         .package(url: "https://github.com/lhoward/AsyncExtensions", .branch("linux")),
     ],
     targets: [
@@ -40,7 +39,6 @@ let package = Package(
 	    dependencies: [
 		"CLVGL",
 		"AsyncExtensions",
-		.product(name: "AsyncAlgorithms", package: "swift-async-algorithms"),
 	    ]
 	),
         .executableTarget(

@@ -14,8 +14,6 @@
 // limitations under the License.
 //
 
-import AsyncAlgorithms
-import AsyncExtensions
 import CLVGL
 import Foundation
 
@@ -69,12 +67,11 @@ public struct LVFlags: OptionSet {
 }
 
 open class LVObject: CustomStringConvertible, Equatable {
-    private var _children = [LVObject]() // keep reference
-    private var _styles = [LVStyle]() // keep references
+    fileprivate var _children = [LVObject]() // keep reference
+    fileprivate var _styles = [LVStyle]() // keep references
 
-    var object: UnsafeMutablePointer<lv_obj_t>
-
-    public let events = AsyncChannel<LVEvent>()
+    var object: UnsafeMutablePointer<lv_obj_t>!
+    public var onEvent: ((LVEvent) -> ())?
 
     private func addEventCallback(filter: lv_event_code_t) {
         lv_obj_add_event_cb(object, eventCallback, filter, bridgeToCLVGL(self))
@@ -102,8 +99,11 @@ open class LVObject: CustomStringConvertible, Equatable {
     }
 
     deinit {
-        events.finish()
-        lv_obj_del(object)
+        if let object {
+            lv_obj_set_user_data(object, nil)
+            lv_obj_remove_event_cb(object, eventCallback)
+            lv_obj_del(object)
+        }
     }
 
     public static func == (lhs: LVObject, rhs: LVObject) -> Bool {
@@ -318,6 +318,10 @@ open class LVObject: CustomStringConvertible, Equatable {
     }
 
     public var isValid: Bool {
+        if isDeleted {
+            return false
+        }
+
         precondition(object.pointee.user_data == bridgeToCLVGL(self))
         precondition(Thread.isMainThread)
         return lv_obj_is_valid(object)
@@ -347,8 +351,11 @@ open class LVObject: CustomStringConvertible, Equatable {
     }
 
     public func removeAllChildren() {
+        // first, remove all our references
         _children.removeAll()
+        // this will trigger LV_EVENT_DELETE which will set user_data to NULL
         lv_obj_clean(object)
+        precondition(childCount == 0)
     }
 
     public var index: Int {
@@ -393,6 +400,10 @@ open class LVObject: CustomStringConvertible, Equatable {
         }
         lv_obj_refresh_style(object, selector, LV_STYLE_PROP_ANY)
     }
+
+    var isDeleted: Bool {
+        object == nil
+    }
 }
 
 private func eventCallback(_ eventData: UnsafeMutablePointer<lv_event_t>?) {
@@ -400,9 +411,19 @@ private func eventCallback(_ eventData: UnsafeMutablePointer<lv_event_t>?) {
         return
     }
 
-    let event = LVEvent(eventData)
-
-    Task { @MainActor in
-        await event.target.events.send(event)
+    switch eventData.code {
+    case LV_EVENT_DELETE:
+        if let target = eventData.target.swiftObject {
+            target.object = nil
+        }
+        lv_obj_set_user_data(eventData.target, nil)
+        lv_obj_remove_event_cb(eventData.target, eventCallback)
+    default:
+        let event = LVEvent(eventData)
+        DispatchQueue.main.async {
+            if let onEvent = event.target?.onEvent {
+                onEvent(event)
+            }
+        }
     }
 }
