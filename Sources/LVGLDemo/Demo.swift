@@ -241,6 +241,54 @@ private func FlexDemo() {
     }
 }
 
+@MainActor
+private func ListDemo() {
+    let screenStyle = LVStyle()
+    screenStyle.backgroundColor = LVColor.black
+    screenStyle.backgroundOpacity = lv_opa_t(LV_OPA_COVER)
+
+    let labelStyle = LVStyle()
+    labelStyle.backgroundColor = LVColor(hexValue: 0x545454)
+    labelStyle.backgroundOpacity = lv_opa_t(LV_OPA_COVER)
+    labelStyle.textFont = LVFont(size: 12)
+    labelStyle.textColor = LVColor.white
+    labelStyle.radius = 0
+
+    let textStyle = LVStyle()
+
+    let screen = LVScreen.active
+    let theme = LVTheme { _, object in
+        if object is LVScreen {
+            object.append(style: screenStyle)
+        }
+    }
+    LVDisplay.default.theme = theme
+
+    let offScreen = LVScreen()
+    let container = LVObject(with: offScreen)
+    container.size = screen.size
+    container.center()
+    
+    container.set(layout: LV_LAYOUT_FLEX)
+    container.withLocalStyle { style in
+        style.flexFlow = LV_FLEX_FLOW_COLUMN.rawValue
+        //style.flexMainPlace = LV_FLEX_ALIGN_SPACE_EVENLY.rawValue
+    }
+    
+    for x in 0..<10 {
+        let label = LVLabel(with: container)
+        label.append(style: labelStyle)
+        label.size = .content
+        label.text = String("List \(x + 1)")
+        label.append(style: textStyle)
+        //label.longMode = lv_label_long_mode_t(LV_LABEL_LONG_CLIP)
+        label.center()
+    }
+  
+    // now try to reparent to real screen
+    container.parent = screen
+}
+
 
 @main
 enum App {
@@ -251,7 +299,8 @@ enum App {
 
         //CounterDemo()
         //GridDemo()
-        FlexDemo()
+        //FlexDemo()
+        ListDemo()
 
         runLoop.run()
     }

@@ -385,23 +385,6 @@ public class LVObject: CustomStringConvertible, Equatable {
         }
         lv_obj_refresh_style(object, selector, LV_STYLE_PROP_ANY)
     }
-
-    // FIXME: local styles should remove these methods
-    public func setFlexAlign(
-        mainPlace: lv_flex_align_t,
-        crossPlace: lv_flex_align_t,
-        trackPlace: lv_flex_align_t
-    ) {
-        lv_obj_set_flex_align(object, mainPlace, crossPlace, trackPlace)
-    }
-
-    public func setFlexFlow(_ flow: lv_flex_flow_t) {
-        lv_obj_set_flex_flow(object, flow)
-    }
-
-    public func setFlexGrow(_ grow: UInt8) {
-        lv_obj_set_flex_grow(object, grow)
-    }
 }
 
 private func eventCallback(_ eventData: UnsafeMutablePointer<lv_event_t>?) {
