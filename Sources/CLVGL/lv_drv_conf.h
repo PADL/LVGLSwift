@@ -86,12 +86,12 @@
 
 /* SDL based drivers for display, mouse, mousewheel and keyboard*/
 #ifndef USE_SDL
-# define USE_SDL 1
+# define USE_SDL 0
 #endif
 
 /* Hardware accelerated SDL driver */
 #ifndef USE_SDL_GPU
-# define USE_SDL_GPU 0
+# define USE_SDL_GPU 1
 #endif
 
 #if USE_SDL || USE_SDL_GPU

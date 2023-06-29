@@ -30,6 +30,7 @@ let package = Package(
             cSettings: [
                         .headerSearchPath("lv_drivers"),
                         .headerSearchPath("lvgl"),
+                        .headerSearchPath("."),
                         .unsafeFlags(SDLCFlags + ["-DLV_LVGL_H_INCLUDE_SIMPLE"])
                         ],
 	    linkerSettings: [.unsafeFlags(["-L/opt/homebrew/lib","-lSDL2"])]

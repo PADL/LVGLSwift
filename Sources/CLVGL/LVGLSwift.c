@@ -22,7 +22,11 @@
 #include "lv_conf.h"
 #include "lv_drv_conf.h"
 
+#if USE_SDL_GPU
+#include "sdl/sdl_gpu.h"
+#else
 #include "sdl/sdl.h"
+#endif
 
 static lv_disp_t *display;
 static lv_disp_draw_buf_t drawBuffer;
@@ -40,12 +44,14 @@ bool LVGLSwiftDriverInit(uint32_t width, uint32_t height)
     sdl_init();
 
     lv_disp_draw_buf_init(&drawBuffer, frameBuffer, NULL, width * height);
-    
     lv_disp_drv_init(&displayDrv);
     displayDrv.draw_buf = &drawBuffer;
     displayDrv.hor_res = width;
     displayDrv.ver_res = height;
     displayDrv.flush_cb = sdl_display_flush;
+#if USE_SDL_GPU
+    sdl_disp_drv_init(&displayDrv, displayDrv.hor_res, displayDrv.ver_res);
+#endif
     display = lv_disp_drv_register(&displayDrv);
     
     lv_indev_drv_init(&inputDrv);
