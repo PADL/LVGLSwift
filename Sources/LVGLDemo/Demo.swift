@@ -14,9 +14,9 @@
 // limitations under the License.
 //
 
-import Foundation
 import AsyncExtensions
 import CLVGL
+import Foundation
 import LVGL
 
 /// example based on https://github.com/scottandrew/LVGLSwift
@@ -182,7 +182,7 @@ private func FlexDemo() {
     labelStyle.radius = 0
 
     let pressedStyle = LVStyle()
-    pressedStyle.backgroundColor = LVColor(hexValue: 0xff4000)
+    pressedStyle.backgroundColor = LVColor(hexValue: 0xFF4000)
     pressedStyle.backgroundOpacity = lv_opa_t(LV_OPA_COVER)
     pressedStyle.textFont = LVFont(size: 48)
     pressedStyle.textColor = LVColor.white
@@ -199,10 +199,10 @@ private func FlexDemo() {
     LVDisplay.default.theme = theme
 
     let container = LVObject(with: screen)
-    //container.size = .content
+    // container.size = .content
     container.size = screen.size
     container.center()
-    
+
     container.set(layout: LV_LAYOUT_FLEX)
     container.withLocalStyle { style in
         style.flexFlow = LV_FLEX_FLOW_ROW_WRAP.rawValue
@@ -211,7 +211,7 @@ private func FlexDemo() {
         style.flexCrossPlace = LV_FLEX_ALIGN_SPACE_EVENLY.rawValue
         style.flexTrackPlace = LV_FLEX_ALIGN_SPACE_AROUND.rawValue
     }
-    
+
     for x in 0..<16 {
         let object = LVButton(with: container)
         object.append(style: labelStyle)
@@ -243,35 +243,35 @@ private func ListDemo() {
     let container = LVObject(with: offScreen)
     container.size = LVScreen.active.size
     container.center()
-    
+
     container.set(layout: LV_LAYOUT_FLEX)
     container.withLocalStyle { style in
         style.flexFlow = LV_FLEX_FLOW_COLUMN.rawValue
         style.flexMainPlace = LV_FLEX_ALIGN_SPACE_EVENLY.rawValue
     }
-    
+
     for x in 0..<20 {
         let label = LVLabel(with: container)
-        //label.append(style: labelStyle)
+        // label.append(style: labelStyle)
         label.text = String("List \(x + 1)")
         label.append(style: textStyle)
-        //label.longMode = lv_label_long_mode_t(LV_LABEL_LONG_CLIP)
+        // label.longMode = lv_label_long_mode_t(LV_LABEL_LONG_CLIP)
         label.center()
     }
-  
+
     // now try to reparent to real screen
     container.parent = LVScreen.active
     LVScreen.active.debugViewTree()
-  }
+}
 
 @MainActor
 private func RollerDemo() {
-  let container = LVRoller(with: LVScreen.active)
-  container.size = LVScreen.active.size
-  container.center()
-  container.options = ["a", "b", "c", "d"]
-  
-  LVScreen.active.debugViewTree()
+    let container = LVRoller(with: LVScreen.active)
+    container.size = LVScreen.active.size
+    container.center()
+    container.options = ["a", "b", "c", "d"]
+
+    LVScreen.active.debugViewTree()
 }
 
 @main
@@ -281,11 +281,11 @@ enum App {
         let runLoop = LVRunLoop
             .shared // FIXME: needs to be called at top to do global initialization
 
-        //CounterDemo()
-        //GridDemo()
-        //FlexDemo()
-        //ListDemo()
-        RollerDemo()
+        CounterDemo()
+        // GridDemo()
+        // FlexDemo()
+        // ListDemo()
+        // RollerDemo()
 
         runLoop.run()
     }
