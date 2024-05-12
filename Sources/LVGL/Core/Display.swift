@@ -18,49 +18,49 @@ import CLVGL
 import Foundation
 
 public class LVDisplay {
-    public static let `default` = LVDisplay()
+  public static let `default` = LVDisplay()
 
-    var display: UnsafeMutablePointer<lv_disp_t>
+  var display: UnsafeMutablePointer<lv_disp_t>
 
-    public convenience init() {
-        self.init(lv_disp_get_default())
+  public convenience init() {
+    self.init(lv_disp_get_default())
+  }
+
+  public init(_ display: UnsafeMutablePointer<lv_disp_t>) {
+    self.display = display
+  }
+
+  public var size: LVSize {
+    LVSize(
+      width: lv_disp_get_hor_res(display),
+      height: lv_disp_get_ver_res(display)
+    )
+  }
+
+  public var backgroundColor: LVColor {
+    get {
+      LVColor(display.pointee.bg_color)
     }
-
-    public init(_ display: UnsafeMutablePointer<lv_disp_t>) {
-        self.display = display
+    set {
+      lv_disp_set_bg_color(display, newValue.color)
     }
+  }
 
-    public var size: LVSize {
-        LVSize(
-            width: lv_disp_get_hor_res(display),
-            height: lv_disp_get_ver_res(display)
-        )
+  public var backgroundOpacity: lv_opa_t {
+    get {
+      display.pointee.bg_opa
     }
+    set {
+      lv_disp_set_bg_opa(display, newValue)
+    }
+  }
 
-    public var backgroundColor: LVColor {
-        get {
-            LVColor(display.pointee.bg_color)
-        }
-        set {
-            lv_disp_set_bg_color(display, newValue.color)
-        }
+  public var theme: LVTheme {
+    get {
+      lv_disp_get_theme(display).swiftObject!
     }
-
-    public var backgroundOpacity: lv_opa_t {
-        get {
-            display.pointee.bg_opa
-        }
-        set {
-            lv_disp_set_bg_opa(display, newValue)
-        }
+    set {
+      lv_disp_set_theme(display, &newValue.theme)
     }
-
-    public var theme: LVTheme {
-        get {
-            lv_disp_get_theme(display).swiftObject!
-        }
-        set {
-            lv_disp_set_theme(display, &newValue.theme)
-        }
-    }
+  }
 }

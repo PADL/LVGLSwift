@@ -1,4 +1,4 @@
---indent 4
+--indent 2
 --indentcase false
 --trimwhitespace always
 --voidtype tuple
@@ -11,4 +11,4 @@
 --typeattributes prev-line
 --varattributes prev-line
 --disable andOperator
---swiftversion 5.6
+--swiftversion 5.9

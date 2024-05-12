@@ -18,22 +18,22 @@ import CLVGL
 import Foundation
 
 public class LVScreen: LVObject {
-    public static let active = LVScreen(screen: lv_scr_act())
+  public static let active = LVScreen(screen: lv_scr_act())
 
-    init(screen: UnsafeMutablePointer<lv_obj_t>) {
-        super.init(screen, with: nil)
-    }
+  init(screen: UnsafeMutablePointer<lv_obj_t>) {
+    super.init(screen, with: nil)
+  }
 
-    public init() {
-        super.init(lv_obj_create(nil), with: nil)
-    }
+  public init() {
+    super.init(lv_obj_create(nil), with: nil)
+  }
 
-    public required init(with parent: LVObject!) {
-        super.init(lv_scr_act(), with: parent)
-    }
+  public required init(with parent: LVObject!) {
+    super.init(lv_scr_act(), with: parent)
+  }
 
-    public func load() {
-        lv_scr_load(object)
-        precondition(isValid)
-    }
+  public func load() {
+    lv_scr_load(object)
+    precondition(isValid)
+  }
 }

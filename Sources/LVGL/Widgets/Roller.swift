@@ -18,65 +18,65 @@ import CLVGL
 import Foundation
 
 public class LVRoller: LVObject {
-    public required init(with parent: LVObject!) {
-        super.init(lv_roller_create(parent.object), with: parent)
-    }
+  public required init(with parent: LVObject!) {
+    super.init(lv_roller_create(parent.object), with: parent)
+  }
 
-    public var options: [String] {
-        get {
-            guard let options = String(cString: lv_roller_get_options(object), encoding: .utf8)
-            else {
-                return []
-            }
-            return options.components(separatedBy: "\n")
-        }
-        set {
-            let options = newValue.joined(separator: "\n")
-            let capturedPointer = object
-            withObjectCast(to: lv_roller_t.self) {
-                lv_roller_set_options(capturedPointer, options, $0.mode)
-            }
-        }
+  public var options: [String] {
+    get {
+      guard let options = String(cString: lv_roller_get_options(object), encoding: .utf8)
+      else {
+        return []
+      }
+      return options.components(separatedBy: "\n")
     }
+    set {
+      let options = newValue.joined(separator: "\n")
+      let capturedPointer = object
+      withObjectCast(to: lv_roller_t.self) {
+        lv_roller_set_options(capturedPointer, options, $0.mode)
+      }
+    }
+  }
 
-    public var mode: lv_roller_mode_t {
-        get {
-            withObjectCast(to: lv_roller_t.self) {
-                $0.mode
-            }
-        }
-        set {
-            withObjectCast(to: lv_roller_t.self) {
-                $0.mode = newValue
-            }
-        }
+  public var mode: lv_roller_mode_t {
+    get {
+      withObjectCast(to: lv_roller_t.self) {
+        $0.mode
+      }
     }
+    set {
+      withObjectCast(to: lv_roller_t.self) {
+        $0.mode = newValue
+      }
+    }
+  }
 
-    public var selected: UInt16 {
-        get {
-            lv_roller_get_selected(object)
-        }
-        set {
-            lv_roller_set_selected(object, newValue, LV_ANIM_ON)
-        }
+  public var selected: UInt16 {
+    get {
+      lv_roller_get_selected(object)
     }
+    set {
+      lv_roller_set_selected(object, newValue, LV_ANIM_ON)
+    }
+  }
 
-    public var selectedString: String? {
-        var buffer = [CChar](repeating: 0, count: 128)
-        buffer.withUnsafeMutableBufferPointer {
-            lv_roller_get_selected_str(object, $0.baseAddress, UInt32($0.count))
-        }
-        guard let string = String(cString: buffer, encoding: .utf8), !string.isEmpty else {
-            return nil
-        }
-        return string
+  public var selectedString: String? {
+    var buffer = [CChar](repeating: 0, count: 128)
+    buffer.withUnsafeMutableBufferPointer {
+      lv_roller_get_selected_str(object, $0.baseAddress, UInt32($0.count))
     }
+    guard let string = String(cString: buffer, encoding: .utf8), !string.isEmpty else {
+      return nil
+    }
+    return string
+  }
 
-    public func setVisibleRowCount(_ rowCount: UInt8) {
-        lv_roller_set_visible_row_count(object, rowCount)
-    }
+  public func setVisibleRowCount(_ rowCount: UInt8) {
+    lv_roller_set_visible_row_count(object, rowCount)
+  }
 
-    public var optionCount: Int {
-        Int(lv_roller_get_option_cnt(object))
-    }
+  public var optionCount: Int {
+    Int(lv_roller_get_option_cnt(object))
+  }
 }

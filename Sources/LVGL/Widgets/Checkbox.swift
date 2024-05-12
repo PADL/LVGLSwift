@@ -18,17 +18,17 @@ import CLVGL
 import Foundation
 
 public class LVCheckbox: LVObject {
-    public required init(with parent: LVObject!) {
-        super.init(lv_checkbox_create(parent.object), with: parent)
-    }
+  public required init(with parent: LVObject!) {
+    super.init(lv_checkbox_create(parent.object), with: parent)
+  }
 
-    public var text: String {
-        get {
-            String(cString: lv_checkbox_get_text(object), encoding: .utf8)!
-        }
-        set {
-            precondition(isValid)
-            lv_checkbox_set_text(object, newValue)
-        }
+  public var text: String {
+    get {
+      String(cString: lv_checkbox_get_text(object), encoding: .utf8)!
     }
+    set {
+      precondition(isValid)
+      lv_checkbox_set_text(object, newValue)
+    }
+  }
 }

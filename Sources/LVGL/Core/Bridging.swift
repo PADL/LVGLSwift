@@ -18,59 +18,59 @@ import CLVGL
 import Foundation
 
 func bridgeToSwift<T: AnyObject>(_ pointer: UnsafeRawPointer) -> T {
-    Unmanaged<T>.fromOpaque(pointer).takeUnretainedValue()
+  Unmanaged<T>.fromOpaque(pointer).takeUnretainedValue()
 }
 
-func bridgeToCLVGL<T: AnyObject>(_ object: T) -> UnsafeMutableRawPointer {
-    UnsafeMutableRawPointer(Unmanaged.passUnretained(object).toOpaque())
+func bridgeToCLVGL(_ object: some AnyObject) -> UnsafeMutableRawPointer {
+  UnsafeMutableRawPointer(Unmanaged.passUnretained(object).toOpaque())
 }
 
 private func releasingBridgeToSwift<T: AnyObject>(_ pointer: UnsafeRawPointer) -> T {
-    Unmanaged<T>.fromOpaque(pointer).takeRetainedValue()
+  Unmanaged<T>.fromOpaque(pointer).takeRetainedValue()
 }
 
-private func retainingBridgeToCLVGL<T: AnyObject>(_ object: T) -> UnsafeMutableRawPointer {
-    UnsafeMutableRawPointer(Unmanaged.passRetained(object).toOpaque())
+private func retainingBridgeToCLVGL(_ object: some AnyObject) -> UnsafeMutableRawPointer {
+  UnsafeMutableRawPointer(Unmanaged.passRetained(object).toOpaque())
 }
 
 func LVRetainUserData(_ object: UnsafeMutablePointer<lv_obj_t>) {
-    _ = retainingBridgeToCLVGL(bridgeToSwift(lv_obj_get_user_data(object)) as LVObject)
+  _ = retainingBridgeToCLVGL(bridgeToSwift(lv_obj_get_user_data(object)) as LVObject)
 }
 
 func LVReleaseUserData(_ object: UnsafeMutablePointer<lv_obj_t>) {
-    _ = bridgeToCLVGL(releasingBridgeToSwift(lv_obj_get_user_data(object)) as LVObject)
+  _ = bridgeToCLVGL(releasingBridgeToSwift(lv_obj_get_user_data(object)) as LVObject)
 }
 
 func LVRetainEventUserData(_ object: UnsafeMutablePointer<lv_event_t>) {
-    _ = retainingBridgeToCLVGL(bridgeToSwift(lv_event_get_user_data(object)) as LVObject)
+  _ = retainingBridgeToCLVGL(bridgeToSwift(lv_event_get_user_data(object)) as LVObject)
 }
 
 func LVReleaseEventUserData(_ object: UnsafeMutablePointer<lv_event_t>) {
-    _ = bridgeToCLVGL(releasingBridgeToSwift(lv_event_get_user_data(object)) as LVObject)
+  _ = bridgeToCLVGL(releasingBridgeToSwift(lv_event_get_user_data(object)) as LVObject)
 }
 
 extension UnsafeMutablePointer where Pointee == lv_obj_t {
-    var swiftObject: LVObject? {
-        if pointee.user_data == nil {
-            return nil
-        } else {
-            return bridgeToSwift(pointee.user_data)
-        }
+  var swiftObject: LVObject? {
+    if pointee.user_data == nil {
+      return nil
+    } else {
+      return bridgeToSwift(pointee.user_data)
     }
+  }
 }
 
 extension UnsafeMutablePointer where Pointee == lv_theme_t {
-    var swiftObject: LVTheme? {
-        if pointee.user_data == nil {
-            return nil
-        } else {
-            return bridgeToSwift(pointee.user_data)
-        }
+  var swiftObject: LVTheme? {
+    if pointee.user_data == nil {
+      return nil
+    } else {
+      return bridgeToSwift(pointee.user_data)
     }
+  }
 }
 
 extension UnsafeMutableRawPointer {
-    var swiftObject: AnyObject? {
-        bridgeToSwift(self)
-    }
+  var swiftObject: AnyObject? {
+    bridgeToSwift(self)
+  }
 }

@@ -18,20 +18,20 @@ import CLVGL
 import Foundation
 
 public struct LVFont {
-    let font: UnsafePointer<lv_font_t>
+  let font: UnsafePointer<lv_font_t>
 
-    init(_ font: UnsafePointer<lv_font_t>) {
-        self.font = font
-    }
+  init(_ font: UnsafePointer<lv_font_t>) {
+    self.font = font
+  }
 
-    public init?(size: UInt32) {
-        guard let font = LVGLSwiftDefaultFontWithSize(size) else {
-            return nil
-        }
-        self.init(font)
+  public init?(size: UInt32) {
+    guard let font = LVGLSwiftDefaultFontWithSize(size) else {
+      return nil
     }
+    self.init(font)
+  }
 
-    static var defaultFont: LVFont {
-        Self(lv_font_default())
-    }
+  static var defaultFont: LVFont {
+    Self(lv_font_default())
+  }
 }

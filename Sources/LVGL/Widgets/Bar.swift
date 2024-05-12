@@ -18,47 +18,47 @@ import CLVGL
 import Foundation
 
 public class LVBar: LVObject {
-    public required init(with parent: LVObject!) {
-        super.init(lv_bar_create(parent.object), with: parent)
-    }
+  public required init(with parent: LVObject!) {
+    super.init(lv_bar_create(parent.object), with: parent)
+  }
 
-    public var value: Int32 {
-        get {
-            lv_bar_get_value(object)
-        }
-        set {
-            precondition(isValid)
-            lv_bar_set_value(object, newValue, LV_ANIM_OFF)
-        }
+  public var value: Int32 {
+    get {
+      lv_bar_get_value(object)
     }
+    set {
+      precondition(isValid)
+      lv_bar_set_value(object, newValue, LV_ANIM_OFF)
+    }
+  }
 
-    public var animatedValue: Int32 {
-        get {
-            lv_bar_get_value(object)
-        }
-        set {
-            precondition(isValid)
-            lv_bar_set_value(object, newValue, LV_ANIM_ON)
-        }
+  public var animatedValue: Int32 {
+    get {
+      lv_bar_get_value(object)
     }
+    set {
+      precondition(isValid)
+      lv_bar_set_value(object, newValue, LV_ANIM_ON)
+    }
+  }
 
-    public var range: ClosedRange<Int32> {
-        get {
-            lv_bar_get_min_value(object)...lv_bar_get_max_value(object)
-        }
-        set {
-            precondition(isValid)
-            lv_bar_set_range(object, newValue.lowerBound, newValue.upperBound)
-        }
+  public var range: ClosedRange<Int32> {
+    get {
+      lv_bar_get_min_value(object)...lv_bar_get_max_value(object)
     }
+    set {
+      precondition(isValid)
+      lv_bar_set_range(object, newValue.lowerBound, newValue.upperBound)
+    }
+  }
 
-    public var mode: lv_bar_mode_t {
-        get {
-            lv_bar_get_mode(object)
-        }
-        set {
-            precondition(isValid)
-            lv_bar_set_mode(object, newValue)
-        }
+  public var mode: lv_bar_mode_t {
+    get {
+      lv_bar_get_mode(object)
     }
+    set {
+      precondition(isValid)
+      lv_bar_set_mode(object, newValue)
+    }
+  }
 }

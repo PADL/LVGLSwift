@@ -18,9 +18,9 @@ import CLVGL
 import Foundation
 
 public class LVTable: LVObject {
-    public required init(with parent: LVObject!) {
-        super.init(lv_table_create(parent.object), with: parent)
-    }
+  public required init(with parent: LVObject!) {
+    super.init(lv_table_create(parent.object), with: parent)
+  }
 
-    // TODO: implement
+  // TODO: implement
 }

@@ -18,25 +18,25 @@ import CLVGL
 import Foundation
 
 public struct LVSize {
-    public let width: lv_coord_t
-    public let height: lv_coord_t
+  public let width: lv_coord_t
+  public let height: lv_coord_t
 
-    public init(width: lv_coord_t, height: lv_coord_t) {
-        self.width = width
-        self.height = height
-    }
+  public init(width: lv_coord_t, height: lv_coord_t) {
+    self.width = width
+    self.height = height
+  }
 
-    public static func percentage(width: Float, height: Float) -> LVSize {
-        LVSize(width: lv_pct(Int16(width * 100)), height: lv_pct(Int16(height * 100)))
-    }
+  public static func percentage(width: Float, height: Float) -> LVSize {
+    LVSize(width: lv_pct(Int16(width * 100)), height: lv_pct(Int16(height * 100)))
+  }
 
-    public static var content: Self {
-        LVSize(width: .sizeContent, height: .sizeContent)
-    }
+  public static var content: Self {
+    LVSize(width: .sizeContent, height: .sizeContent)
+  }
 
-    public static var zero: Self {
-        LVSize(width: 0, height: 0)
-    }
+  public static var zero: Self {
+    LVSize(width: 0, height: 0)
+  }
 }
 
 extension LVSize: Equatable {}
